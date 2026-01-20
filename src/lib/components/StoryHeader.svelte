@@ -1,10 +1,16 @@
-<!-- Reusable story header with title, subtitle, and author info -->
 <script lang="ts">
-  let { title, subtitle, authors, date } = $props();
+  let {
+    title,
+    subtitle,
+    authors,
+    date,
+    class: className = ''
+  } = $props();
 </script>
 
-<header class="story-header prose">
+<header class={`story-header prose ${className}`}>
   <h1>{title}</h1>
+
   {#if subtitle}
     <h2>{subtitle}</h2>
   {/if}
@@ -12,11 +18,22 @@
   <div class="article-meta">
     {#if authors}
       <p class="author">
-        By {#each authors as author, i}
-          <a target="_blank" rel="noreferrer" href={author.url}>{author.name}</a>{#if i < authors.length - 1}{i === authors.length - 2 ? ' and ' : ', '}{/if}
+        By
+        {#each authors as author, i}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={author.url}
+          >
+            {author.name}
+          </a>
+          {#if i < authors.length - 1}
+            {i === authors.length - 2 ? ' and ' : ', '}
+          {/if}
         {/each}
       </p>
     {/if}
+
     {#if date}
       <p class="date">{date}</p>
     {/if}

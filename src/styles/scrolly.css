@@ -11,6 +11,7 @@
 .story .prose {
     max-width: 600px;
     margin-inline: auto;
+    margin-top: 2rem;
     padding-inline: 1rem;
 }
 
@@ -153,8 +154,9 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 0;
+    z-index: -1;
 }
+
 
 .scrolly-fullscreen .scrolly-content {
     position: relative;

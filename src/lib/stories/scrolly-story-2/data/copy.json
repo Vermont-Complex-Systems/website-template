@@ -1,21 +1,120 @@
 {
-	"title": "Scrolly story",
-	"subtitle": "Centering with plot on the right",
-	"author1": "<a target=_blank rel=noreferrer href=https://vermont-complex-systems.github.io/complex-stories/author/jonathan-st-onge>Jonathan St-Onge</a>",
+	"title": "Scrolly story 2",
+	"subtitle": "Fullscreen mode",
+	"authors": [
+        { 
+			"name": "Jonathan St-Onge", 
+			"url": "https://complexstories.uvm.edu/author/jonathan-st-onge" 
+		},
+        { 
+			"name": "Ben Cooley", 
+			"url": "https://complexstories.uvm.edu/author/ben-dexter-cooley" 
+		}
+    ],
 	"date": "Aug 15, 2025",
 	"SectionTitle": "Hello world",
+	"introduction": [
+		{
+			"type": "markdown",
+			"value": "There are many different ways to structure code to do visual data essays."
+		},
+		{
+			"type": "markdown",
+			"value": "Here's an example of a background plot evolving with content."
+		}
+	],
 	"steps": [
 		{
 			"type": "markdown",
-			"value": "This is a scrolly story where the content shows on the left, matching the plot on the right. On mobile, the content appears on top of the plot, which takes the full client width."
+			"value": "2001"
 		},
 		{
 			"type": "markdown",
-			"value": "As we scroll, we **sort** the data, describing how a bar chart is best read when ordered by counts."
+			"value": "2002"
 		},
 		{
 			"type": "markdown",
-			"value": "We can change mark, here transitioning from barchart to lollipop. Note that here we always show the **same data**, but differently."
+			"value": "2003"
+		},
+		{
+			"type": "markdown",
+			"value": "2004"
+		},
+		{
+			"type": "markdown",
+			"value": "2005"
+		},
+		{
+			"type": "markdown",
+			"value": "2006"
+		},
+		{
+			"type": "markdown",
+			"value": "2007"
+		},
+		{
+			"type": "markdown",
+			"value": "2008"
+		},
+		{
+			"type": "markdown",
+			"value": "2009"
+		},
+		{
+			"type": "markdown",
+			"value": "2010"
+		},
+		{
+			"type": "markdown",
+			"value": "2011"
+		},
+		{
+			"type": "markdown",
+			"value": "2012"
+		},
+		{
+			"type": "markdown",
+			"value": "2013"
+		},
+		{
+			"type": "markdown",
+			"value": "2014"
+		},
+		{
+			"type": "markdown",
+			"value": "2015"
+		},
+		{
+			"type": "markdown",
+			"value": "2016"
+		},
+		{
+			"type": "markdown",
+			"value": "2017"
+		},
+		{
+			"type": "markdown",
+			"value": "2018"
+		},
+		{
+			"type": "markdown",
+			"value": "2019"
+		},
+		{
+			"type": "markdown",
+			"value": "2020"
+		},
+		{
+			"type": "markdown",
+			"value": "2021"
+		},
+		{
+			"type": "markdown",
+			"value": "2022"
+		},
+		{
+			"type": "markdown",
+			"value": "2023"
 		}
 	],
 	"conclusion": [
