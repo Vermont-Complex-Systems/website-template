@@ -1,0 +1,38 @@
+import adapter from '@sveltejs/adapter-static'
+import { readFileSync } from 'fs';
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
+
+// Example of how to dynamically prerender members in static web app.
+// There might be a better way to do that at some point.
+const membersCSV = readFileSync('src/data/members.csv', 'utf-8');
+const memberIds = membersCSV.split('\n').slice(1).filter(line => line.trim()).map(line => line.split(',')[0]);
+
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+	preprocess: vitePreprocess(),
+	kit: {
+		prerender: {
+			entries: [
+				'*',
+				...memberIds.map(id => `/about/${id}`)
+			]
+		},
+		adapter: adapter(),
+		alias: {
+			$data: './src/data'
+		},
+		experimental: {
+			remoteFunctions: true,
+		},
+	},
+	compilerOptions: {
+		experimental: {
+			async: true,
+		},
+	},
+	vitePlugin: {
+		inspector: true,
+	},
+}
+
+export default config

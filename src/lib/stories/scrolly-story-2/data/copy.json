@@ -1,0 +1,27 @@
+{
+	"title": "Scrolly story",
+	"subtitle": "Centering with plot on the right",
+	"author1": "<a target=_blank rel=noreferrer href=https://vermont-complex-systems.github.io/complex-stories/author/jonathan-st-onge>Jonathan St-Onge</a>",
+	"date": "Aug 15, 2025",
+	"SectionTitle": "Hello world",
+	"steps": [
+		{
+			"type": "markdown",
+			"value": "This is a scrolly story where the content shows on the left, matching the plot on the right. On mobile, the content appears on top of the plot, which takes the full client width."
+		},
+		{
+			"type": "markdown",
+			"value": "As we scroll, we **sort** the data, describing how a bar chart is best read when ordered by counts."
+		},
+		{
+			"type": "markdown",
+			"value": "We can change mark, here transitioning from barchart to lollipop. Note that here we always show the **same data**, but differently."
+		}
+	],
+	"conclusion": [
+		{
+			"type": "markdown",
+			"value": "In conclusion, we saw how to programmatically have a scrolly story with content on the left and a shifting plot on the right."
+		}
+	]
+}
