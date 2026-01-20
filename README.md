@@ -10,6 +10,6 @@ We use CSS coloring to showcase what bits of code is responsible to the styling.
 
 We installed a chrome devtool developed by the svelte team to navigate between the user interface (UI) and the code underneath. The inspector lets you click on components you want to learn about, then navigate to relevant code in editor (the vscode editor works flawlessly), e.g. 
 
-<img src="/static/common/assets/screenshots/inspector.jpg" width="500">
+<img src="/static/common/assets/screenshots/inspector.png" width="500">
 
-
+To activate the mode, on mac you need to press `option+x` and on windows it is `alt+x`, then you double click on the component to see the code.
