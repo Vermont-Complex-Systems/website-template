@@ -13,7 +13,7 @@ let tooltip = $state({ visible: false, x: 0, y: 0, content: '' });
 
 <ScrollIndicator />
 
-<article class="story">
+<article class="story theme-dark" style="--theme-bg: #353839; --theme-footer: #414A4C;">
     <div class="prose">
         <StoryHeader
             title={data.title}
@@ -50,3 +50,23 @@ let tooltip = $state({ visible: false, x: 0, y: 0, content: '' });
     y={tooltip.y}
     content={tooltip.content}
 />
+
+<style>
+    /* Custom scrolly step boxes for this story */
+    :global(.theme-dark .scrolly-content .step > *),
+    :global(.theme-dark .scrolly-content .step > * *) {
+        background: white;
+        box-shadow: 1px 1px 30px rgba(252, 220, 252, 1);
+        border: 1px solid plum;
+        border-radius: 6px;
+        color: #353839 !important;
+    }
+
+    /* Remove duplicate styles on nested elements */
+    :global(.theme-dark .scrolly-content .step > * *) {
+        background: transparent;
+        box-shadow: none;
+        border: none;
+        border-radius: 0;
+    }
+</style>

@@ -1,5 +1,6 @@
 <script>
   import DotsToImage from '$lib/components/DotsToImage.svelte';
+  import StoryGrid from '$lib/components/StoryGrid.svelte';
   import { getStories } from '$lib/data.remote';
 </script>
 
@@ -7,35 +8,19 @@
 <section class="hero page">
   <div class="hero-inner">
     <div class="hero-text">
-      <h1>HOME PAGE</h1>
-      <p>INSPIRATIONAL DESCRIPTION</p>
+      <h1>Home Page</h1>
+      <p>Inspirational description</p>
     </div>
-    <DotsToImage imgFilePath='/UVM_Logo_Primary_Horiz_W_PunchOut.png' />
+    <DotsToImage imgFilePath='/octopus-swim-right.png' />
   </div>
 </section>
 
-<hr>
-
 <!-- Stories Section -->
 <section class="stories page">
-  <h2>Stories</h2>
   {#await getStories()}
     <div class="loading">Loading stories...</div>
   {:then stories}
-    <div class="story-grid">
-      {#each stories as story (story.slug)}
-        <a href="/{story.slug}" class="story-card">
-          <div class="card-content">
-            <h3>{story.title}</h3>
-            <p class="description">{story.description}</p>
-            <div class="card-footer">
-              <p class="date">{story.date}</p>
-              <span class="read-more">Read more →</span>
-            </div>
-          </div>
-        </a>
-      {/each}
-    </div>
+    <StoryGrid {stories} />
   {/await}
 </section>
 
@@ -81,7 +66,7 @@
 /* Make DotsToImage grow to fill space */
 .hero-inner > :global(DotsToImage) {
   flex: 1;
-  height: 100%;
+  height: 50%;
 }
 
 /* ---------------- Stories Section ---------------- */
@@ -95,75 +80,6 @@
   font-size: 1.2rem;
   color: var(--color-fg);
   opacity: 0.7;
-}
-
-.story-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin: 2rem 0;
-}
-
-.story-card {
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-height: 280px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  text-decoration: none;
-  color: inherit;
-  display: flex;
-  flex-direction: column;
-}
-
-.story-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-  background: rgba(255, 255, 255, 1);
-  border-color: rgba(0, 0, 0, 0.12);
-}
-
-.card-content {
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  gap: 1rem;
-}
-
-.card-footer {
-  margin-top: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.read-more {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-primary, #007a87);
-  transition: transform 0.2s ease;
-}
-
-.story-card:hover .read-more {
-  transform: translateX(4px);
-}
-
-.description {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: rgba(0, 0, 0, 0.7);
-  flex-grow: 1;
-}
-
-.date {
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.5);
-  font-family: var(--sans);
 }
 
 /* ---------------- Responsive ---------------- */
@@ -181,19 +97,6 @@
   }
   .hero-text p {
     font-size: 1.2rem;
-  }
-
-  .story-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .story-card {
-    min-height: 220px;
-  }
-
-  .card-content {
-    padding: 1.5rem;
   }
 }
 </style>

@@ -58,6 +58,17 @@
         .domain(regions)
         .range(['#e15759', '#f28e2c', '#4e79a7', '#76b7b2', '#59a14f', '#edc949', '#999999']);
 
+    // Legend layout - wrap on smaller screens
+    const legendItemWidth = 110;
+    const legendItemHeight = 20;
+    let legendItemsPerRow = $derived(Math.max(2, Math.floor((innerWidth - 40) / legendItemWidth)));
+
+    function getLegendPosition(index) {
+        const row = Math.floor(index / legendItemsPerRow);
+        const col = index % legendItemsPerRow;
+        return { x: col * legendItemWidth, y: row * legendItemHeight };
+    }
+
     // Scales
     let xScale = $derived(scaleLinear()
         .domain([0, 1])
@@ -246,8 +257,9 @@
         <!-- Legend -->
         <g transform={`translate(${margin.left + 20}, 20)`}>
             {#each regions.filter(r => r !== 'Unknown') as region, i}
+                {@const pos = getLegendPosition(i)}
                 <g
-                    transform={`translate(${i * 110}, 0)`}
+                    transform={`translate(${pos.x}, ${pos.y})`}
                     class="legend-item"
                     onclick={() => toggleRegion(region)}
                     role="button"
@@ -271,15 +283,6 @@
                     </text>
                 </g>
             {/each}
-            <text
-                x={regions.filter(r => r !== 'Unknown').length * 110}
-                y={4}
-                font-size="12"
-                font-style="italic"
-                opacity="0.6"
-            >
-                (click region to filter, hover country to show details)
-            </text>
         </g>
     </svg>
 </div>
