@@ -51,7 +51,7 @@
 		background-color: var(--color-uvm-green);
 		border-top: 1px solid var(--color-border);
 		padding: 3rem 0 2rem; /* vertical padding only */
-		margin-top: auto;
+		margin-top: 4rem;
 	}
 
 	:global(.dark) .footer {
