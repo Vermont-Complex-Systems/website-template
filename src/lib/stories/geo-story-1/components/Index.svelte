@@ -8,9 +8,10 @@
     let { story, data } = $props();
 
     let scrollyIndex = $state({ value: undefined });
+
 </script>
 
-<!-- <ScrollIndicator /> -->
+<ScrollIndicator threshold={50} />
 
 <article class="story">
     <div class="prose">
