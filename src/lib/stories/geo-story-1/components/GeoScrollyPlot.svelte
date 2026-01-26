@@ -11,7 +11,6 @@
 
     // Fetched data
     let districts = $state([]);
-    let boundary = $state([]);
     let hydro = $state([]);
     let metadataRaw = $state([]);
 
@@ -23,7 +22,6 @@
         ]);
         const features = topojson.feature(topo, topo.objects.data).features;
         districts = features.filter(f => f.properties.layer === 'districts');
-        boundary = features.filter(f => f.properties.layer === 'boundary');
         hydro = features.filter(f => f.properties.layer === 'hydro');
         metadataRaw = d3.csvParse(csvText);
     });
@@ -96,16 +94,9 @@
             .domain([-maxChange, 0, maxChange])
     );
 
-    // Check if a district is a non-merged municipality (not in population data)
-    function isNonMerged(arrondissement) {
-        return !pop2011.has(arrondissement);
-    }
-
     // Get fill color based on mode
     function getFillColor(arrondissement) {
-        if (isNonMerged(arrondissement)) {
-            return 'url(#hatch)'; // Hatched pattern for non-merged municipalities
-        } else if (!showPopulation) {
+        if (!showPopulation) {
             return '#e0e0e0'; // Neutral gray for intro step
         } else if (showChange) {
             const change = changeMap.get(arrondissement);
@@ -132,13 +123,12 @@
 
     // Projection that fits the districts to the container
     let projection = $derived.by(() => {
-        const allFeatures = [...districts, ...hydro];
-        if (allFeatures.length === 0) return d3.geoMercator();
+        if (districts.length === 0) return d3.geoMercator();
 
         return d3.geoMercator()
             .fitSize([innerWidth, innerHeight], {
                 type: "FeatureCollection",
-                features: allFeatures
+                features: districts
             });
     });
 
@@ -165,16 +155,6 @@
 
     <svg viewBox={`0 0 ${width} ${height}`}>
         <g transform={`translate(${margin.left},${margin.top})`}>
-            <!-- Boundary (background layer) -->
-            {#each boundary as feature}
-                <path
-                    d={pathGenerator(feature)}
-                    fill=var(--color-bg)
-                    stroke="#999"
-                    stroke-width="1"
-                />
-            {/each}
-
             <!-- Hydro (water) -->
             {#each hydro as feature}
                 <path

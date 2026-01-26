@@ -1,6 +1,6 @@
 {
 	"title": "Geo Scrolly story",
-	"subtitle": "Left-right layout but some geographies!",
+	"subtitle": "Fullscreen mode with geo data together with data orchestration",
 	"authors": [
         { 
 			"name": "Jonathan St-Onge", 
@@ -12,12 +12,26 @@
 	"introduction": [
 		{
 			"type": "markdown",
-			"value": "There are many different ways to structure code to do visual data essays."
+			"value": "This code is a follow up from [this story](https://vcsi.cmplxsys.w3.uvm.edu/scrolly-story-2/), but we show how to integrate geo data into the mix. One key challenge with project including geo data is that it can get messy very fast. You have different layers you might want to include or not, with metadata one needs to merge at different moment."
 		},
 		{
 			"type": "markdown",
-			"value": "We use snippets combined with a copy.json to facilitate non-technical users to share their stories without knowing everything there is to know to get started."
+			"value": "To keep the project neat and tidy, we show how to write simple dagster pipeline to do extraction-transformation-load (ETL) in a secondary [github repository](https://github.com/jstonge/dag-montreal). The github repository culminates into a [metadata.csv](https://github.com/jstonge/dag-montreal/blob/main/src/dag_montreal/defs/transform/input/metadata.csv) and a [montreal.topojson](https://github.com/jstonge/dag-montreal/blob/main/src/dag_montreal/defs/transform/input/montreal.topojson). The pipeline currently look like:"
+		},
+		{
+			"type": "markdown",
+			"value": "<img src=\"/dagster.jpg\" style=\"width: 70vw; max-width: none; margin-left: calc(50% - 30vw); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); border-radius: 4px;\" />"
+		},
+		{
+			"type": "markdown",
+			"value": "Structuring the data flow as directed acyclic graph is neat because we can understand at a glance what is happening. Under the hood, we are using [dagster](https://dagster.io/) as data orchestration tools, using different features to describe where the data comes from and how it is aggregated. The pipeline could be part of our current project,  but here we keep it as separate because we reuse that pipelines across multiple projects."
+		},
+		{
+			"type": "markdown",
+			"value": "Now, without further ado, a simple yet pretty scrolly story using geographic data."
 		}
+
+
 	],
 	"steps": [
 		{
@@ -36,7 +50,7 @@
 	"conclusion": [
 		{
 			"type": "markdown",
-			"value": "In conclusion, we saw how to programmatically have a scrolly story with content on the left and a shifting plot on the right."
+			"value": "In conclusion, we saw how to programmatically have a scrolly story with geo data coming from a backend.."
 		}
 	]
 }
