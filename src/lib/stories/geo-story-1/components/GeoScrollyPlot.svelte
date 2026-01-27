@@ -1,13 +1,12 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-    import { asyncBufferFromUrl, parquetReadObjects } from 'hyparquet';
+    import * as topojson from 'topojson-client';
 
     let { scrollyIndex } = $props();
 
-    // GeoParquet URLs (hyparquet auto-decodes geometry to GeoJSON)
-    const DISTRICTS_URL = '/data/districts.parquet';
-    const BOUNDARY_URL = '/data/boundary.parquet';
+    // Data URLs
+    const TOPOJSON_URL = '/data/montreal.topojson';
     const METADATA_URL = '/data/metadata.csv';
 
     // Fetched data
@@ -17,32 +16,16 @@
 
     // Fetch data on mount
     onMount(async () => {
-        console.time('fetch+parse');
-        const [districtsFile, boundaryFile, csvText] = await Promise.all([
-            asyncBufferFromUrl({ url: DISTRICTS_URL }),
-            asyncBufferFromUrl({ url: BOUNDARY_URL }),
+        const [topo, csvText] = await Promise.all([
+            fetch(TOPOJSON_URL).then(r => r.json()),
             fetch(METADATA_URL).then(r => r.text())
         ]);
 
-        // hyparquet auto-decodes GeoParquet geometry columns to GeoJSON
-        const [districtsData, boundaryData] = await Promise.all([
-            parquetReadObjects({ file: districtsFile }),
-            parquetReadObjects({ file: boundaryFile })
-        ]);
-
-        // Convert parquet rows to GeoJSON features
-        districts = districtsData.map(row => ({
-            type: 'Feature',
-            properties: { ...row, geometry: undefined },
-            geometry: row.geometry
-        }));
-        boundary = boundaryData.map(row => ({
-            type: 'Feature',
-            properties: { ...row, geometry: undefined },
-            geometry: row.geometry
-        }));
+        // Only extract districts and boundary (skip hydro for performance)
+        const features = topojson.feature(topo, topo.objects.data).features;
+        districts = features.filter(f => f.properties.layer === 'districts');
+        boundary = features.filter(f => f.properties.layer === 'boundary');
         metadataRaw = d3.csvParse(csvText);
-        console.timeEnd('fetch+parse');
     });
 
     // Chart dimensions
@@ -142,13 +125,12 @@
 
     // Projection that fits the districts to the container
     let projection = $derived.by(() => {
-        const allFeatures = [...districts, ...hydro];
-        if (allFeatures.length === 0) return d3.geoMercator();
+        if (districts.length === 0) return d3.geoMercator();
 
         return d3.geoMercator()
             .fitSize([innerWidth, innerHeight], {
                 type: "FeatureCollection",
-                features: allFeatures
+                features: districts
             });
     });
 
