@@ -1,31 +1,48 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-    import * as topojson from 'topojson-client';
+    import { asyncBufferFromUrl, parquetReadObjects } from 'hyparquet';
 
     let { scrollyIndex } = $props();
 
-    // Remote data URLs
-    const TOPOJSON_URL = 'https://raw.githubusercontent.com/jstonge/dag-montreal/refs/heads/main/src/dag_montreal/defs/transform/input/montreal.topojson';
-    const METADATA_URL = 'https://raw.githubusercontent.com/jstonge/dag-montreal/refs/heads/main/src/dag_montreal/defs/transform/input/metadata.csv';
+    // GeoParquet URLs (hyparquet auto-decodes geometry to GeoJSON)
+    const DISTRICTS_URL = '/data/districts.parquet';
+    const BOUNDARY_URL = '/data/boundary.parquet';
+    const METADATA_URL = '/data/metadata.csv';
 
     // Fetched data
     let districts = $state([]);
     let boundary = $state([]);
-    let hydro = $state([]);
     let metadataRaw = $state([]);
 
     // Fetch data on mount
     onMount(async () => {
-        const [topo, csvText] = await Promise.all([
-            fetch(TOPOJSON_URL).then(r => r.json()),
+        console.time('fetch+parse');
+        const [districtsFile, boundaryFile, csvText] = await Promise.all([
+            asyncBufferFromUrl({ url: DISTRICTS_URL }),
+            asyncBufferFromUrl({ url: BOUNDARY_URL }),
             fetch(METADATA_URL).then(r => r.text())
         ]);
-        const features = topojson.feature(topo, topo.objects.data).features;
-        districts = features.filter(f => f.properties.layer === 'districts');
-        boundary = features.filter(f => f.properties.layer === 'boundary');
-        hydro = features.filter(f => f.properties.layer === 'hydro');
+
+        // hyparquet auto-decodes GeoParquet geometry columns to GeoJSON
+        const [districtsData, boundaryData] = await Promise.all([
+            parquetReadObjects({ file: districtsFile }),
+            parquetReadObjects({ file: boundaryFile })
+        ]);
+
+        // Convert parquet rows to GeoJSON features
+        districts = districtsData.map(row => ({
+            type: 'Feature',
+            properties: { ...row, geometry: undefined },
+            geometry: row.geometry
+        }));
+        boundary = boundaryData.map(row => ({
+            type: 'Feature',
+            properties: { ...row, geometry: undefined },
+            geometry: row.geometry
+        }));
         metadataRaw = d3.csvParse(csvText);
+        console.timeEnd('fetch+parse');
     });
 
     // Chart dimensions
@@ -142,7 +159,6 @@
     function getCentroid(feature) {
         return pathGenerator.centroid(feature);
     }
-
 </script>
 
 <div class="chart-container" bind:clientWidth={width} bind:clientHeight={height}>
@@ -158,12 +174,12 @@
 
     <svg viewBox={`0 0 ${width} ${height}`} style="background: #a6cee3;">
         <g transform={`translate(${margin.left},${margin.top})`}>
-            <!-- Boundary (CMA land outside districts) -->
+            <!-- Boundary (CMA land outside districts) - COMMENTED OUT FOR TESTING -->
             {#each boundary as feature}
                 <path
                     class="boundary"
                     d={pathGenerator(feature)}
-                    fill="#f0f0f0"
+                    fill="#f4efea"
                     stroke="#999"
                     stroke-width="0.5"
                 />
