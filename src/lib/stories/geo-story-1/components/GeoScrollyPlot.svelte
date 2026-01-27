@@ -5,9 +5,9 @@
 
     let { scrollyIndex } = $props();
 
-    // Data URLs
-    const TOPOJSON_URL = '/data/montreal.topojson';
-    const METADATA_URL = '/data/metadata.csv';
+    // Remote data URLs
+    const TOPOJSON_URL = 'https://raw.githubusercontent.com/jstonge/dag-montreal/refs/heads/main/src/dag_montreal/defs/transform/input/montreal.topojson';
+    const METADATA_URL = 'https://raw.githubusercontent.com/jstonge/dag-montreal/refs/heads/main/src/dag_montreal/defs/transform/input/metadata.csv';
 
     // Fetched data
     let districts = $state([]);
@@ -20,8 +20,6 @@
             fetch(TOPOJSON_URL).then(r => r.json()),
             fetch(METADATA_URL).then(r => r.text())
         ]);
-
-        // Only extract districts and boundary (skip hydro for performance)
         const features = topojson.feature(topo, topo.objects.data).features;
         districts = features.filter(f => f.properties.layer === 'districts');
         boundary = features.filter(f => f.properties.layer === 'boundary');
@@ -125,12 +123,13 @@
 
     // Projection that fits the districts to the container
     let projection = $derived.by(() => {
-        if (districts.length === 0) return d3.geoMercator();
+        const allFeatures = [...districts];
+        if (allFeatures.length === 0) return d3.geoMercator();
 
         return d3.geoMercator()
             .fitSize([innerWidth, innerHeight], {
                 type: "FeatureCollection",
-                features: districts
+                features: allFeatures
             });
     });
 
@@ -141,6 +140,7 @@
     function getCentroid(feature) {
         return pathGenerator.centroid(feature);
     }
+
 </script>
 
 <div class="chart-container" bind:clientWidth={width} bind:clientHeight={height}>
@@ -156,7 +156,7 @@
 
     <svg viewBox={`0 0 ${width} ${height}`} style="background: #a6cee3;">
         <g transform={`translate(${margin.left},${margin.top})`}>
-            <!-- Boundary (CMA land outside districts) - COMMENTED OUT FOR TESTING -->
+            <!-- Boundary (CMA land outside districts) -->
             {#each boundary as feature}
                 <path
                     class="boundary"
