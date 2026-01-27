@@ -224,6 +224,8 @@
         height: 100%;
         min-height: 500px;
         position: relative;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 16px;
     }
 
     svg {

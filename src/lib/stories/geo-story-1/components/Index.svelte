@@ -13,7 +13,17 @@
 
 <ScrollIndicator threshold={50} />
 
-<article class="story">
+<!-- Here we overwrite --header-position to prevent its stickiness  -->
+<svelte:head>
+  <style>
+    :root {
+      --header-position: relative;
+    }
+  </style>
+</svelte:head>
+
+
+<article class="story" id="geo-story-1">
     <div class="prose">
         <StoryHeader
             title={data.title}
@@ -22,7 +32,7 @@
             date={data.date}
         />
 
-        <section id="intro" class="prose">
+    <section id="intro" class="prose">
             {#each data.introduction as item}
                 {@render renderTextContent(item)}
             {/each}
@@ -44,15 +54,16 @@
     </section>
     
     <h2 class="prose">Appendix</h2>
-    <section id="conclusion" class="prose">
+    <section id="appendix" class="prose">
         {#each data.appendix as item}
             {@render renderTextContent(item)}
         {/each}
     </section>
 </article>
 
-<style>
-    :global(.header) {
-        position: relative !important;
+<style>    
+    :global(#geo-story-1 #intro) {
+        margin-bottom: 10rem;
     }
+
 </style>

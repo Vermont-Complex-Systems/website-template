@@ -12,7 +12,11 @@
     "introduction": [
         {
             "type": "markdown",
-            "value": "This code is a follow up from [this story](https://vcsi.cmplxsys.w3.uvm.edu/scrolly-story-2/), but we show how to integrate geo data into the mix. "
+            "value": "This code is a follow up from [this story](https://vcsi.cmplxsys.w3.uvm.edu/scrolly-story-2/), but we show how to integrate geo with metadata from various sources together into a neat scrolly story. The data we'll be using is from statcan, in charge of the Canadian census, the city of montreal, and other places that we document in the pipeline."
+        },
+        {
+            "type": "markdown",
+            "value": "It is important to note that data orchestration is a crucial component of making this story maintainable and exntensible. We talk about it more in the appendix. But without further ado, here's Montreal."
         }
     ],
     "steps": [
