@@ -58,11 +58,11 @@
         },
         {
             "type": "markdown",
-            "value": "Under the hood, we are using [dagster](https://dagster.io/) as data orchestration tool, using different features to describe where the data comes from and how it is aggregated. The pipeline could be part of our current project, but here we keep it as separate because we reuse that pipelines across multiple projects."
+            "value": "Under the hood, we are using [dagster](https://dagster.io/) as data orchestration tool (or [maestro](https://whipson.github.io/maestro/index.html) in `R`), using different features to describe where the data comes from and how it is aggregated. The pipeline could be part of our current project, but here we keep it as separate because we reuse that pipelines across multiple projects."
         },
         {
             "type": "markdown",
-            "value": "Here's what a dagster project implementing principled data processing looks like:"
+            "value": "Here's what the project implementing principled data processing looks like:"
         },
         {
             "type": "markdown",

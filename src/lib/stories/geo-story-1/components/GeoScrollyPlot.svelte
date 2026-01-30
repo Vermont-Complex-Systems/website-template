@@ -1,28 +1,64 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-    import * as topojson from 'topojson-client';
+    import { parquetReadObjects } from 'hyparquet';
 
     let { scrollyIndex } = $props();
 
     // Remote data URLs
-    const TOPOJSON_URL = 'https://raw.githubusercontent.com/jstonge/dag-montreal/refs/heads/main/src/dag_montreal/defs/transform/input/montreal.topojson';
-    const METADATA_URL = 'https://raw.githubusercontent.com/jstonge/dag-montreal/refs/heads/main/src/dag_montreal/defs/transform/input/metadata.csv';
+    const DISTRICTS_URL = 'https://raw.githubusercontent.com/jstonge/rdag-montreal/refs/heads/main/pipelines/transform/input/districts.parquet';
+    const BOUNDARY_URL = 'https://raw.githubusercontent.com/jstonge/rdag-montreal/refs/heads/main/pipelines/transform/input/boundary.parquet';
+    const METADATA_URL = 'https://raw.githubusercontent.com/jstonge/rdag-montreal/refs/heads/main/pipelines/transform/input/metadata.csv';
 
     // Fetched data
     let districts = $state([]);
     let boundary = $state([]);
     let metadataRaw = $state([]);
 
+    // Convert parquet geometry {x,y}[][] to GeoJSON [lon,lat][][]
+    function convertGeometry(geometry) {
+        const coordinates = geometry.map(polygon =>
+            polygon.map(ring => ring.map(pt => [pt.x, pt.y]))
+        );
+        return {
+            type: coordinates.length > 1 ? 'MultiPolygon' : 'Polygon',
+            coordinates: coordinates.length > 1 ? coordinates : coordinates[0]
+        };
+    }
+
+    // Convert parquet row to GeoJSON feature
+    function toFeature(row, properties) {
+        return {
+            type: 'Feature',
+            properties,
+            geometry: convertGeometry(row.geometry)
+        };
+    }
+
     // Fetch data on mount
     onMount(async () => {
-        const [topo, csvText] = await Promise.all([
-            fetch(TOPOJSON_URL).then(r => r.json()),
+        const [districtsBuffer, boundaryBuffer, csvText] = await Promise.all([
+            fetch(DISTRICTS_URL).then(r => r.arrayBuffer()),
+            fetch(BOUNDARY_URL).then(r => r.arrayBuffer()),
             fetch(METADATA_URL).then(r => r.text())
         ]);
-        const features = topojson.feature(topo, topo.objects.data).features;
-        districts = features.filter(f => f.properties.layer === 'districts');
-        boundary = features.filter(f => f.properties.layer === 'boundary');
+
+        // Parse parquet files
+        const districtRows = await parquetReadObjects({ file: districtsBuffer });
+        const boundaryRows = await parquetReadObjects({ file: boundaryBuffer });
+
+        districts = districtRows.map(row => toFeature(row, {
+            nom: row.nom,
+            num: row.num,
+            id: row.id,
+            arrondissement: row.arrondissement,
+            municipalite: row.municipalite
+        }));
+        boundary = boundaryRows.map(row => toFeature(row, {
+            name: row.CMANAME,
+            id: row.CMAUID
+        }));
+
         metadataRaw = d3.csvParse(csvText);
     });
 
@@ -157,7 +193,7 @@
     <svg viewBox={`0 0 ${width} ${height}`} style="background: #a6cee3;">
         <g transform={`translate(${margin.left},${margin.top})`}>
             <!-- Boundary (CMA land outside districts) -->
-            {#each boundary as feature}
+            {#each boundary as feature (feature.properties.id)}
                 <path
                     class="boundary"
                     d={pathGenerator(feature)}
@@ -167,7 +203,7 @@
                 />
             {/each}
 
-            <!-- Districts (land) -->
+            <!-- Districts -->
             {#each districts as feature (feature.properties.id || feature.properties.nom)}
                 <path
                     class="district"
