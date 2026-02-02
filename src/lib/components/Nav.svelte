@@ -1,6 +1,7 @@
 <script lang="ts">
 import { base } from '$app/paths';
 import Menu from "./Nav.Menu.svelte";
+import ThemeToggle from "./helpers/ThemeToggle.svelte";
 import { Menu as MenuIcon } from "@lucide/svelte";
 
 let isMenuOpen = $state(false);
@@ -26,6 +27,8 @@ function closeMenu(skipFocus = false) {
 
   <div class="header-right">
     <a href="{base}/about" class="about-button">About</a>
+
+    <ThemeToggle />
 
     <a href="https://github.com/Vermont-Complex-Systems/website-template" target="_blank" rel="noopener noreferrer" class="github-button" aria-label="View on GitHub">
       <svg viewBox="0 0 16 16" width="20" height="20" aria-hidden="true">
@@ -86,10 +89,6 @@ function closeMenu(skipFocus = false) {
   gap: 3rem;
 }
 
-.header-right {
-  gap: 0.5rem;
-}
-
 .title-link {
   text-decoration: none;
   color: inherit;
@@ -110,18 +109,28 @@ function closeMenu(skipFocus = false) {
 }
 
 .about-button {
-  padding: 0.5rem 1rem;
-  font-family: var(--serif);
-  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 500;
   color: var(--color-fg);
   text-decoration: none;
   background: transparent;
   border: none;
-  transition: color 200ms ease;
+  border-radius: 0.5rem;
+  transition: all var(--transition-medium);
 }
 
 .about-button:hover {
-  color: var(--color-gray-600);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+:global(.dark) .about-button {
+  color: var(--color-fg);
+}
+
+:global(.dark) .about-button:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .icon-button {
@@ -143,6 +152,10 @@ function closeMenu(skipFocus = false) {
   background: rgba(0, 0, 0, 0.05);
 }
 
+:global(.dark) .icon-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .mobile-menu-button {
   display: none;
 }
@@ -151,13 +164,25 @@ function closeMenu(skipFocus = false) {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
   text-decoration: none;
   color: var(--color-fg);
-  transition: transform var(--transition-medium);
+  transition: all var(--transition-medium);
 }
 
 .github-button:hover {
   transform: scale(1.1);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+:global(.dark) .github-button {
+  color: var(--color-fg);
+}
+
+:global(.dark) .github-button:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .sr-only {

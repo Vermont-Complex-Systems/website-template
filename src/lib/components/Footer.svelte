@@ -51,12 +51,11 @@
 		background-color: var(--color-uvm-green);
 		border-top: 1px solid var(--color-border);
 		padding: 3rem 0 2rem; /* vertical padding only */
-		margin-top: 4rem;
 	}
 
 	:global(.dark) .footer {
-		background-color: var(--color-gray-800);
-		border-top-color: var(--color-gray-700);
+		background-color: #0d0d0d;
+		border-top-color: rgba(255, 255, 255, 0.1);
 	}
 
 	/* Inner container aligns content with header/main page */
@@ -96,7 +95,7 @@
 	}
 
 	:global(.dark) .footer-bottom {
-		border-top-color: var(--color-gray-700);
+		border-top-color: rgba(255, 255, 255, 0.15);
 	}
 
 	.social-icons {
@@ -109,6 +108,10 @@
 
 	.social-icons a {
 		text-decoration: none;
+		color: var(--color-uvm-gold);
+	}
+
+	:global(.dark) .social-icons a {
 		color: var(--color-uvm-gold);
 	}
 

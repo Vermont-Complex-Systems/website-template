@@ -5,6 +5,8 @@
 
 .story {
     width: 100%;
+    padding-top: var(--padding-top-page);
+    padding-bottom: var(--padding-bottom-page);
 }
 
 /* Prose sections within stories get centered treatment */
@@ -25,7 +27,7 @@
 }
 
 .story #conclusion {
-    margin-bottom: 4rem;
+    margin-bottom: 0;
 }
 
 /* =============================================================================

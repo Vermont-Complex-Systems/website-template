@@ -55,6 +55,18 @@
         border-color: rgba(0, 0, 0, 0.12);
     }
 
+    :global(.dark) .story-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    :global(.dark) .story-card:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.15);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+    }
+
     .card-content {
         padding: 2rem;
         display: flex;
@@ -70,6 +82,10 @@
         align-items: center;
         padding-top: 1rem;
         border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    :global(.dark) .card-footer {
+        border-top-color: rgba(255, 255, 255, 0.1);
     }
 
     .read-more {
@@ -90,10 +106,18 @@
         flex-grow: 1;
     }
 
+    :global(.dark) .description {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
     .date {
         font-size: 0.9rem;
         color: rgba(0, 0, 0, 0.5);
         font-family: var(--sans);
+    }
+
+    :global(.dark) .date {
+        color: rgba(255, 255, 255, 0.5);
     }
 
     .tags {
@@ -109,6 +133,11 @@
         background: rgba(0, 0, 0, 0.06);
         border-radius: 12px;
         color: rgba(0, 0, 0, 0.6);
+    }
+
+    :global(.dark) .tag {
+        background: rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.7);
     }
 
     @media (max-width: 768px) {

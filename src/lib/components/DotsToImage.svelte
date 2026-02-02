@@ -137,11 +137,11 @@
     const fsSource = `
       precision mediump float;
       uniform float u_time;
+      uniform vec3 u_dotColor;
       void main() {
         float dist = distance(gl_PointCoord, vec2(0.5, 0.5));
         float alpha = 1.0 - smoothstep(0.4, 0.5, dist);
-        vec3 color = vec3(0.0, 0.0, 0.0); // black dots
-        gl_FragColor = vec4(color, alpha);
+        gl_FragColor = vec4(u_dotColor, alpha);
       }
     `;
 
@@ -254,6 +254,7 @@
     gl.vertexAttribPointer(randomAttributeLocation, 1, gl.FLOAT, false, 0, 0);
     const rotationUniformLocation = gl.getUniformLocation(program, 'u_rotation');
     const timeUniformLocation = gl.getUniformLocation(program, 'u_time');
+    const dotColorUniformLocation = gl.getUniformLocation(program, 'u_dotColor');
 
     let rotationAngle = 0;
     let lastJumpTime = 0;
@@ -372,6 +373,12 @@
       rotationAngle += 0.0005;
       gl.uniform1f(rotationUniformLocation, rotationAngle);
       gl.uniform1f(timeUniformLocation, timestamp);
+      // Set dot color based on theme (black for light, white for dark)
+      if (mode.current === 'dark') {
+        gl.uniform3f(dotColorUniformLocation, 0.9, 0.9, 0.9); // light dots for dark mode
+      } else {
+        gl.uniform3f(dotColorUniformLocation, 0.0, 0.0, 0.0); // black dots for light mode
+      }
       // Clear with transparent color - CSS background will show through
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);

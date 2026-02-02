@@ -49,6 +49,11 @@
         font-family: var(--mono);
         font-size: 0.85rem;
         max-width: fit-content;
+        transition: background-color 200ms ease;
+    }
+
+    :global(.dark) .code-block {
+        background: rgba(255, 255, 255, 0.1);
     }
 
     .code-block code {

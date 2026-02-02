@@ -125,7 +125,7 @@
   align-items: center;
   justify-content: center;
   min-height: min(70vh, 600px);
-  padding: 3rem var(--page-padding);
+  padding-bottom: 3rem;
   box-sizing: border-box;
 }
 
@@ -226,6 +226,10 @@
   background: rgba(0, 0, 0, 0.02);
 }
 
+:global(.dark) .why-svelte {
+  background: rgba(255, 255, 255, 0.03);
+}
+
 .why-svelte h2 {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-family: var(--serif);
@@ -244,6 +248,10 @@
   background: var(--color-bg);
   border-radius: 12px;
   border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+:global(.dark) .reason {
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .reason h3 {
@@ -327,6 +335,10 @@
   background: var(--color-bg);
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+:global(.dark) .explanation {
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .explanation h3 {
