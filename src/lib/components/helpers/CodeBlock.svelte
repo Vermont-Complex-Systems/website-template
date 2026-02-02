@@ -102,6 +102,12 @@
 :global(.dark) .code-view :global(.hljs-type) {
   color: #ffa657;
 }
+:global(.dark) .code-view :global(.hljs-subst) {
+  color: #e6edf3;
+}
+:global(.dark) .code-view :global(.hljs-variable) {
+  color: #ffa657;
+}
 
 @media (max-width: 768px) {
   .code-filename {

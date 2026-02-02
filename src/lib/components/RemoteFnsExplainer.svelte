@@ -20,7 +20,8 @@ const config = {
     },
 }`, { language: 'typescript' }).value;
 
-  const remoteCodeSnippet = `import { prerender } from '$app/state';
+  const remoteCodeSnippet = `
+import { prerender } from '$app/state';
 import { error, redirect } from '@sveltejs/kit';
 import * as v from 'valibot';
 import storiesData from '$data/stories.csv';
@@ -109,6 +110,7 @@ export const getStory = prerender(v.string(), async (slug) => {
 <style>
 .remote-functions {
   padding: 4rem var(--page-padding);
+  margin-bottom: var(--padding-bottom-page); /* here we add margin-bottom so that we don't extends the shaded background */
   background: rgba(0, 0, 0, 0.02);
   overflow-x: hidden;
 }
