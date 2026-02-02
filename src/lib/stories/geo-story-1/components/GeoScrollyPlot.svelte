@@ -1,13 +1,13 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-    import { parquetReadObjects } from 'hyparquet';
+    import { rewind } from '@turf/rewind';
 
     let { scrollyIndex } = $props();
 
     // Remote data URLs
-    const DISTRICTS_URL = 'https://raw.githubusercontent.com/jstonge/rdag-montreal/refs/heads/main/pipelines/transform/input/districts.parquet';
-    const BOUNDARY_URL = 'https://raw.githubusercontent.com/jstonge/rdag-montreal/refs/heads/main/pipelines/transform/input/boundary.parquet';
+    const DISTRICTS_URL = 'https://raw.githubusercontent.com/jstonge/rdag-montreal/refs/heads/main/pipelines/transform/input/districts.geojson';
+    const BOUNDARY_URL = 'https://raw.githubusercontent.com/jstonge/rdag-montreal/refs/heads/main/pipelines/transform/input/boundary.geojson';
     const METADATA_URL = 'https://raw.githubusercontent.com/jstonge/rdag-montreal/refs/heads/main/pipelines/transform/input/metadata.csv';
 
     // Fetched data
@@ -15,50 +15,28 @@
     let boundary = $state([]);
     let metadataRaw = $state([]);
 
-    // Convert parquet geometry {x,y}[][] to GeoJSON [lon,lat][][]
-    function convertGeometry(geometry) {
-        const coordinates = geometry.map(polygon =>
-            polygon.map(ring => ring.map(pt => [pt.x, pt.y]))
-        );
+    // Fix winding order for GeoJSON features
+    // https://observablehq.com/@john-guerra/d3-black-box-map
+    function rewindGeoJSON(geo) {
         return {
-            type: coordinates.length > 1 ? 'MultiPolygon' : 'Polygon',
-            coordinates: coordinates.length > 1 ? coordinates : coordinates[0]
-        };
-    }
-
-    // Convert parquet row to GeoJSON feature
-    function toFeature(row, properties) {
-        return {
-            type: 'Feature',
-            properties,
-            geometry: convertGeometry(row.geometry)
+            ...geo,
+            features: geo.features.map(f => rewind(f, { reverse: true }))
         };
     }
 
     // Fetch data on mount
     onMount(async () => {
-        const [districtsBuffer, boundaryBuffer, csvText] = await Promise.all([
-            fetch(DISTRICTS_URL).then(r => r.arrayBuffer()),
-            fetch(BOUNDARY_URL).then(r => r.arrayBuffer()),
+        const [districtsGeo, boundaryGeo, csvText] = await Promise.all([
+            fetch(DISTRICTS_URL).then(r => r.json()),
+            fetch(BOUNDARY_URL).then(r => r.json()),
             fetch(METADATA_URL).then(r => r.text())
         ]);
 
-        // Parse parquet files
-        const districtRows = await parquetReadObjects({ file: districtsBuffer });
-        const boundaryRows = await parquetReadObjects({ file: boundaryBuffer });
+        const fixedDistricts = rewindGeoJSON(districtsGeo);
+        const fixedBoundary = rewindGeoJSON(boundaryGeo);
 
-        districts = districtRows.map(row => toFeature(row, {
-            nom: row.nom,
-            num: row.num,
-            id: row.id,
-            arrondissement: row.arrondissement,
-            municipalite: row.municipalite
-        }));
-        boundary = boundaryRows.map(row => toFeature(row, {
-            name: row.CMANAME,
-            id: row.CMAUID
-        }));
-
+        districts = fixedDistricts.features;
+        boundary = fixedBoundary.features;
         metadataRaw = d3.csvParse(csvText);
     });
 
@@ -143,20 +121,6 @@
         }
     }
 
-    // Get tooltip text based on mode
-    function getTooltip(arrondissement, nom) {
-        if (!showPopulation) {
-            return nom;
-        } else if (showChange) {
-            const change = changeMap.get(arrondissement);
-            const sign = change >= 0 ? '+' : '';
-            return `${nom}: ${sign}${change?.toFixed(1)}%`;
-        } else {
-            const pop = pop2011.get(arrondissement);
-            return `${nom}: ${pop?.toLocaleString() || 'N/A'}`;
-        }
-    }
-
     // Projection that fits the districts to the container
     let projection = $derived.by(() => {
         const allFeatures = [...districts];
@@ -192,50 +156,52 @@
 
     <svg viewBox={`0 0 ${width} ${height}`} style="background: #a6cee3;">
         <g transform={`translate(${margin.left},${margin.top})`}>
-            <!-- Boundary (CMA land outside districts) -->
-            {#each boundary as feature (feature.properties.id)}
-                <path
-                    class="boundary"
-                    d={pathGenerator(feature)}
-                    fill="#f4efea"
-                    stroke="#999"
-                    stroke-width="0.5"
-                />
-            {/each}
+                <!-- Boundary (CMA land outside districts) -->
+                {#each boundary as feature (feature.properties.id)}
+                    <path
+                        class="boundary"
+                        d={pathGenerator(feature)}
+                        fill="#f4efea"
+                        stroke="#999"
+                        stroke-width="0.5"
+                        pointer-events="none"
+                    />
+                {/each}
 
-            <!-- Districts -->
-            {#each districts as feature (feature.properties.id || feature.properties.nom)}
-                <path
-                    class="district"
-                    d={pathGenerator(feature)}
-                    fill={getFillColor(feature.properties.arrondissement)}
-                    stroke="#333"
-                    stroke-width="0.5"
-                    style="transition: fill 0.5s ease;"
-                >
-                    <title>{getTooltip(feature.properties.arrondissement, feature.properties.nom)}</title>
-                </path>
-            {/each}
+                <!-- Districts -->
+                {#each districts as feature (feature.properties.id || feature.properties.nom)}
+                    <path
+                        class="district"
+                        d={pathGenerator(feature)}
+                        fill={getFillColor(feature.properties.arrondissement)}
+                        stroke="#333"
+                        stroke-width="0.5"
+                        style="transition: fill 0.5s ease;"
+                        pointer-events="none"
+                    />
+                {/each}
 
-            <!-- District labels -->
-            {#each districts as feature (feature.properties.id || feature.properties.nom)}
-                {@const centroid = getCentroid(feature)}
-                {#if centroid && !isNaN(centroid[0])}
-                    <text
-                        x={centroid[0]}
-                        y={centroid[1]}
-                        text-anchor="middle"
-                        font-size="8"
-                        fill="#333"
-                        stroke="white"
-                        stroke-width="2"
-                        paint-order="stroke"
-                    >
-                        {feature.properties.nom}
-                    </text>
-                {/if}
-            {/each}
-        </g>
+                <!-- District labels -->
+                {#each districts as feature (feature.properties.id || feature.properties.nom)}
+                    {@const centroid = getCentroid(feature)}
+                    {#if centroid && !isNaN(centroid[0])}
+                        <text
+                            x={centroid[0]}
+                            y={centroid[1]}
+                            text-anchor="middle"
+                            font-size="10"
+                            font-weight="500"
+                            fill="#333"
+                            stroke="white"
+                            stroke-width="3"
+                            stroke-linejoin="round"
+                            paint-order="stroke"
+                        >
+                            {feature.properties.nom}
+                        </text>
+                    {/if}
+                {/each}
+            </g>
     </svg>
 
     <!-- Color legend -->
@@ -314,14 +280,5 @@
     .legend-label {
         font-size: 0.75rem;
         color: #333;
-    }
-
-    path.district {
-        cursor: pointer;
-    }
-
-    path.district:hover {
-        stroke-width: 2;
-        stroke: #000;
     }
 </style>

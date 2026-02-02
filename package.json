@@ -44,6 +44,7 @@
 		"@lucide/svelte": "^0.562.0",
 		"@playwright/mcp": "^0.0.56",
 		"@rollup/plugin-dsv": "^3.0.5",
+		"@turf/rewind": "^7.3.3",
 		"better-sqlite3": "^12.5.0",
 		"d3": "^7.9.0",
 		"highlight.js": "^11.11.1",

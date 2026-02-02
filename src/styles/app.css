@@ -9,11 +9,9 @@
 
 :root {
   /* Typography families */
-  --sans: "Atlas Grotesk", system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --serif: "Tiempos Text", "Times New Roman", Times, serif;
-  --mono: "Atlas Typewriter", "SF Mono", Monaco, "Cascadia Code",
-    "Roboto Mono", Consolas, "Courier New", monospace;
+  --sans: "Atlas Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --serif: "Baskerville", "Times New Roman", Times, serif;
+  --mono: "Atlas Typewriter", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
 
   /* Type scale */
   --font-size-giant: clamp(3rem, 10vw, 4rem);
