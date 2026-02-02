@@ -23,13 +23,14 @@ export const getMember = prerender(
 
 // STORIES 
 
-interface Story {
+export interface Story {
   slug: string;
   title: string;
   description: string;
   author: string;
   date: string;
   externalUrl: string;
+  tags: string;
 }
 
 

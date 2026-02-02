@@ -3,7 +3,7 @@
     import Spinner from "$lib/components/helpers/Spinner.svelte";
     import About from "$lib/components/About.svelte";
 
-    import { getMembers } from '$lib/data.remote'
+    import { getMembers } from '$lib/story.remote'
 
      const preloadFont = [
         "/assets/fonts/tiempos/TiemposTextWeb-Regular.woff2",
@@ -40,7 +40,31 @@
 </div>
 
 <style>
-    h1 {
-        margin-bottom: 3rem;
+    .page-header-text h1 {
+        font-size: 3rem;
+        font-weight: 400;
     }
+
+    .page-header {
+        display: flex;
+        align-items: flex-start;
+        gap: 3rem;
+        margin-top: 4rem;
+    }
+
+    .page-header-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        max-width: 50%;
+    }
+
+     @media (max-width: 960px) {
+        
+        .page-header-text,
+        .page-header.no-logo .page-header-text {
+            max-width: 100%;
+        }
+    }
+
 </style>

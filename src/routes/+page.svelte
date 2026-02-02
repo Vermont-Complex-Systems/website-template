@@ -12,7 +12,7 @@
 </script>
 
 <Meta 
-  title="TODO"
+  title="Website template"
   description="TODO"
   {preloadFont}
 />
