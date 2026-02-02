@@ -110,6 +110,7 @@ export const getStory = prerender(v.string(), async (slug) => {
 .remote-functions {
   padding: 4rem var(--page-padding);
   background: rgba(0, 0, 0, 0.02);
+  overflow-x: hidden;
 }
 
 .remote-functions h2 {
@@ -145,6 +146,11 @@ export const getStory = prerender(v.string(), async (slug) => {
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   align-items: start;
+  min-width: 0;
+}
+
+.remote-layout > * {
+  min-width: 0;
 }
 
 .remote-explanations {
@@ -280,11 +286,59 @@ export const getStory = prerender(v.string(), async (slug) => {
 }
 
 @media (max-width: 768px) {
+  .remote-functions {
+    padding: 2.5rem var(--page-padding);
+  }
+
+  .section-intro {
+    font-size: 0.95rem;
+    text-align: left;
+    margin-bottom: 1.5rem;
+  }
+
   .remote-layout {
     grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
+
   .remote-explanations {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .explanation {
+    padding: 0.875rem 1rem;
+  }
+
+  .explanation h3 {
+    font-size: 0.95rem;
+  }
+
+  .explanation p {
+    font-size: 0.85rem;
+  }
+
+  .static-note {
+    padding: 0.875rem 1rem;
+    padding-top: 1.25rem;
+  }
+
+  .static-note .note-label {
+    font-size: 0.6rem;
+    top: -0.5rem;
+  }
+
+  .static-note pre {
+    font-size: 0.65rem;
+    padding: 0.5rem;
+  }
+
+  .remote-cta {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    margin-top: 1rem;
   }
 }
 </style>

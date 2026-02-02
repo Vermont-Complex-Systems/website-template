@@ -2,7 +2,7 @@
   import DotsToImage from '$lib/components/DotsToImage.svelte';
   import StoryGrid from '$lib/components/StoryGrid.svelte';
   import CopyCodeBlock from '$lib/components/helpers/CopyCodeBlock.svelte';
-  import RemoteFunctionsSection from '$lib/components/RemoteFunctionsSection.svelte';
+  import RemoteFunctionsSection from '$lib/components/RemoteFnsExplainer.svelte';
   import { getStories } from '$lib/story.remote';
   import { ArrowRight } from '@lucide/svelte';
 </script>

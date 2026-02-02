@@ -10,7 +10,7 @@
 
 <Nav />
 
-<ModeWatcher defaultMode="light" />
+<ModeWatcher defaultMode="system" />
 
 <main id="content">
 	{@render children?.()}

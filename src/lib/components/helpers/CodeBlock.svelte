@@ -24,6 +24,8 @@
 <style>
 .code-block-wrapper {
   position: relative;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .code-filename {
@@ -99,5 +101,19 @@
 }
 :global(.dark) .code-view :global(.hljs-type) {
   color: #ffa657;
+}
+
+@media (max-width: 768px) {
+  .code-filename {
+    font-size: 0.6rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .code-view {
+    padding: 0.75rem;
+    padding-top: 2rem;
+    font-size: 0.65rem;
+    border-radius: 6px;
+  }
 }
 </style>
