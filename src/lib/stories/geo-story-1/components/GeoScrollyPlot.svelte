@@ -47,6 +47,7 @@
 
     let innerWidth = $derived(width - margin.left - margin.right);
     let innerHeight = $derived(height - margin.top - margin.bottom);
+    let isMobile = $derived(width < 768);
 
     // Determine display mode from scrollyIndex
     // Step 0: Just show Montreal (no data fill)
@@ -96,6 +97,28 @@
         return values.length > 0 ? Math.max(Math.abs(d3.min(values)), Math.abs(d3.max(values))) : 10;
     });
 
+    // Top 5 most populous districts (2011)
+    let top5Population = $derived.by(() => {
+        const entries = [...pop2011.entries()];
+        return new Set(
+            entries
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(d => d[0])
+        );
+    });
+
+    // Top 5 districts by population change
+    let top5Change = $derived.by(() => {
+        const entries = [...changeMap.entries()];
+        return new Set(
+            entries
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 5)
+                .map(d => d[0])
+        );
+    });
+
     // Color scale for population (spectral)
     let populationColorScale = $derived(
         d3.scaleSequential(d3.interpolateSpectral)
@@ -126,11 +149,13 @@
         const allFeatures = [...districts];
         if (allFeatures.length === 0) return d3.geoMercator();
 
+        const featureCollection = {
+            type: "FeatureCollection",
+            features: allFeatures
+        };
+
         return d3.geoMercator()
-            .fitSize([innerWidth, innerHeight], {
-                type: "FeatureCollection",
-                features: allFeatures
-            });
+            .fitSize([innerWidth, innerHeight], featureCollection);
     });
 
     // Path generator
@@ -184,7 +209,13 @@
                 <!-- District labels -->
                 {#each districts as feature (feature.properties.id || feature.properties.nom)}
                     {@const centroid = getCentroid(feature)}
-                    {#if centroid && !isNaN(centroid[0])}
+                    {@const arrondissement = feature.properties.arrondissement}
+                    {@const showLabel =
+                        ((scrollyIndex === 0 || scrollyIndex === undefined) && !isMobile) ||
+                        (scrollyIndex === 1 && top5Population.has(arrondissement)) ||
+                        (scrollyIndex >= 2 && top5Change.has(arrondissement))
+                    }
+                    {#if centroid && !isNaN(centroid[0]) && showLabel}
                         <text
                             x={centroid[0]}
                             y={centroid[1]}
@@ -224,10 +255,30 @@
     .chart-container {
         width: 100%;
         height: 100%;
-        min-height: 500px;
+        min-height: min(500px, 80vh);
         position: relative;
         border: 1px solid rgba(0, 0, 0, 0.08);
         border-radius: 16px;
+        overflow: hidden;
+    }
+
+    /* Mobile: Square container centered within sticky parent
+       - aspect-ratio: 1 creates a square based on width
+       - position absolute + transform centers it vertically and horizontally
+       - Parent (.scrolly-chart) must have position: sticky/relative for this to work
+       - Results in a compact, centered map that fits mobile viewport
+    */
+    @media (max-width: 767px) {
+        .chart-container {
+            aspect-ratio: 1;
+            min-height: unset;
+            height: auto;
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 
     svg {
