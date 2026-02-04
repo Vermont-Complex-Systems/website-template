@@ -8,7 +8,7 @@
     let { story, data } = $props();
 
     let scrollyIndex = $state({ value: undefined });
-
+    
 </script>
 
 <ScrollIndicator threshold={50} />
@@ -23,7 +23,7 @@
 </svelte:head>
 
 
-<article class="story" id="geo-story-1">
+<article class="story theme-light" id="geo-story-1">
     <div class="prose">
         <StoryHeader
             title={data.title}

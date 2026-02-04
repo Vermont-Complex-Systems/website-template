@@ -10,9 +10,8 @@ import { TokenCredentialAuthenticationProvider } from '@microsoft/microsoft-grap
 import settings from '../src/appSettings.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = join(__dirname, '..', 'src', 'data');
-
-const EXCEL_EXTENSIONS = ['.xlsx', '.xlsm', '.xls'];
+const STORIES_DIR = join(__dirname, '..', 'src', 'lib', 'stories');
+const DATA_STORY_FILE = 'data-story.xlsx';
 
 function createClient() {
   const credential = new ClientSecretCredential(
@@ -28,32 +27,68 @@ function createClient() {
   return Client.initWithMiddleware({ authProvider });
 }
 
-function isExcelFile(item) {
-  if (!item.file || !item.name) return false;
-  const name = item.name.toLowerCase();
-  return EXCEL_EXTENSIONS.some((ext) => name.endsWith(ext));
-}
-
-function escapeCSVValue(value) {
-  if (value === null || value === undefined) return '';
-  const str = String(value);
-  // Escape if contains comma, quote, or newline
-  if (str.includes(',') || str.includes('"') || str.includes('\n')) {
-    return `"${str.replace(/"/g, '""')}"`;
-  }
-  return str;
-}
-
-function convertToCSV(rows) {
-  return rows.map((row) => row.map(escapeCSVValue).join(',')).join('\n');
-}
-
 function sanitizeFilename(name) {
   // Remove Excel extension and sanitize for filesystem
   return name
     .replace(/\.(xlsx|xlsm|xls)$/i, '')
     .replace(/[^a-zA-Z0-9-_]/g, '-')
     .toLowerCase();
+}
+
+function excelDateToString(serial) {
+  // Excel dates are days since 1900-01-01 (with a leap year bug)
+  const utcDays = Math.floor(serial - 25569);
+  const date = new Date(utcDays * 86400 * 1000);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function convertToStoryJson(rows) {
+  // Skip header row, expect columns: Section, key, value
+  const [header, ...dataRows] = rows;
+
+  const result = {
+    title: '',
+    subtitle: '',
+    authors: [],
+    date: '',
+    SectionTitle: ''
+  };
+
+  let currentAuthor = {};
+
+  for (const row of dataRows) {
+    const section = String(row[0] || '').trim().toLowerCase();
+    const key = String(row[1] || '').trim();
+    const value = row[2];
+
+    if (!section || !key) continue;
+
+    if (section === 'meta') {
+      const keyLower = key.toLowerCase();
+      if (keyLower === 'title') result.title = value;
+      else if (keyLower === 'subtitle') result.subtitle = value;
+      else if (keyLower === 'sectiontitle') result.SectionTitle = value;
+      else if (keyLower === 'date') {
+        result.date = typeof value === 'number' ? excelDateToString(value) : value;
+      }
+    } else if (section === 'author') {
+      if (key.toLowerCase() === 'name') {
+        currentAuthor = { name: value };
+      } else if (key.toLowerCase() === 'url') {
+        currentAuthor.url = value;
+        result.authors.push(currentAuthor);
+        currentAuthor = {};
+      }
+    } else {
+      // Dynamic sections: create array if needed, then push
+      if (!result[section]) {
+        result[section] = [];
+      }
+      result[section].push({ type: key, value: String(value) });
+    }
+  }
+
+  return result;
 }
 
 async function main() {
@@ -74,54 +109,52 @@ async function main() {
   const drives = await client.api(`/sites/${site.id}/drives`).get();
   const driveId = drives.value[0].id;
 
-  // Get items in root
+  // Find data-story.xlsx
   const items = await client.api(`/drives/${driveId}/root/children`).get();
-  const excelFiles = items.value.filter(isExcelFile);
+  const dataStoryFile = items.value.find(
+    (item) => item.file && item.name.toLowerCase() === DATA_STORY_FILE.toLowerCase()
+  );
 
-  console.log(`\nFound ${excelFiles.length} Excel file(s)`);
+  if (!dataStoryFile) {
+    console.log(`\n${DATA_STORY_FILE} not found`);
+    return;
+  }
 
-  for (const excelFile of excelFiles) {
-    console.log(`\nProcessing: ${excelFile.name}`);
+  console.log(`\nProcessing: ${dataStoryFile.name}`);
 
-    // Get worksheets
-    const worksheets = await client
-      .api(`/drives/${driveId}/items/${excelFile.id}/workbook/worksheets`)
-      .get();
+  // Get worksheets
+  const worksheets = await client
+    .api(`/drives/${driveId}/items/${dataStoryFile.id}/workbook/worksheets`)
+    .get();
 
-    for (const sheet of worksheets.value) {
-      console.log(`  Sheet: ${sheet.name}`);
+  for (const sheet of worksheets.value) {
+    console.log(`  Sheet: ${sheet.name}`);
 
-      try {
-        // Get the used range (all data in the sheet)
-        const usedRange = await client
-          .api(
-            `/drives/${driveId}/items/${excelFile.id}/workbook/worksheets/${sheet.id}/usedRange`
-          )
-          .get();
+    try {
+      const usedRange = await client
+        .api(
+          `/drives/${driveId}/items/${dataStoryFile.id}/workbook/worksheets/${sheet.id}/usedRange`
+        )
+        .get();
 
-        const values = usedRange.values || [];
+      const values = usedRange.values || [];
 
-        if (values.length === 0) {
-          console.log(`    (empty sheet, skipping)`);
-          continue;
-        }
-
-        // Convert to CSV
-        const csv = convertToCSV(values);
-
-        // Generate filename and determine output directory
-        const sheetName = sanitizeFilename(sheet.name);
-        const filename = `${sheetName}.csv`;
-
-        // Route "publications" Excel to publications subdirectory
-        let outputDir = DATA_DIR;
-        const filepath = join(outputDir, filename);
-        writeFileSync(filepath, csv, 'utf8');
-
-        console.log(`    -> ${filepath} (${values.length} rows)`);
-      } catch (error) {
-        console.error(`    Error reading sheet: ${error.message}`);
+      if (values.length === 0) {
+        console.log(`    (empty sheet, skipping)`);
+        continue;
       }
+
+      const sheetName = sanitizeFilename(sheet.name);
+      const storyDir = join(STORIES_DIR, sheetName, 'data');
+      mkdirSync(storyDir, { recursive: true });
+
+      const json = convertToStoryJson(values);
+      const filepath = join(storyDir, 'copy.json');
+      writeFileSync(filepath, JSON.stringify(json, null, '\t'), 'utf8');
+
+      console.log(`    -> ${filepath}`);
+    } catch (error) {
+      console.error(`    Error reading sheet: ${error.message}`);
     }
   }
 

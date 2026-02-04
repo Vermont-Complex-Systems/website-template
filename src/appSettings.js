@@ -5,7 +5,7 @@ export const settings = {
   tenantId: process.env.tenantId,
   clientSecret: process.env.clientSecret,
   // SharePoint/Graph resource IDs
-  siteId: process.env.siteId,
+  siteId: process.env.siteID,
   // Default scopes for client credentials flow
   scopes: ['https://graph.microsoft.com/.default'],
 };

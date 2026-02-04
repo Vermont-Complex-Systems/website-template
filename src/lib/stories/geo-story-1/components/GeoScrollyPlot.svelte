@@ -18,7 +18,7 @@
     // Chart dimensions
     let width = $state(800);
     let height = $state(600);
-    const margin = { top: 20, right: 20, bottom: 40, left: 20 };
+    const margin = { top: 20, right: 20, bottom: 40, left: 40 };
 
     let innerWidth = $derived(width - margin.left - margin.right);
     let innerHeight = $derived(height - margin.top - margin.bottom);
@@ -26,10 +26,6 @@
 
     // Current step index (default case handles overflow)
     let stepIndex = $derived(scrollyIndex ?? 0);
-
-    // ============================================
-    // STATIC DATA (computed once from imports)
-    // ============================================
 
     // Parse CSV data (year and population are strings, convert to numbers)
     const metadata = metadataRaw.map(d => ({
@@ -45,7 +41,7 @@
     const pop2016 = new Map(
         metadata.filter(d => d.year === 2016).map(d => [d.arrondissement, d.population])
     );
-
+    
     // Percentage change for each arrondissement
     const changeMap = new Map();
     for (const [arr, pop11] of pop2011) {
@@ -88,7 +84,7 @@
                 return { title: 'Population 2011', colors, labelsToShow, legend: colorScale };
             }
 
-            default: {
+            case 2: {
                 // Change view
                 const changeValues = [...changeMap.values()];
                 const maxChange = Math.max(Math.abs(d3.min(changeValues)), Math.abs(d3.max(changeValues)));
@@ -106,6 +102,10 @@
                 );
 
                 return { title: 'Population Change 2011→2016', colors, labelsToShow, legend: colorScale };
+            }
+
+            default: {
+                return { title: null, colors: null, labelsToShow: null, legend: null };
             }
         }
     });
@@ -146,13 +146,13 @@
                 {/each}
 
                 <!-- Districts -->
-                {#each districts as feature (feature.properties.id || feature.properties.nom)}
+                {#each districts as feature (feature.properties.id)}
                     {@const arrondissement = feature.properties.arrondissement}
-                    {@const color = mapConfig.colors?.get(arrondissement) ?? '#e0e0e0'}
+                    {@const fill = mapConfig.colors?.get(arrondissement) ?? '#e0e0e0'}
                     <path
                         class="district"
                         d={pathGenerator(feature)}
-                        fill={color}
+                        {fill}
                         stroke="#333"
                         stroke-width="0.5"
                         style="transition: fill 0.5s ease;"
@@ -161,7 +161,7 @@
                 {/each}
 
                 <!-- District labels -->
-                {#each districts as feature (feature.properties.id || feature.properties.nom)}
+                {#each districts as feature (feature.properties.id)}
                     {@const centroid = getCentroid(feature)}
                     {@const arrondissement = feature.properties.arrondissement}
                     {@const showLabel = mapConfig.labelsToShow
