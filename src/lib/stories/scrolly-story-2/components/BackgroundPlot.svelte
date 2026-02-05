@@ -1,7 +1,11 @@
 <script>
+    /* =====================================================
+     * Imports
+     * =================================================== */
     import { scaleLinear, scaleLog, scaleOrdinal, scaleSqrt } from 'd3';
     import { Tween } from 'svelte/motion';
     import { cubicOut } from 'svelte/easing';
+
     import ChartTooltip from './ChartTooltip.svelte';
     import RegressionLines from './RegressionLines.svelte';
     import RegionLegend from './RegionLegend.svelte';
@@ -9,109 +13,158 @@
     import XAxis from './XAxis.svelte';
     import YAxis from './YAxis.svelte';
     import SimpleToggle from '$lib/components/helpers/SimpleToggle.svelte';
+
     import allData from '../data/combined-data.csv';
+
 
     let { scrollyIndex } = $props();
 
-    
-    let selectedXVar = $state('democracy');
-    
-    // X-axis variable options
-    const xVariables = [
-        { value: 'democracy', label: 'Electoral Democracy Index', domain: [0, 1], scale: 'linear' },
-        { value: 'gdp', label: 'GDP per Capita', domain: [200, 150000], scale: 'log' },
-    ];
-    
-    let xConfig = $derived(xVariables.find(v => v.value === selectedXVar));
 
-    // Population-based dot sizing
-    let usePopulationSize = $state(true);
-
-    // Chart dimensions
+    /* =====================================================
+     * 1. Viewport & layout signals
+     * =================================================== */
     let width = $state(800);
     let height = $state(600);
+
     const navHeight = 200;
     const margin = { top: 60, right: 40, bottom: 70, left: 70 };
 
-    let innerWidth = $derived(width - margin.left - margin.right);
-    let innerHeight = $derived(height - margin.top - margin.bottom - navHeight / 2);
-
-    // Years matching the steps in copy.json
-    const years = [2001, 2007, 2013, 2020, 2022];
-
-    // Map scrollyIndex to year
-    let currentYear = $derived(years[Math.min(scrollyIndex ?? 0, years.length - 1)] ?? years[0]);
-
-    // Filter data for current year AND selected x variable
-    let currentData = $derived(
-        allData.filter(d => d.year === currentYear && d.x_variable === selectedXVar)
+    let innerWidth = $derived(
+        width - margin.left - margin.right
     );
 
-    // Color scale for regions
+    let innerHeight = $derived(
+        height - margin.top - margin.bottom - navHeight / 2
+    );
+
+
+    /* =====================================================
+     * 2. User-controlled state (UI inputs)
+     * =================================================== */
+    let selectedXVar = $state('democracy');
+    let selectedRegions = $state(new Set());
+    let usePopulationSize = $state(true);
+    let hoveredCountry = $state(null);
+
+
+    /* =====================================================
+     * Static configuration
+     * =================================================== */
+    const years = [2001, 2007, 2013, 2020, 2022];
+
+    const xVariables = [
+        { value: 'democracy', label: 'Electoral Democracy Index', domain: [0, 1], scale: 'linear' },
+        { value: 'gdp', label: 'GDP per Capita', domain: [200, 150000], scale: 'log' }
+    ];
+
+
+    /* =====================================================
+     * 3. Derived configuration signals
+     * =================================================== */
+    let currentYear = $derived(years[scrollyIndex ?? 0]);
+
+    let xConfig = $derived(xVariables.find(v => v.value === selectedXVar));
+
+
+    /* =====================================================
+     * 4. Data filtering pipeline
+     * =================================================== */
+    let currentData = $derived(
+        allData.filter(d =>
+            d.year === currentYear &&
+            d.x_variable === selectedXVar
+        )
+    );
+
+    let filteredData = $derived(
+        selectedRegions.size === 0
+            ? currentData
+            : currentData.filter(d =>
+                selectedRegions.has(d.owid_region)
+            )
+    );
+
+
+    /* =====================================================
+     * 5. Encodings & derived metrics & Scales
+     * =================================================== */
     const regions = [...new Set(allData.map(d => d.owid_region))];
+
     const colorScale = scaleOrdinal()
         .domain(regions)
         .range(['#e15759', '#f28e2c', '#4e79a7', '#76b7b2', '#59a14f', '#edc949']);
 
-    // Radius scale for population (area-proportional using sqrt)
     let radiusScale = $derived(
         scaleSqrt()
-            .domain([0, 1.4e9]) // Max ~1.4 billion (China/India)
+            .domain([0, 1.4e9])
             .range([3, 30])
     );
 
-    // X-scale - dynamic based on selected variable
+
     let xScale = $derived(
         xConfig.scale === 'log'
-            ? scaleLog().domain(xConfig.domain).range([0, innerWidth])
-            : scaleLinear().domain(xConfig.domain).range([0, innerWidth])
+            ? scaleLog()
+                .domain(xConfig.domain)
+                .range([0, innerWidth])
+            : scaleLinear()
+                .domain(xConfig.domain)
+                .range([0, innerWidth])
     );
 
-    // X-axis ticks
     let xTicks = $derived(
         xConfig.scale === 'log'
             ? [200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000]
             : [0, 0.2, 0.4, 0.6, 0.8, 1.0]
     );
 
-    // Filter state - null means show all, otherwise show only selected regions
-    let selectedRegions = $state(new Set());
 
-    // Filtered data based on selected regions
-    let filteredData = $derived(
-        selectedRegions.size === 0
-            ? currentData
-            : currentData.filter(d => selectedRegions.has(d.owid_region))
-    );
-
-    // Compute min/max life expectancy for filtered data with padding
+    /* =====================================================
+     * 6. Y-scale (data → extent → tween → scale)
+     * =================================================== */
     let lifeExpExtent = $derived.by(() => {
         const data = filteredData.length > 0 ? filteredData : currentData;
         if (data.length === 0) return [40, 90];
+
         return [
             Math.floor(Math.min(...data.map(d => d.life_expectancy))) - 5,
             Math.ceil(Math.max(...data.map(d => d.life_expectancy))) + 5
         ];
     });
 
-    // Tweened values for smooth scale transitions
-    const yMin = Tween.of(() => lifeExpExtent[0], { duration: 800, easing: cubicOut });
-    const yMax = Tween.of(() => lifeExpExtent[1], { duration: 800, easing: cubicOut });
+    const yMin = Tween.of(
+        () => lifeExpExtent[0],
+        { duration: 800, easing: cubicOut }
+    );
 
-    let yScale = $derived(scaleLinear()
-        .domain([yMin.current, yMax.current])
-        .range([innerHeight, 0]));
+    const yMax = Tween.of(
+        () => lifeExpExtent[1],
+        { duration: 800, easing: cubicOut }
+    );
+
+    let yScale = $derived(
+        scaleLinear()
+            .domain([yMin.current, yMax.current])
+            .range([innerHeight, 0])
+    );
 
     const yTicks = [20, 30, 40, 50, 60, 70, 80, 90];
 
-    // Tooltip state
-    let hoveredCountry = $state(null);
-    let hoveredData = $derived(hoveredCountry ? filteredData.find(c => c.entity === hoveredCountry) : null);
+
+    /* =====================================================
+     * 7. Tooltip derived state
+     * =================================================== */
+    let hoveredData = $derived(
+        hoveredCountry
+            ? filteredData.find(c => c.entity === hoveredCountry)
+            : null
+    );
 </script>
+
 
 <div class="chart-container" bind:clientWidth={width} bind:clientHeight={height}>
     <svg viewBox={`0 0 ${width} ${height-navHeight}`}>
         
+        <!-- Small hack to deal with Tweening axes ventring above and below the chart... -->
         <defs>
             <clipPath id="chart-area">
                 <rect x={0} y={0} width={innerWidth} height={innerHeight} />
@@ -122,14 +175,11 @@
         </defs>
 
         <g transform={`translate(${margin.left},${margin.top})`}>
-            <!-- Axes -->
             <XAxis {xScale} {innerWidth} {innerHeight} ticks={xTicks} label={xConfig.label} isLogScale={xConfig.scale === 'log'} />
             <YAxis {yScale} {innerWidth} {innerHeight} ticks={yTicks} label="Life Expectancy (years)" />
 
-            <!-- Regression lines per region -->
-            <RegressionLines data={filteredData} {xScale} {yScale} {colorScale} />
+            <RegressionLines data={filteredData} {xScale} {yScale} {colorScale} isLogScale={xConfig?.scale === 'log'}/>
 
-            <!-- Dots -->
             <ScatterDots
                 data={filteredData}
                 {xScale}
@@ -142,7 +192,7 @@
 
             <!-- Year label -->
             <text
-                x={innerWidth - 10}
+                x={margin.left + 35}
                 y={30}
                 text-anchor="end"
                 font-size="48"
@@ -164,12 +214,14 @@
     <!-- Controls positioned outside SVG -->
     <div class="chart-controls">
         
+        <!-- using vanilla html -->
         <select class="x-selector" bind:value={selectedXVar}>
             {#each xVariables as opt}
                 <option value={opt.value}>{opt.label}</option>
             {/each}
         </select>
         
+        <!-- using the bits-ui library -->
         <SimpleToggle bind:isTrue={usePopulationSize} onText="Show population size" offText="Show population size" />
     </div>
 </div>
@@ -187,6 +239,11 @@
 <style>
     .chart-container {
         position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    
+    svg {
         width: 100%;
         height: 100%;
     }
@@ -210,11 +267,6 @@
         background: #2a2a2a;
         color: #fff;
         cursor: pointer;
-    }
-
-    svg {
-        width: 100%;
-        height: 100%;
     }
 
     text {

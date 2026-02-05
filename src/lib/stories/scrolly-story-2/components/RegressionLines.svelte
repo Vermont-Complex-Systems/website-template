@@ -3,13 +3,10 @@
     import { Tween } from 'svelte/motion';
     import { cubicOut } from 'svelte/easing';
 
-    let { data, xScale, yScale, colorScale } = $props();
+    let { data, xScale, yScale, colorScale, isLogScale } = $props();
 
     // Get x domain from scale
     let xDomain = $derived(xScale.domain());
-
-    // Detect if using log scale (log scales have a .base() method)
-    let isLogScale = $derived(typeof xScale.base === 'function');
 
     // Compute regression lines per region
     let regressionData = $derived.by(() => {

@@ -1,30 +1,12 @@
-<script lang="ts">
-    import type { ScaleLinear, ScaleLogarithmic, ScaleOrdinal, ScalePower } from 'd3';
-
-    type DataPoint = {
-        entity: string;
-        owid_region: string;
-        x_value: number;
-        life_expectancy: number;
-        population: number;
-    };
-
+<script>
     let {
-        data,
-        xScale,
-        yScale,
-        colorScale,
-        radiusScale,
-        usePopulationSize = false,
+        data, 
+        xScale, 
+        yScale, 
+        colorScale, 
+        radiusScale, 
+        usePopulationSize = false, 
         hoveredCountry = $bindable()
-    }: {
-        data: DataPoint[];
-        xScale: ScaleLinear<number, number> | ScaleLogarithmic<number, number>;
-        yScale: ScaleLinear<number, number>;
-        colorScale: ScaleOrdinal<string, string>;
-        radiusScale: ScalePower<number, number>;
-        usePopulationSize: boolean;
-        hoveredCountry: string | null;
     } = $props();
 
 </script>
