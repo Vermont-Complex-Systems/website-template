@@ -16,39 +16,35 @@
 	"introduction": [
 		{
 			"type": "markdown",
-			"value": "There are many different ways to structure code to do visual data essays."
-		},
-		{
-			"type": "markdown",
-			"value": "Here's an example of a background plot evolving with content."
+			"value": "There are many different ways to structure code to do visual data essays. Here's an example of a background plot evolving with content. We replicate [Hans Rosling](https://www.youtube.com/watch?v=jbkSRLYSojo) using data form [our world in data](https://ourworldindata.org)."
 		}
 	],
 	"steps": [
-		{
+		{ 
 			"type": "markdown",
-			"value": "2001"
+			"value": "We made some improvement over the original [Hans Rosling](https://www.youtube.com/watch?v=jbkSRLYSojo) chart. You can now toggle between GDP and democracy index  in the top right of the chart, examining how variables tell different stories. You can hover on Dots to see extra information."
 		},
 		{
 			"type": "markdown",
-			"value": "2007"
+			"value": " We also added regression lines, making explicit what most people were doing anyway when looking at those correlations. You can click on the different regions in the top left, if you want to compare one or many specific regions."
 		},
 		{
 			"type": "markdown",
-			"value": "2013"
+			"value": "Try resizing the window, you'll see how the dots and regression lines are adapting thanks to svelte reactivity and smooth transitions. It is very pleasing."
 		},
 		{
 			"type": "markdown",
-			"value": "2020"
+			"value": "Of course, the goal is still to gain insights into our world in data."
 		},
 		{
 			"type": "markdown",
-			"value": "2023"
+			"value": "Like, what is happening with Central Africa? Is this a bug or is this a real outlier in terms of Life expectancy?"
 		}
 	],
 	"conclusion": [
 		{
 			"type": "markdown",
-			"value": "In conclusion, we saw how to programmatically have a scrolly story with content on the left and a shifting plot on the right."
+			"value": "In conclusion, we saw how to programmatically have a scrolly story with content in the middle and a background chart. All of this was made easier with the snippets and copy.json we're using under the hood. Importantly, using those templates, you're still in control of the nitty-gritty of the plot and the animation."
 		}
 	]
 }

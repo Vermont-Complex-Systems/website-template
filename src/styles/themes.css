@@ -31,7 +31,7 @@
 
 /* Dark mode link styling */
 :root.dark a {
-  color: var(--color-link);
+color: var(--color-link);
 }
 
 :root.dark a:hover {

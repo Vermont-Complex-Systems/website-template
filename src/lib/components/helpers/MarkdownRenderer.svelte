@@ -102,6 +102,10 @@
         margin: 0.75rem 0;
         line-height: 1.2;
     }
+   
+    .markdown-content :global(a) {
+        color: var(--color-link);
+    }
 
     .markdown-content :global(ol) {
         margin: 1.5rem 0;
