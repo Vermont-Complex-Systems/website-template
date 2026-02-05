@@ -2,49 +2,32 @@
     import { scaleLinear, scaleOrdinal } from 'd3';
     import { Tween } from 'svelte/motion';
     import { cubicOut } from 'svelte/easing';
+    import Tooltip from '$lib/components/helpers/Tooltip.svelte';
+    import RegressionLines from './RegressionLines.svelte';
     import rawData from '../data/life-expectancy-vs-electoral-democracy-index-modern.csv';
 
-    let { scrollyIndex, tooltip = $bindable({ visible: false, x: 0, y: 0, content: '' }) } = $props();
+    let { scrollyIndex } = $props();
+    let tooltip = $state({ visible: false, x: 0, y: 0, content: '' });
 
-    // Chart dimensions - bind to container for responsiveness
+    // Chart dimensions
     let width = $state(800);
     let height = $state(600);
-    let navHeight = 200
+    const navHeight = 200;
     const margin = { top: 60, right: 40, bottom: 70, left: 70 };
 
     let innerWidth = $derived(width - margin.left - margin.right);
-    let innerHeight = $derived(height - margin.top - margin.bottom - navHeight/2);
+    let innerHeight = $derived(height - margin.top - margin.bottom - navHeight / 2);
 
-    // Build region lookup from rows that have region data
-    const regionLookup = {};
-    rawData.forEach(d => {
-        const region = d['World region according to OWID'];
-        if (region && region.trim() !== '') {
-            regionLookup[d.Entity] = region.trim();
-        }
-    });
-
-    // Filter and prepare data - exclude aggregate regions like "Africa", "World", etc.
-    const aggregateEntities = new Set(['Africa', 'Asia', 'Europe', 'North America', 'South America', 'Oceania', 'World', 'High-income countries', 'Low-income countries', 'Lower-middle-income countries', 'Upper-middle-income countries']);
-
-    const allData = rawData
-        .filter(d => {
-            const lifeExp = d['Period life expectancy at birth'];
-            const democracy = d['Electoral democracy index (central estimate)'];
-            const year = +d.Year;
-            return lifeExp && democracy && !aggregateEntities.has(d.Entity) && year >= 2001;
-        })
-        .map(d => ({
-            entity: d.Entity,
-            code: d.Code,
-            year: +d.Year,
-            lifeExpectancy: +d['Period life expectancy at birth'],
-            democracy: +d['Electoral democracy index (central estimate)'],
-            region: regionLookup[d.Entity] || 'Unknown'
-        }));
+    // Data is pre-cleaned by Python script, just convert types
+    const allData = rawData.map(d => ({
+        ...d,
+        year: +d.year,
+        lifeExp: +d.lifeExp,
+        democracy: +d.democracy
+    }));
 
     // Years matching the steps in copy.json (every 3 years)
-    const years = [2001, 2004, 2007, 2010, 2013, 2016, 2019, 2022];
+    const years = [2001, 2007, 2013, 2020, 2023];
 
     // Map scrollyIndex to year
     let currentYear = $derived(years[Math.min(scrollyIndex ?? 0, years.length - 1)] ?? years[0]);
@@ -78,13 +61,9 @@
     let selectedRegions = $state(new Set());
 
     function toggleRegion(region) {
-        if (selectedRegions.has(region)) {
-            selectedRegions.delete(region);
-            selectedRegions = new Set(selectedRegions);
-        } else {
-            selectedRegions.add(region);
-            selectedRegions = new Set(selectedRegions);
-        }
+        selectedRegions = selectedRegions.has(region)
+            ? new Set([...selectedRegions].filter(r => r !== region))
+            : new Set([...selectedRegions, region]);
     }
 
     // Filtered data based on selected regions
@@ -98,8 +77,8 @@
     let lifeExpExtent = $derived.by(() => {
         const data = filteredData.length > 0 ? filteredData : currentData;
         return [
-            Math.floor(Math.min(...data.map(d => d.lifeExpectancy))) - 5,
-            Math.ceil(Math.max(...data.map(d => d.lifeExpectancy))) + 5
+            Math.floor(Math.min(...data.map(d => d.lifeExp))) - 5,
+            Math.ceil(Math.max(...data.map(d => d.lifeExp))) + 5
         ];
     });
 
@@ -120,16 +99,9 @@
 
     // Update tooltip content when hovered country changes
     $effect(() => {
-        if (!hoveredCountry) {
-            tooltip.visible = false;
-            tooltip.content = '';
-        } else {
-            const d = filteredData.find(c => c.entity === hoveredCountry);
-            if (d) {
-                tooltip.visible = true;
-                tooltip.content = `${d.entity}\nLife exp: ${d.lifeExpectancy.toFixed(1)}\nDemocracy: ${d.democracy.toFixed(2)}`;
-            }
-        }
+        const d = hoveredCountry && filteredData.find(c => c.entity === hoveredCountry);
+        tooltip.visible = !!d;
+        tooltip.content = d ? `${d.entity}\nLife exp: ${d.lifeExp.toFixed(1)}\nDemocracy: ${d.democracy.toFixed(2)}` : '';
     });
 </script>
 
@@ -168,11 +140,14 @@
                 {/each}
             </g>
 
+            <!-- Regression lines per region -->
+            <RegressionLines data={filteredData} {xScale} {yScale} {colorScale} />
+
             <!-- Dots -->
             {#each filteredData as d (d.entity)}
                 <circle
                     cx={xScale(d.democracy)}
-                    cy={yScale(d.lifeExpectancy)}
+                    cy={yScale(d.lifeExp)}
                     r={6}
                     fill={colorScale(d.region)}
                     opacity={hoveredCountry === d.entity ? 1 : 0.7}
@@ -287,12 +262,12 @@
     </svg>
 </div>
 
+<Tooltip visible={tooltip.visible} x={tooltip.x} y={tooltip.y} content={tooltip.content} />
 
 <style>
     .chart-container {
         width: 100%;
         height: 100%;
-        background: var(--color-bg, #f4efe9);
     }
 
     svg {

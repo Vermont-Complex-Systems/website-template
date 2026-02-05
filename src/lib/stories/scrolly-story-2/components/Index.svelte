@@ -2,13 +2,10 @@
 import BackgroundPlot from './BackgroundPlot.svelte';
 import StoryHeader from '$lib/components/StoryHeader.svelte';
 import ScrollIndicator from '$lib/components/helpers/ScrollIndicator.svelte';
-import Tooltip from '$lib/components/helpers/Tooltip.svelte';
-
 import { renderTextContent, scrollyContent } from '$lib/components/helpers/ScrollySnippets.svelte';
 
 let { story, data } = $props();
 let scrollyIndex = $state({ value: undefined });
-let tooltip = $state({ visible: false, x: 0, y: 0, content: '' });
 </script>
 
 <ScrollIndicator />
@@ -31,7 +28,7 @@ let tooltip = $state({ visible: false, x: 0, y: 0, content: '' });
     
     <section id="scrolly" class="scrolly-fullscreen">
         <div class="scrolly-chart">
-            <BackgroundPlot scrollyIndex={scrollyIndex.value} bind:tooltip />
+            <BackgroundPlot scrollyIndex={scrollyIndex.value} />
         </div>
         {@render scrollyContent(data.steps, scrollyIndex)}
     </section>
@@ -44,20 +41,11 @@ let tooltip = $state({ visible: false, x: 0, y: 0, content: '' });
     </section>
 </article>
 
-<Tooltip
-    visible={tooltip.visible}
-    x={tooltip.x}
-    y={tooltip.y}
-    content={tooltip.content}
-/>
-
 <style>
     /* Custom scrolly step boxes for this story */
     :global(.theme-dark .scrolly-content .step > *),
     :global(.theme-dark .scrolly-content .step > * *) {
         background: white;
-        box-shadow: 1px 1px 30px rgba(252, 220, 252, 1);
-        border: 1px solid plum;
         border-radius: 6px;
         color: #353839 !important;
     }

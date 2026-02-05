@@ -74,6 +74,7 @@
                 const colors = new Map(
                     [...pop2011.entries()].map(([arr, pop]) => [arr, colorScale(pop)])
                 );
+                
                 const labelsToShow = new Set(
                     [...pop2011.entries()]
                         .sort((a, b) => b[1] - a[1])

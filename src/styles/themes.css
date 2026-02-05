@@ -89,7 +89,8 @@ body:has(.theme-dark) .chart-container text {
   fill: white;
 }
 
-body:has(.theme-dark) .chart-container line {
+/* Only target grid lines (stroke="#e0e0e0"), not all lines */
+body:has(.theme-dark) .chart-container line[stroke="#e0e0e0"] {
   stroke: rgba(255, 255, 255, 0.2);
 }
 
