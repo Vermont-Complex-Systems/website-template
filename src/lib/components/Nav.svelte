@@ -21,7 +21,7 @@ function closeMenu(skipFocus = false) {
 <div class="header-inner">
   <div class="header-left">
     <a href="{base}/" class="title-link">
-      <h1 class="site-title">Site logo</h1>
+       <img src="waxSeal.png" alt="Verso seal" class="site-title"/>
     </a>
   </div>
 
@@ -86,8 +86,9 @@ function closeMenu(skipFocus = false) {
 }
 
 .header-left {
-  gap: 3rem;
+  margin-left: -0.5rem; /* compensate for logo whitespace */
 }
+
 
 .title-link {
   text-decoration: none;
@@ -100,12 +101,9 @@ function closeMenu(skipFocus = false) {
 }
 
 .site-title {
-  font-family: var(--sans);
-  font-weight: var(--font-weight-bold);
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  margin: 0;
-  line-height: 1.1;
-  color: var(--color-fg);
+  height: 5rem;
+  width: auto;
+  display: block;  /* removes baseline gap */
 }
 
 .about-button {

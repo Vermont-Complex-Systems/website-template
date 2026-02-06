@@ -94,7 +94,7 @@ def main():
     combined = pd.concat(all_dfs, ignore_index=True)
 
     # Save combined long-form CSV
-    output_path = DATA_DIR / 'combined-data.csv'
+    output_path = DATA_DIR / 'owid_combined.csv'
     combined.to_csv(output_path, index=False)
     print(f"Saved {len(combined)} rows to {output_path.name}")
 

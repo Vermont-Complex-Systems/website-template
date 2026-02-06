@@ -14,11 +14,10 @@
     import YAxis from './YAxis.svelte';
     import SimpleToggle from '$lib/components/helpers/SimpleToggle.svelte';
 
-    import allData from '../data/combined-data.csv';
+    import allData from '../data/owid_combined.csv';
 
 
     let { scrollyIndex } = $props();
-
 
     /* =====================================================
      * 1. Viewport & layout signals

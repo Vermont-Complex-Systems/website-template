@@ -24,6 +24,8 @@
             ? new Set([...selectedRegions].filter(r => r !== region))
             : new Set([...selectedRegions, region]);
     }
+
+    $inspect(selectedRegions);
 </script>
 
 {#each regions.filter(r => r !== 'Unknown') as region, i (region)}
