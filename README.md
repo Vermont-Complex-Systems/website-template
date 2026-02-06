@@ -33,6 +33,12 @@ If you want to use a specific branch, you can do
 npx degit Vermont-Complex-Systems/website-template#annotated-boxes example
 ```
 
+We use this command to also provide simpler stages of a given story to learn from. From example, to see the barebone version of `scrolly-story-2`, you can do
+
+```
+npx degit jstonge1/website-template#scrolly-story-2-v1.0.1
+```
+
 ## Goal
 
 This is an experimental Template to scaffold web applications with data-driven visual essays. It aims to demonstrate techniques we do at the VCSI to do visual essays.
