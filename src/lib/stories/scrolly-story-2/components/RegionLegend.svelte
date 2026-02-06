@@ -1,10 +1,9 @@
 <script lang="ts">
     import type { ScaleOrdinal } from 'd3';
 
-    let { regions, colorScale, selectedRegions = $bindable(), innerWidth }: {
+    let { regions, colorScale, innerWidth }: {
         regions: string[];
         colorScale: ScaleOrdinal<string, string>;
-        selectedRegions: Set<string>;
         innerWidth: number;
     } = $props();
 
@@ -19,13 +18,6 @@
         return { x: col * legendItemWidth, y: row * legendItemHeight };
     }
 
-    function toggleRegion(region: string) {
-        selectedRegions = selectedRegions.has(region)
-            ? new Set([...selectedRegions].filter(r => r !== region))
-            : new Set([...selectedRegions, region]);
-    }
-
-    $inspect(selectedRegions);
 </script>
 
 {#each regions.filter(r => r !== 'Unknown') as region, i (region)}
@@ -33,23 +25,19 @@
     <g
         transform={`translate(${pos.x}, ${pos.y})`}
         class="legend-item"
-        onclick={() => toggleRegion(region)}
-        role="button"
-        tabindex="0"
-        onkeydown={(e) => e.key === 'Enter' && toggleRegion(region)}
     >
         <circle
             cx={0}
             cy={0}
             r={6}
             fill={colorScale(region)}
-            opacity={selectedRegions.size === 0 || selectedRegions.has(region) ? 0.7 : 0.2}
+            opacity={0.7}
         />
         <text
             x={12}
             y={4}
             font-size="10"
-            opacity={selectedRegions.size === 0 || selectedRegions.has(region) ? 1 : 0.4}
+            opacity={1}
         >
             {region}
         </text>
@@ -57,10 +45,7 @@
 {/each}
 
 <style>
-    .legend-item {
-        cursor: pointer;
-    }
-
+    
     .legend-item:hover circle {
         transform: scale(1.2);
     }
