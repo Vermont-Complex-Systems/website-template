@@ -38,7 +38,7 @@ npx degit Vermont-Complex-Systems/website-template#annotated-boxes example
 Similarly, we use branches with specific tags to showcase stories at differnet point in time. From example, to see the vanilla version of `scrolly-story-2`, you can do
 
 ```
-npx degit jstonge1/website-template#scrolly-story-2-v1.0.1
+npx degit Vermont-Complex-Systems/website-template#scrolly-story-2-v1.0.1 example
 ```
 
 ## Goal
