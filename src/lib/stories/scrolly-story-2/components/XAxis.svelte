@@ -5,7 +5,15 @@
         innerHeight,
         ticks,
         label,
+        isLogScale = false
     } = $props();
+
+    function formatTick(tick) {
+        if (isLogScale) {
+            return tick >= 1000 ? `${tick / 1000}k` : tick;
+        }
+        return tick;
+    }
 </script>
 
 <!-- Grid lines -->

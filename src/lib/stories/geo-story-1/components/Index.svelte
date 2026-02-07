@@ -1,4 +1,5 @@
 <script>
+    import BackToHome from '$lib/components/helpers/BackToHome.svelte';
     import GeoScrollyPlot from './GeoScrollyPlot.svelte';
     import StoryHeader from '$lib/components/StoryHeader.svelte';
     import ScrollIndicator from '$lib/components/helpers/ScrollIndicator.svelte';
@@ -11,17 +12,8 @@
     
 </script>
 
+<BackToHome />
 <ScrollIndicator threshold={50} />
-
-<!-- Here we overwrite --header-position to prevent its stickiness  -->
-<svelte:head>
-  <style>
-    :root {
-      --header-position: relative;
-    }
-  </style>
-</svelte:head>
-
 
 <article class="story" id="geo-story-1">
     <div class="prose">
@@ -60,10 +52,3 @@
         {/each}
     </section>
 </article>
-
-<style>
-    /* Story-specific spacing override */
-    #intro {
-        margin-bottom: 10rem;
-    }
-</style>

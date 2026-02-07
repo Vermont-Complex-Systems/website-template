@@ -1,4 +1,5 @@
     <script>
+    import BackToHome from '$lib/components/helpers/BackToHome.svelte';
     import ScrollyPlot from './ScrollyPlot.svelte';
     import StoryHeader from '$lib/components/StoryHeader.svelte';
     import ScrollIndicator from '$lib/components/helpers/ScrollIndicator.svelte';
@@ -10,6 +11,8 @@
     let scrollyIndex = $state({ value: undefined });
 </script>
 
+
+<BackToHome colored />
 <ScrollIndicator />
 
 <article class="story">
@@ -40,5 +43,3 @@
     </section>
 </article>
 
-
-    

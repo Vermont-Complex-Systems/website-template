@@ -2,6 +2,7 @@
 import BackgroundPlot from './BackgroundPlot.svelte';
 import StoryHeader from '$lib/components/StoryHeader.svelte';
 import ScrollIndicator from '$lib/components/helpers/ScrollIndicator.svelte';
+import BackToHome from '$lib/components/helpers/BackToHome.svelte';
 
 import { renderTextContent, scrollyContent } from '$lib/components/helpers/ScrollySnippets.svelte';
 
@@ -10,17 +11,9 @@ let scrollyIndex = $state({ value: undefined });
 
 </script>
 
+<BackToHome />
 <ScrollIndicator />
 
-<!-- Set header/footer colors to match story -->
-<svelte:head>
-  <style>
-    :root {
-      --header-bg: #353839;
-      --header-fg: white;
-    }
-  </style>
-</svelte:head>
 
 <article class="story dark" style="--story-bg: #353839; --story-fg: white;">
     <div class="prose">
@@ -52,3 +45,4 @@ let scrollyIndex = $state({ value: undefined });
         {/each}
     </section>
 </article>
+

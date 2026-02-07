@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import { Youtube, Github, Linkedin, MessageCircle, ExternalLink } from "@lucide/svelte";
+	import { Youtube, Github, Linkedin, ExternalLink } from "@lucide/svelte";
 </script>
 
 <footer class="footer">
@@ -48,9 +48,15 @@
 <style>
 	.footer {
 		width: 100%;
-		background-color: light-dark(var(--color-uvm-green), #0d0d0d);
-		border-top: 1px solid light-dark(var(--color-border), rgba(255, 255, 255, 0.1));
+		/* Use story-defined variables with sensible defaults */
+		background-color: var(--footer-bg, light-dark(var(--color-uvm-green), #0d0d0d));
+		border-top: 1px solid var(--footer-border, light-dark(var(--color-border), rgba(255, 255, 255, 0.1)));
 		padding: 3rem 0 2rem; /* vertical padding only */
+	}
+
+	/* When a dark story is present, Footer adapts to dark theme */
+	:global(body:has(.story.dark)) .footer {
+		color-scheme: dark;
 	}
 
 	/* Inner container aligns content with header/main page */

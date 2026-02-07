@@ -4,7 +4,7 @@
         innerWidth,
         innerHeight,
         ticks,
-        label,
+        label
     } = $props();
 </script>
 
