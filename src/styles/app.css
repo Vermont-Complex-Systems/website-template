@@ -196,61 +196,6 @@ main > :last-child {
 }
 
 /* =============================================================================
-   SCROLLY: CONTENT & STEPS
-   ============================================================================= */
-
-.scrolly-content {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.scrolly-content .spacer {
-  height: 65vh;
-}
-
-.scrolly-content .step {
-  height: 90vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  margin: 0 auto;
-}
-
-/* Step box styling - uses story tokens */
-.scrolly-content .step > * {
-  padding: 1rem;
-  background: var(--story-step-bg-inactive);
-  color: var(--story-step-fg-inactive);
-  border-radius: 5px;
-  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
-  transition: all 500ms ease;
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* Active step */
-.scrolly-content .step.active > * {
-  background: var(--story-step-bg);
-  color: var(--story-step-fg);
-}
-
-/* Ensure nested elements inherit step colors */
-.scrolly-content .step > * * {
-  color: inherit;
-}
-
-.scrolly-content .step-content {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* =============================================================================
    SCROLLY LAYOUT: SIDE-BY-SIDE
    Content on left, sticky chart on right
 
@@ -269,6 +214,10 @@ main > :last-child {
   align-items: start;
   padding-left: var(--page-padding);
   padding-right: var(--page-padding);
+
+  /* Override component defaults via CSS variables */
+  --scrolly-max-width: none;
+  --step-max-width: 400px;
 }
 
 .scrolly-with-chart .scrolly-chart {
@@ -282,11 +231,6 @@ main > :last-child {
 .scrolly-with-chart .scrolly-content {
   grid-column: 1;
   margin: 0;
-  max-width: none;
-}
-
-.scrolly-with-chart .scrolly-content .step > * {
-  max-width: 400px;
 }
 
 @media (max-width: 768px) {
@@ -294,6 +238,7 @@ main > :last-child {
     grid-template-columns: 1fr;
     padding-left: 0;
     padding-right: 0;
+    --step-max-width: 100%;
   }
 
   .scrolly-with-chart .scrolly-chart {
@@ -315,10 +260,6 @@ main > :last-child {
     padding-left: var(--page-padding);
     padding-right: var(--page-padding);
   }
-
-  .scrolly-with-chart .scrolly-content .step > * {
-    max-width: 100%;
-  }
 }
 
 /* =============================================================================
@@ -336,6 +277,14 @@ main > :last-child {
   position: relative;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
+
+  /* Override component defaults via CSS variables */
+  --step-height: 100vh;
+  --step-max-width: 500px;
+  --step-padding: 2rem;
+  --step-border-radius: 8px;
+  --scrolly-max-width: 600px;
+  --scrolly-pointer-events: none; /* Let events pass to chart behind */
 }
 
 .scrolly-fullscreen .scrolly-chart {
@@ -349,28 +298,7 @@ main > :last-child {
 .scrolly-fullscreen .scrolly-content {
   position: relative;
   z-index: 1;
-  max-width: 600px;
   margin: 0 auto;
-  pointer-events: none;
-}
-
-.scrolly-fullscreen .scrolly-content .step > * {
-  pointer-events: auto;
-}
-
-.scrolly-fullscreen .scrolly-content .step {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.scrolly-fullscreen .scrolly-content .step > * {
-  background: var(--story-step-bg);
-  color: var(--story-step-fg);
-  padding: 2rem;
-  border-radius: 8px;
-  max-width: 500px;
 }
 
 /* =============================================================================
@@ -427,7 +355,7 @@ p {
 .story.dark {
   /* Opt into dark mode when story explicitly uses .dark class */
   color-scheme: dark;
-  --story-step-bg: white;
+  --story-step-bg: whitesmoke;
   --story-step-fg: #333;
   --story-step-bg-inactive: rgba(255, 255, 255, 0.9);
   --story-step-fg-inactive: #666;
@@ -442,17 +370,6 @@ p {
 .story.dark .prose p,
 .story.dark .prose a {
   color: var(--story-fg);
-}
-
-/* Step boxes use their own colors (not story foreground) */
-.story.dark .scrolly-content .step > *,
-.story.dark .scrolly-content .step > * * {
-  color: var(--story-step-fg-inactive);
-}
-
-.story.dark .scrolly-content .step.active > *,
-.story.dark .scrolly-content .step.active > * * {
-  color: var(--story-step-fg);
 }
 
 /* Header uses --header-bg/--header-fg variables (set by stories via <svelte:head>) */
