@@ -14,7 +14,7 @@
 .home-logo {
     position: absolute;
     top: 1rem;
-    right: 1rem;
+    left: 1rem;
     z-index: 100;
     transition: transform 0.2s ease;
 }
