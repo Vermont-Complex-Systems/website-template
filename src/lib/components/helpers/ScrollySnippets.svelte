@@ -56,9 +56,9 @@
         position: absolute;
         top: 0;
         right: 0;
-        background: light-dark(#e1e4e8, #30363d);
-        color: light-dark(#57606a, #8b949e);
-        border-color: light-dark(#d1d9e0, #30363d);
+        background: #e1e4e8;
+        color: #57606a;
+        border-color: #d1d9e0;
         font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         font-size: 0.75rem;
         padding: 0.25rem 0.5rem;

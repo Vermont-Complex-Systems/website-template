@@ -9,7 +9,6 @@
    ============================================================================= */
 
 :root {
-  /* Enable light-dark() function */
   color-scheme: light dark;
 
   /* Core palette */
@@ -22,28 +21,28 @@
   --color-uvm-gold: rgb(255, 209, 0);
   --color-accent: var(--color-uvm-green);
 
-  /* Gray scale - automatically inverts in dark mode */
-  --color-gray-100: light-dark(rgb(239, 239, 239), rgb(45, 45, 45));
-  --color-gray-200: light-dark(rgb(223, 223, 223), rgb(55, 55, 55));
-  --color-gray-300: light-dark(rgb(202, 202, 202), rgb(75, 75, 75));
-  --color-gray-400: light-dark(rgb(168, 168, 168), rgb(100, 100, 100));
-  --color-gray-600: light-dark(rgb(109, 109, 109), rgb(160, 160, 160));
-  --color-gray-700: light-dark(rgb(78, 78, 78), rgb(180, 180, 180));
-  --color-gray-800: light-dark(rgb(55, 55, 55), rgb(200, 200, 200));
-  --color-gray-900: light-dark(rgb(38, 38, 38), rgb(225, 225, 225));
-  --color-tertiary-gray: light-dark(rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.5));
+  /* Gray scale */
+  --color-gray-100: rgb(239, 239, 239);
+  --color-gray-200: rgb(223, 223, 223);
+  --color-gray-300: rgb(202, 202, 202);
+  --color-gray-400: rgb(168, 168, 168);
+  --color-gray-600: rgb(109, 109, 109);
+  --color-gray-700: rgb(78, 78, 78);
+  --color-gray-800: rgb(55, 55, 55);
+  --color-gray-900: rgb(38, 38, 38);
+  --color-tertiary-gray: rgba(0, 0, 0, 0.5);
 
   /* Semantic colors */
-  --color-bg: light-dark(var(--color-beige), #1a1a1a);
-  --color-fg: light-dark(rgb(55, 55, 55), #e8e8e8);
-  --color-muted: light-dark(rgb(109, 109, 109), #888);
-  --color-border: light-dark(rgb(202, 202, 202), rgba(255, 255, 255, 0.15));
-  --color-link: light-dark(var(--color-fg), #8ab4f8);
-  --color-link-hover: light-dark(var(--color-accent), #aecbfa);
+  --color-bg: var(--color-beige);
+  --color-fg: rgb(55, 55, 55);
+  --color-muted: rgb(109, 109, 109);
+  --color-border: rgb(202, 202, 202);
+  --color-link: var(--color-fg);
+  --color-link-hover: var(--color-accent);
 
   /* Interactive states */
-  --color-hover: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.1));
-  --color-border-on-dark: light-dark(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.15));
+  --color-hover: rgba(0, 0, 0, 0.05);
+  --color-border-on-dark: rgba(255, 255, 255, 0.2);
 
   /* Typography */
   --sans: "Atlas Grotesk", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -86,19 +85,57 @@
   --header-fg: var(--color-fg);
 }
 
+/* Dark mode via system preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-100: rgb(45, 45, 45);
+    --color-gray-200: rgb(55, 55, 55);
+    --color-gray-300: rgb(75, 75, 75);
+    --color-gray-400: rgb(100, 100, 100);
+    --color-gray-600: rgb(160, 160, 160);
+    --color-gray-700: rgb(180, 180, 180);
+    --color-gray-800: rgb(200, 200, 200);
+    --color-gray-900: rgb(225, 225, 225);
+    --color-tertiary-gray: rgba(255, 255, 255, 0.5);
+    --color-bg: #1a1a1a;
+    --color-fg: #e8e8e8;
+    --color-muted: #888;
+    --color-border: rgba(255, 255, 255, 0.15);
+    --color-link: #8ab4f8;
+    --color-link-hover: #aecbfa;
+    --color-hover: rgba(255, 255, 255, 0.1);
+    --color-border-on-dark: rgba(255, 255, 255, 0.15);
+    --story-step-bg: #2a2a2a;
+    --story-step-fg: #e8e8e8;
+    --story-step-bg-inactive: #222;
+    --story-step-fg-inactive: #666;
+  }
+}
+
 /* Theme toggle: force dark mode when .dark class is present */
 :root.dark {
   color-scheme: dark;
-}
-
-/* Progressive enhancement: use light-dark() for step colors when supported */
-@supports (color: light-dark(#fff, #000)) {
-  :root {
-    --story-step-bg: light-dark(#fff, #2a2a2a);
-    --story-step-fg: light-dark(#333, #e8e8e8);
-    --story-step-bg-inactive: light-dark(#f5f5f5, #222);
-    --story-step-fg-inactive: light-dark(#ccc, #666);
-  }
+  --color-gray-100: rgb(45, 45, 45);
+  --color-gray-200: rgb(55, 55, 55);
+  --color-gray-300: rgb(75, 75, 75);
+  --color-gray-400: rgb(100, 100, 100);
+  --color-gray-600: rgb(160, 160, 160);
+  --color-gray-700: rgb(180, 180, 180);
+  --color-gray-800: rgb(200, 200, 200);
+  --color-gray-900: rgb(225, 225, 225);
+  --color-tertiary-gray: rgba(255, 255, 255, 0.5);
+  --color-bg: #1a1a1a;
+  --color-fg: #e8e8e8;
+  --color-muted: #888;
+  --color-border: rgba(255, 255, 255, 0.15);
+  --color-link: #8ab4f8;
+  --color-link-hover: #aecbfa;
+  --color-hover: rgba(255, 255, 255, 0.1);
+  --color-border-on-dark: rgba(255, 255, 255, 0.15);
+  --story-step-bg: #2a2a2a;
+  --story-step-fg: #e8e8e8;
+  --story-step-bg-inactive: #222;
+  --story-step-fg-inactive: #666;
 }
 
 /* Interactive elements get pointer cursor by default */
@@ -170,8 +207,15 @@ main > :last-child {
    ============================================================================= */
 
 .story {
-  /* Stories default to light mode, independent of global dark mode toggle */
+  /* Stories default to light mode, independent of global dark mode toggle.
+     Explicitly set light values so system dark mode doesn't leak in. */
   color-scheme: light;
+  --story-bg: var(--color-beige);
+  --story-fg: rgb(55, 55, 55);
+  --story-step-bg: #fff;
+  --story-step-fg: #333;
+  --story-step-bg-inactive: #f5f5f5;
+  --story-step-fg-inactive: #ccc;
   width: 100%;
   padding-top: var(--padding-top-page);
   padding-bottom: var(--padding-bottom-page);
