@@ -7,10 +7,7 @@
 
 	let mainEl: HTMLElement | null | undefined;
 	let closeBtnEl: HTMLButtonElement | undefined;
-	let isWhoWeAreOpen = $state(false);
-	let isResearchOpen = $state(false);
-	let isEducationOpen = $state(false);
-
+	
 	export const open = () => {
 		closeBtnEl?.focus();
 		mainEl?.setAttribute("aria-hidden", "true");
@@ -47,6 +44,11 @@
 				<li>
 					<a href="{base}/about" rel="noopener noreferrer">
 						About
+					</a>
+				</li>
+				<li>
+					<a href="{base}/getting-started" rel="noopener noreferrer">
+						Videos & Tutorials
 					</a>
 				</li>
 			</ul>

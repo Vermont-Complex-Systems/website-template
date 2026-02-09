@@ -78,7 +78,12 @@
         },
         {
             "type": "code",
+            "language": "R",
             "value": "library(here)\n\nsource(here('pipelines', 'ingest', 'src', 'ingest.R'))\nsource(here('pipelines', 'transform', 'src', 'geo_aggregation.R'))\nsource(here('pipelines', 'transform', 'src', 'metadata_aggregation.R'))\n\n# INGEST PIPELINES\ningest_districts <- function() {\n  districts_electoraux_2021()\n}\n\ningest_cma <- function() {\n  montreal_cma()\n}\n\ningest_population <- function() {\n  population_by_district()\n}\n\n# TRANSFORM PIPELINES\ntransform_geo <- function(.input) {\n  geo_aggregation()\n}\n\ntransform_metadata <- function(.input) {\n  metadata_aggregation()\n}"
+        },
+        {
+            "type": "markdown",
+            "value": "Then you should see:"
         },
         {
             "type": "code",

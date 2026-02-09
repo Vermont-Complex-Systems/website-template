@@ -29,8 +29,8 @@
         {/each}
     </section>
 
-    <section id="scrolly" class="scrolly-with-chart">
-        <div class="scrolly-chart">
+    <section id="scrolly" class="split-layout">
+        <div class="sticky-panel">
             <ScrollyPlot {scrollyIndex} />
         </div>
 

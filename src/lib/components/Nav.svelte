@@ -27,6 +27,7 @@ function closeMenu(skipFocus = false) {
 
   <div class="header-right">
     <a href="{base}/about" class="about-button">About</a>
+    <a href="{base}/getting-started" class="about-button">Videos & Tutorials</a>
 
     <ThemeToggle />
 

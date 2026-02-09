@@ -79,13 +79,33 @@
   --story-step-fg: #333;
   --story-step-bg-inactive: #f5f5f5;
   --story-step-fg-inactive: #ccc;
-  
+
   --step-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
   --step-height: 90vh;
 
   /* Header theming (stories can override via <svelte:head>) */
   --header-bg: var(--color-bg);
   --header-fg: var(--color-fg);
+
+  /* ==========================================================================
+     SCROLLY: SHARED VARIABLES
+     General variables for scrolly content, reusable across any layout.
+     Override these on the layout container to customize.
+     ========================================================================== */
+
+  /* Content area (used by all layouts) */
+  --content-padding-inline: 2rem;
+
+  /* Scrolly content container */
+  --scrolly-max-width: 600px;
+  --scrolly-pointer-events: auto;
+
+  /* Step boxes (the text cards) - these apply regardless of layout */
+  --step-max-width: 400px;
+  --step-padding: 1.5rem;
+  --step-border-radius: 8px;
+
+  /* Section spacing (vertical breathing room around scrolly sections) */
 }
 
 /* Dark mode via system preference */
@@ -253,58 +273,81 @@ main > :last-child {
 }
 
 /* =============================================================================
-   SCROLLY LAYOUT: SIDE-BY-SIDE
-   Content on left, sticky chart on right
+   LAYOUT: SPLIT (Two-Column)
+   Generic side-by-side layout with one sticky panel and one scrolling content area.
+   Default: content on left, sticky panel on right. Add .reversed to flip.
 
    Usage:
-     <section class="scrolly-with-chart">
-       <div class="scrolly-chart">...</div>
-       {@render scrollyContent(...)}
+     <section class="split-layout">
+       <div class="sticky-panel">...</div>
+       <div class="scrolly-content">...</div>
+     </section>
+
+     <!-- Reversed: panel on left, content on right -->
+     <section class="split-layout reversed">
+       ...
      </section>
    ============================================================================= */
 
-.scrolly-with-chart {
+.split-layout {
+  /* Panel configuration (specific to two-column layout) */
+  --panel-min-width: 450px;
+  --panel-width: 45%;
+  --panel-height: 80vh;
+  --panel-top-offset: calc((100vh - var(--panel-height)) / 2); /* auto-center vertically */
+  --panel-max-height: 600px;
+  --layout-gap: 2rem;
+
   position: relative;
   display: grid;
-  grid-template-columns: 1fr minmax(450px, 45%);
-  gap: 2rem;
+  grid-template-columns: 1fr minmax(var(--panel-min-width), var(--panel-width));
+  gap: var(--layout-gap);
   align-items: start;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-inline: var(--content-padding-inline);
 
-  /* Override component defaults via CSS variables */
+  /* Override shared defaults for this layout */
   --scrolly-max-width: none;
-  --step-max-width: 400px;
 }
 
-.scrolly-with-chart .scrolly-chart {
+/* Reversed: panel on left, content on right */
+.split-layout.reversed {
+  grid-template-columns: minmax(var(--panel-min-width), var(--panel-width)) 1fr;
+}
+
+.split-layout .sticky-panel {
   position: sticky;
-  top: calc(50vh - 20vh);
-  height: 50vh;
-  max-height: 600px;
+  top: var(--panel-top-offset);
+  height: var(--panel-height);
+  max-height: var(--panel-max-height);
   grid-column: 2;
 }
 
-.scrolly-with-chart .scrolly-content,
-.scrolly-with-chart .scrolly-outer {
+.split-layout.reversed .sticky-panel {
+  grid-column: 1;
+}
+
+.split-layout .scrolly-content {
   grid-column: 1;
   margin: 0;
 }
 
+.split-layout.reversed .scrolly-content {
+  grid-column: 2;
+}
+
 @media (max-width: 768px) {
-  .scrolly-with-chart {
+  .split-layout {
     grid-template-columns: 1fr;
-    padding-left: 0;
-    padding-right: 0;
+    padding-inline: 0;
     --step-max-width: 100%;
   }
 
-  .scrolly-with-chart .scrolly-chart {
+  .split-layout .sticky-panel {
     position: sticky;
     top: 0;
     height: 100vh;
     grid-column: 1;
-    grid-row: 1;  /* Chart in row 1 */
+    grid-row: 1;
     width: 100%;
     z-index: 0;
     display: flex;
@@ -312,44 +355,49 @@ main > :last-child {
     justify-content: center;
   }
 
-  /* BOTH in same grid cell = natural overlap, no margin-top hack needed
+  /* On mobile, both occupy same grid cell for natural overlap.
      Safari mobile needs physical overlap for z-index to work during client-side nav */
-  .scrolly-with-chart .scrolly-content,
-  .scrolly-with-chart .scrolly-outer {
+  .split-layout .scrolly-content,
+  .split-layout .scrolly-outer {
     grid-column: 1;
-    grid-row: 1;  /* SAME row as chart */
+    grid-row: 1;
     z-index: 1;
     pointer-events: none;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-inline: var(--content-padding-inline);
+  }
+
+  /* Reversed has no effect on mobile (stacks vertically) */
+  .split-layout.reversed .sticky-panel,
+  .split-layout.reversed .scrolly-content {
+    grid-column: 1;
   }
 }
 
+
 /* =============================================================================
-   SCROLLY LAYOUT: FULLSCREEN
-   Full-viewport background with centered text overlay
+   LAYOUT: FULLSCREEN
+   Full-viewport background with centered text overlay.
+   Use for immersive, full-bleed visualizations.
 
    Usage:
-     <section class="scrolly-fullscreen">
-       <div class="scrolly-chart">...</div>
-       {@render scrollyContent(...)}
+     <section class="fullscreen-layout">
+       <div class="sticky-panel">...</div>
+       <div class="scrolly-content">...</div>
      </section>
    ============================================================================= */
 
-.scrolly-fullscreen {
+.fullscreen-layout {
   position: relative;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
 
-  /* Override component defaults via CSS variables */
+  /* Override shared defaults for immersive fullscreen experience */
   --step-max-width: 500px;
   --step-padding: 2rem;
-  --step-border-radius: 8px;
-  --scrolly-max-width: 600px;
-  --scrolly-pointer-events: none; /* Let events pass to chart behind */
+  --scrolly-pointer-events: none; /* Let events pass to panel behind */
 }
 
-.scrolly-fullscreen .scrolly-chart {
+.fullscreen-layout .sticky-panel {
   position: sticky;
   top: 0;
   width: 100vw;
@@ -357,11 +405,102 @@ main > :last-child {
   z-index: 0;
 }
 
-.scrolly-fullscreen .scrolly-content {
+.fullscreen-layout .scrolly-content {
   position: relative;
   z-index: 1;
   margin: 0 auto;
 }
+
+
+/* =============================================================================
+   LAYOUT: TRIPLE (Three-Column)
+   Three equal columns: content (steps), code panel, and visualization.
+   All three panels share equal width with the code and chart panels sticky.
+
+   Usage:
+     <section class="triple-layout">
+       <div class="scrolly-content">...</div>
+       <div class="code-panel">...</div>
+       <div class="chart-panel">...</div>
+     </section>
+   ============================================================================= */
+
+.triple-layout {
+  --panel-height: 95vh;
+  --panel-top-offset: calc((100vh - var(--panel-height)) / 2);
+  --panel-max-height: 900px;
+  --layout-gap: 1.5rem;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--layout-gap);
+  align-items: start;
+  padding-inline: var(--content-padding-inline);
+}
+
+.triple-layout .scrolly-content {
+  grid-column: 1;
+}
+
+.triple-layout .code-panel {
+  position: sticky;
+  top: var(--panel-top-offset);
+  height: var(--panel-height);
+  max-height: var(--panel-max-height);
+  grid-column: 2;
+}
+
+.triple-layout .chart-panel {
+  position: sticky;
+  top: var(--panel-top-offset);
+  height: var(--panel-height);
+  max-height: var(--panel-max-height);
+  grid-column: 3;
+}
+
+@media (max-width: 1024px) {
+  .triple-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .triple-layout .chart-panel {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .triple-layout .code-panel {
+    display: none; /* Hide code on tablet, show only steps and chart */
+  }
+}
+
+@media (max-width: 768px) {
+  .triple-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .triple-layout .chart-panel {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    max-height: none;
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .triple-layout .scrolly-content {
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 1;
+    pointer-events: none;
+    padding-inline: var(--content-padding-inline);
+  }
+}
+
 
 /* =============================================================================
    TYPOGRAPHY
@@ -429,6 +568,32 @@ pre code {
   color: #1f2328;
 }
 
+/* Code line numbers and highlighting (from rehype-highlight-code-lines) */
+pre code .code-line {
+  display: inline-block;
+  min-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  border-left: 3px solid transparent;
+}
+
+pre code .numbered-code-line::before {
+  content: attr(data-line-number);
+  display: inline-block;
+  width: 2rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: #6e7781;
+  user-select: none;
+}
+
+pre code .highlighted-code-line {
+  background: rgba(255, 220, 100, 0.3);
+  border-left-color: #f0c000;
+}
+
 /* Inline code */
 :where(p, li) code {
   font-family: var(--mono);
@@ -461,6 +626,13 @@ blockquote p {
   pre code {
     color: #e6edf3;
   }
+  pre code .numbered-code-line::before {
+    color: #6e7781;
+  }
+  pre code .highlighted-code-line {
+    background: rgba(255, 220, 100, 0.15);
+    border-left-color: #f0c000;
+  }
   :where(p, li) code {
     background: var(--color-gray-200);
   }
@@ -476,6 +648,13 @@ blockquote p {
 }
 :root.dark pre code {
   color: #e6edf3;
+}
+:root.dark pre code .numbered-code-line::before {
+  color: #6e7781;
+}
+:root.dark pre code .highlighted-code-line {
+  background: rgba(255, 220, 100, 0.15);
+  border-left-color: #f0c000;
 }
 :root.dark :where(p, li) code {
   background: var(--color-gray-200);

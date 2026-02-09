@@ -9,9 +9,19 @@
         type: 'html' | 'markdown' | 'math' | 'code';
         value: string | string[];
         language?: string;
+        /** Lines to highlight, e.g. "1-3,5" or "2,4-6" */
+        highlightLines?: string;
     }
 
     const VALID_TYPES = ['html', 'markdown', 'math', 'code'] as const;
+
+    /** Escape HTML entities so code displays as text, not rendered HTML */
+    function escapeHtml(str: string): string {
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
 
     export { renderTextContent };
 </script>
@@ -19,7 +29,7 @@
 <!-- Renders a content item based on its type: html, markdown, math, code -->
 {#snippet renderTextContent(item: ContentItem)}
     {#if item.type === "html"}
-        {@html item.value}
+        <span>{@html item.value}</span>
     {:else if item.type === "markdown"}
         <Md text={item.value as string}/>
     {:else if item.type === "math"}
@@ -27,12 +37,15 @@
             <Md text={item.value as string}/>
         </div>
     {:else if item.type === "code"}
-        {@const codeValue = Array.isArray(item.value) ? item.value.join('\n') : item.value}
+        {@const rawCode = Array.isArray(item.value) ? item.value.join('\n') : item.value}
+        {@const codeValue = escapeHtml(rawCode)}
+        {@const langClass = item.language ? `language-${item.language}` : ''}
+        {@const highlightAttr = item.highlightLines ? `data-highlight-lines="${item.highlightLines}"` : ''}
         <div class="code-block">
             {#if item.language}
                 <div class="code-language">{item.language}</div>
             {/if}
-            <Md text={`\`\`\`${item.language || ''}\n${codeValue}\n\`\`\``}/>
+            <Md text={`<pre><code class="${langClass} show-line-numbers" ${highlightAttr}>${codeValue}</code></pre>`}/>
         </div>
     {:else}
         {@const _ = console.warn(`[ScrollySnippets] Unknown type: "${(item as any).type}". Valid: ${VALID_TYPES.join(', ')}`)}
@@ -50,6 +63,8 @@
 
     .code-block {
         position: relative;
+        max-width: 100%;
+        overflow-x: auto;
     }
 
     .code-language {

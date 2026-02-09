@@ -71,10 +71,10 @@
                 </div>
                 <div class="video-info">
                     <h3 class="video-title">{video.title}</h3>
-                    
-                    <div class="description">
-                        <MarkdownRenderer text={video.description} />
-                    </div>
+                </div>
+                <div class="tooltip-trigger" title="Hover to see abstract">ⓘ</div>
+                <div class="tooltip">
+                    {video.description}
                 </div>
             </a>
         </div>
@@ -113,7 +113,7 @@
 
     .videos-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
         gap: 2rem;
         margin-bottom: 3rem;
     }
@@ -198,7 +198,93 @@
             grid-template-columns: 1fr;
             gap: 1.5rem;
         }
+
+        .tooltip {
+            width: calc(100vw - 2rem) !important;
+            max-width: none !important;
+            left: 50% !important;
+            right: auto !important;
+            top: 50% !important;
+            transform: translate(-50%, -50%) !important;
+        }
         
+    }
+
+    /* Tooltip styles */
+    .tooltip {
+        position: fixed;
+        background: var(--color-fg);
+        color: var(--color-white);
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        font-size: 0.9rem;
+        line-height: 1.6;
+        width: calc(45vw);
+        max-width: 1000px;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 200ms ease 100ms, visibility 200ms ease 100ms;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        white-space: pre-line;
+        pointer-events: auto;
+        box-sizing: border-box;
+        
+        /* Simple centering */
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        
+        /* Ensure readable text */
+        text-align: left;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+    /* Tooltip trigger */
+    .tooltip-trigger {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        cursor: help;
+        z-index: 5;
+    }
+    
+    .tooltip-trigger:hover ~ .tooltip,
+    .tooltip:hover {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 200ms ease, visibility 200ms ease;
+    }
+    
+    /* Scrollbar styling for webkit browsers */
+    .tooltip::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .tooltip::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+    }
+    
+    .tooltip::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 3px;
+    }
+    
+    .tooltip::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
     }
     
 </style>

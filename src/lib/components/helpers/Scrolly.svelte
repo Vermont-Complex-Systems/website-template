@@ -25,7 +25,7 @@
 	let threshold = [];
 	let nodes = [];
 	let intersectionObservers = [];
-	let container = undefined;
+	let container = $state(undefined);
 
 	function mostInView () {
 		let maxRatio = 0;
@@ -67,6 +67,8 @@
 	}
 
 	$effect(() => {
+		if (!container) return;
+
 		for (let i = 0; i < increments + 1; i++) {
 			threshold.push(i / increments);
 		}

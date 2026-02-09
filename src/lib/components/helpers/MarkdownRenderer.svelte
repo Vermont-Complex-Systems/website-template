@@ -43,7 +43,12 @@
             ]
         },
         {
-            rehypePlugin: [rehypeHighlightCodeLines]
+            rehypePlugin: [
+                rehypeHighlightCodeLines,
+                {
+                    showLineNumbers: true
+                }
+            ]
         }
     ];
 
@@ -53,8 +58,8 @@
         // Remove footnote markers
         content = content.replace(/\[\^(\d+)\]/g, '');
 
-        // Preserve code blocks, remove leading whitespace from non-code
-        const parts = content.split(/(```[\s\S]*?```)/);
+        // Preserve code blocks (markdown fences and <pre> tags), remove leading whitespace from non-code
+        const parts = content.split(/(```[\s\S]*?```|<pre[\s\S]*?<\/pre>)/);
         content = parts.map((part, i) =>
             i % 2 === 0 ? part.replace(/^[ \t]+/gm, '') : part
         ).join('');

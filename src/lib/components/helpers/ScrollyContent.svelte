@@ -28,8 +28,9 @@
 <div class="scrolly-content">
     {#if topSpacer}<div class="spacer"></div>{/if}
     <Scrolly bind:value>
-        {#each steps as step, i (i)}
-            <div class="step" class:active={value === i}>
+        {#each steps as step, i}
+            {@const active = value === i}
+            <div class="step" class:active>
                 <div class="step-box">
                     {@render contentRenderer(step)}
                 </div>
@@ -49,6 +50,7 @@
      *   --step-max-width: 600px    Max width of step box
      *   --step-padding: 1rem       Padding inside step box
      *   --step-border-radius: 5px  Corner rounding
+     *   --step-text-align: center  Text alignment (left, center, right)
      *
      * Colors (set globally in app.css):
      *   --story-step-bg / --story-step-fg           Active step
@@ -74,14 +76,15 @@
     }
 
     .step-box {
+        width: 100%;
+        max-width: var(--step-max-width, 600px);
         padding: var(--step-padding, 1rem);
         background-color: var(--story-step-bg-inactive);
         color: var(--story-step-fg-inactive);
         border-radius: var(--step-border-radius, 5px);
         box-shadow: var(--step-box-shadow);
         transition: background-color 400ms ease, color 400ms ease;
-        text-align: center;
-        max-width: var(--step-max-width, 600px);
+        text-align: var(--step-text-align, center);
         pointer-events: auto;
     }
 
