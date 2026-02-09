@@ -28,17 +28,15 @@
             {@render renderTextContent(item)}
         {/each}
     </section>
-    
+
     <section id="scrolly" class="scrolly-with-chart">
-        
         <div class="scrolly-chart">
             <ScrollyPlot {scrollyIndex} />
         </div>
-        
-        <div class="stepContainer">
-            <ScrollyContent steps={data.steps} bind:value={scrollyIndex} />
-        </div>
 
+        <div class=stepContainer>
+            <ScrollyContent steps={data.steps} bind:value={scrollyIndex} topSpacer={false}/>
+        </div>
     </section>
 
     <h2 class="prose">Markdown Renderer</h2>
@@ -47,7 +45,7 @@
             {@render renderTextContent(item)}
         {/each}
     </section>
-    
+
     <h2 class="prose">Conclusion</h2>
     <section id="conclusion" class="prose">
         {#each data.conclusion as item}
@@ -58,11 +56,12 @@
 </article>
 
 <style>
-    /* Overwritting the step-height */
-    .stepContainer {
-        --step-height: 60vh;
-        --story-step-bg: transparent;
-        --story-step-bg-inactive: transparent;
-        --step-box-shadow: none;
+    @media (min-width: 769px) {
+        .stepContainer {
+            --story-step-bg: transparent;
+            --story-step-bg-inactive: transparent;
+            --step-box-shadow: none;
+            --step-height: 40vh;
+        }
     }
 </style>

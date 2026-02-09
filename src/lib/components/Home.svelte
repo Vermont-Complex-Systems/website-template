@@ -218,7 +218,7 @@ Uses padding-bottom: 0 to make the centering symmetric
 
 /* ---------------- Stories Section ---------------- */
 .stories {
-  padding: 4rem var(--page-padding);
+  padding: 4rem var(--page-inline-padding);
 }
 
 .loading {
@@ -231,7 +231,7 @@ Uses padding-bottom: 0 to make the centering symmetric
 
 /* ---------------- Why Svelte Section ---------------- */
 .why-svelte {
-  padding: 4rem var(--page-padding);
+  padding: 4rem var(--page-inline-padding);
   background: rgba(0, 0, 0, 0.02);
 }
 
@@ -292,7 +292,7 @@ Uses padding-bottom: 0 to make the centering symmetric
 
 /* ---------------- Project Structure Section ---------------- */
 .project-structure {
-  padding: 4rem var(--page-padding);
+  padding: 4rem var(--page-inline-padding);
 }
 
 .project-structure h2 {

@@ -60,7 +60,7 @@
 
   /* Layout */
   --page-max-width: 1200px;
-  --page-padding: clamp(1rem, 4vw, 3rem);
+  --page-inline-padding: 5%;
   --nav-height: 4.5rem;
   --padding-top-page: 5.5rem;
   --padding-bottom-page: 7.5rem;
@@ -79,6 +79,9 @@
   --story-step-fg: #333;
   --story-step-bg-inactive: #f5f5f5;
   --story-step-fg-inactive: #ccc;
+  
+  --step-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+  --step-height: 90vh;
 
   /* Header theming (stories can override via <svelte:head>) */
   --header-bg: var(--color-bg);
@@ -187,7 +190,7 @@ main > :last-child {
   width: 100%;
   max-width: var(--page-max-width);
   margin-inline: auto;
-  padding-inline: var(--page-padding);
+  padding-inline: var(--page-inline-padding);
   padding-top: var(--padding-top-page);
   padding-bottom: var(--padding-bottom-page);
 }
@@ -266,8 +269,8 @@ main > :last-child {
   grid-template-columns: 1fr minmax(450px, 45%);
   gap: 2rem;
   align-items: start;
-  padding-left: var(--page-padding);
-  padding-right: var(--page-padding);
+  padding-left: 2rem;
+  padding-right: 2rem;
 
   /* Override component defaults via CSS variables */
   --scrolly-max-width: none;
@@ -277,12 +280,13 @@ main > :last-child {
 .scrolly-with-chart .scrolly-chart {
   position: sticky;
   top: calc(50vh - 20vh);
-  height: 80vh;
+  height: 50vh;
   max-height: 600px;
   grid-column: 2;
 }
 
-.scrolly-with-chart .scrolly-content {
+.scrolly-with-chart .scrolly-content,
+.scrolly-with-chart .scrolly-outer {
   grid-column: 1;
   margin: 0;
 }
@@ -297,22 +301,27 @@ main > :last-child {
 
   .scrolly-with-chart .scrolly-chart {
     position: sticky;
-    top: calc(50vh - 30vh);
-    height: 60vh;
+    top: 0;
+    height: 100vh;
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 1;  /* Chart in row 1 */
     width: 100%;
-    padding: 0;
+    z-index: 0;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .scrolly-with-chart .scrolly-content {
+  /* BOTH in same grid cell = natural overlap, no margin-top hack needed
+     Safari mobile needs physical overlap for z-index to work during client-side nav */
+  .scrolly-with-chart .scrolly-content,
+  .scrolly-with-chart .scrolly-outer {
     grid-column: 1;
-    grid-row: 2;
-    padding-left: var(--page-padding);
-    padding-right: var(--page-padding);
+    grid-row: 1;  /* SAME row as chart */
+    z-index: 1;
+    pointer-events: none;
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
@@ -333,7 +342,6 @@ main > :last-child {
   margin-left: calc(-50vw + 50%);
 
   /* Override component defaults via CSS variables */
-  --step-height: 100vh;
   --step-max-width: 500px;
   --step-padding: 2rem;
   --step-border-radius: 8px;
@@ -397,6 +405,84 @@ p {
   p {
     font-size: 1.2rem;
   }
+}
+
+/* Code blocks */
+pre {
+  background: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+  line-height: 1.45;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: #1f2328;
+}
+
+/* Inline code */
+:where(p, li) code {
+  font-family: var(--mono);
+  font-size: 0.8em;
+  background: var(--color-gray-100);
+  padding: 0.125rem 0.35rem;
+  border-radius: 3px;
+}
+
+/* Blockquotes */
+blockquote {
+  margin: 2rem 0;
+  padding: 0 0 0 1.5rem;
+  font-size: 1.1em;
+  line-height: 1.5;
+  color: #2c5aa0;
+  border-left: 3px solid #2c5aa0;
+}
+
+blockquote p {
+  margin: 0;
+}
+
+/* Dark mode: code and blockquotes */
+@media (prefers-color-scheme: dark) {
+  pre {
+    background: #161b22;
+    border-color: #30363d;
+  }
+  pre code {
+    color: #e6edf3;
+  }
+  :where(p, li) code {
+    background: var(--color-gray-200);
+  }
+  blockquote {
+    color: #4a90e2;
+    border-left-color: #4a90e2;
+  }
+}
+
+:root.dark pre {
+  background: #161b22;
+  border-color: #30363d;
+}
+:root.dark pre code {
+  color: #e6edf3;
+}
+:root.dark :where(p, li) code {
+  background: var(--color-gray-200);
+}
+:root.dark blockquote {
+  color: #4a90e2;
+  border-left-color: #4a90e2;
 }
 
 /* =============================================================================

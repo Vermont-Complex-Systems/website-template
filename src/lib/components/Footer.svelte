@@ -64,7 +64,7 @@
 		width: 100%;
 		max-width: var(--page-max-width);
 		margin-inline: auto;
-		padding-inline: var(--page-padding);
+		padding-inline: var(--page-inline-padding);
 
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);

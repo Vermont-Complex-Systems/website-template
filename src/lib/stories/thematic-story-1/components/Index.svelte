@@ -1,7 +1,6 @@
 <script>
     import { scrollReveal } from '$lib/utils/scrollReveal.js';
     import BackToHome from '$lib/components/helpers/BackToHome.svelte';
-    let { story, data } = $props();
 </script>
 
 <BackToHome />
@@ -189,7 +188,7 @@
     .intro {
         max-width: 900px;
         margin: 0 auto;
-        padding: 4rem var(--page-padding);
+        padding: 4rem var(--page-inline-padding);
         text-align: center;
     }
 
@@ -205,7 +204,7 @@
         display: grid;
         grid-template-columns: 0.8fr 1.2fr;
         gap: 3rem;
-        padding: 4rem var(--page-padding);
+        padding: 4rem var(--page-inline-padding);
         align-items: center;
         max-width: 1200px;
         margin: 0 auto;
@@ -268,7 +267,7 @@
 
     /* Testimonials */
     .testimonials {
-        padding: 4rem var(--page-padding);
+        padding: 4rem var(--page-inline-padding);
         max-width: 1400px;
         margin: 0 auto;
     }
@@ -328,7 +327,7 @@
 
     /* Gallery */
     .gallery {
-        padding: 4rem var(--page-padding);
+        padding: 4rem var(--page-inline-padding);
     }
 
     .gallery-grid {
@@ -348,7 +347,7 @@
 
     /* Logos */
     .logos {
-        padding: 4rem var(--page-padding);
+        padding: 4rem var(--page-inline-padding);
         border-top: 1px solid var(--story-border);
     }
 
@@ -394,7 +393,7 @@
         .content-row,
         .content-row.reverse {
             grid-template-columns: 1fr;
-            padding: 2rem var(--page-padding);
+            padding: 2rem var(--page-inline-padding);
         }
 
         .content-row .image-col,

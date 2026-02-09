@@ -34,4 +34,17 @@
   :global(.dark) .theme-toggle:hover {
     background: rgba(255, 255, 255, 0.1);
   }
+
+  /* Mobile: match icon-button sizing in Nav */
+  @media (max-width: 768px) {
+    .theme-toggle {
+      width: 3.5rem;
+      height: 3.5rem;
+    }
+
+    .theme-toggle :global(svg) {
+      width: 24px;
+      height: 24px;
+    }
+  }
 </style>
