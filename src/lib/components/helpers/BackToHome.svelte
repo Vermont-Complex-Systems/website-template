@@ -27,4 +27,15 @@
     height: 4.5rem;
     width: auto;
 }
+
+@media (max-width: 768px) {
+    .home-logo {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .home-logo:hover {
+        transform: translateX(-50%) scale(1.05);
+    }
+}
 </style>

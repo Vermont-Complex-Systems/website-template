@@ -9,7 +9,6 @@
    ============================================================================= */
 
 :root {
-  /* Enable light-dark() function */
   color-scheme: light dark;
 
   /* Core palette */
@@ -22,28 +21,28 @@
   --color-uvm-gold: rgb(255, 209, 0);
   --color-accent: var(--color-uvm-green);
 
-  /* Gray scale - automatically inverts in dark mode */
-  --color-gray-100: light-dark(rgb(239, 239, 239), rgb(45, 45, 45));
-  --color-gray-200: light-dark(rgb(223, 223, 223), rgb(55, 55, 55));
-  --color-gray-300: light-dark(rgb(202, 202, 202), rgb(75, 75, 75));
-  --color-gray-400: light-dark(rgb(168, 168, 168), rgb(100, 100, 100));
-  --color-gray-600: light-dark(rgb(109, 109, 109), rgb(160, 160, 160));
-  --color-gray-700: light-dark(rgb(78, 78, 78), rgb(180, 180, 180));
-  --color-gray-800: light-dark(rgb(55, 55, 55), rgb(200, 200, 200));
-  --color-gray-900: light-dark(rgb(38, 38, 38), rgb(225, 225, 225));
-  --color-tertiary-gray: light-dark(rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.5));
+  /* Gray scale */
+  --color-gray-100: rgb(239, 239, 239);
+  --color-gray-200: rgb(223, 223, 223);
+  --color-gray-300: rgb(202, 202, 202);
+  --color-gray-400: rgb(168, 168, 168);
+  --color-gray-600: rgb(109, 109, 109);
+  --color-gray-700: rgb(78, 78, 78);
+  --color-gray-800: rgb(55, 55, 55);
+  --color-gray-900: rgb(38, 38, 38);
+  --color-tertiary-gray: rgba(0, 0, 0, 0.5);
 
   /* Semantic colors */
-  --color-bg: light-dark(var(--color-beige), #1a1a1a);
-  --color-fg: light-dark(rgb(55, 55, 55), #e8e8e8);
-  --color-muted: light-dark(rgb(109, 109, 109), #888);
-  --color-border: light-dark(rgb(202, 202, 202), rgba(255, 255, 255, 0.15));
-  --color-link: light-dark(var(--color-fg), #8ab4f8);
-  --color-link-hover: light-dark(var(--color-accent), #aecbfa);
+  --color-bg: var(--color-beige);
+  --color-fg: rgb(55, 55, 55);
+  --color-muted: rgb(109, 109, 109);
+  --color-border: rgb(202, 202, 202);
+  --color-link: var(--color-fg);
+  --color-link-hover: var(--color-accent);
 
   /* Interactive states */
-  --color-hover: light-dark(rgba(0, 0, 0, 0.05), rgba(255, 255, 255, 0.1));
-  --color-border-on-dark: light-dark(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.15));
+  --color-hover: rgba(0, 0, 0, 0.05);
+  --color-border-on-dark: rgba(255, 255, 255, 0.2);
 
   /* Typography */
   --sans: "Atlas Grotesk", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -61,7 +60,7 @@
 
   /* Layout */
   --page-max-width: 1200px;
-  --page-padding: clamp(1rem, 4vw, 3rem);
+  --page-inline-padding: 5%;
   --nav-height: 4.5rem;
   --padding-top-page: 5.5rem;
   --padding-bottom-page: 7.5rem;
@@ -76,19 +75,90 @@
   /* Story theming (defaults, stories override these) */
   --story-bg: var(--color-bg);
   --story-fg: var(--color-fg);
-  --story-step-bg: light-dark(#fff, #2a2a2a);
-  --story-step-fg: light-dark(#333, #e8e8e8);
-  --story-step-bg-inactive: light-dark(#f5f5f5, #222);
-  --story-step-fg-inactive: light-dark(#ccc, #666);
+  --story-step-bg: #fff;
+  --story-step-fg: #333;
+  --story-step-bg-inactive: #f5f5f5;
+  --story-step-fg-inactive: #ccc;
+
+  --step-box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+  --step-height: 90vh;
 
   /* Header theming (stories can override via <svelte:head>) */
   --header-bg: var(--color-bg);
   --header-fg: var(--color-fg);
+
+  /* ==========================================================================
+     SCROLLY: SHARED VARIABLES
+     General variables for scrolly content, reusable across any layout.
+     Override these on the layout container to customize.
+     ========================================================================== */
+
+  /* Content area (used by all layouts) */
+  --content-padding-inline: 2rem;
+
+  /* Scrolly content container */
+  --scrolly-max-width: 600px;
+  --scrolly-pointer-events: auto;
+
+  /* Step boxes (the text cards) - these apply regardless of layout */
+  --step-max-width: 400px;
+  --step-padding: 1.5rem;
+  --step-border-radius: 8px;
+
+  /* Section spacing (vertical breathing room around scrolly sections) */
+}
+
+/* Dark mode via system preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-gray-100: rgb(45, 45, 45);
+    --color-gray-200: rgb(55, 55, 55);
+    --color-gray-300: rgb(75, 75, 75);
+    --color-gray-400: rgb(100, 100, 100);
+    --color-gray-600: rgb(160, 160, 160);
+    --color-gray-700: rgb(180, 180, 180);
+    --color-gray-800: rgb(200, 200, 200);
+    --color-gray-900: rgb(225, 225, 225);
+    --color-tertiary-gray: rgba(255, 255, 255, 0.5);
+    --color-bg: #1a1a1a;
+    --color-fg: #e8e8e8;
+    --color-muted: #888;
+    --color-border: rgba(255, 255, 255, 0.15);
+    --color-link: #8ab4f8;
+    --color-link-hover: #aecbfa;
+    --color-hover: rgba(255, 255, 255, 0.1);
+    --color-border-on-dark: rgba(255, 255, 255, 0.15);
+    --story-step-bg: #2a2a2a;
+    --story-step-fg: #e8e8e8;
+    --story-step-bg-inactive: #222;
+    --story-step-fg-inactive: #666;
+  }
 }
 
 /* Theme toggle: force dark mode when .dark class is present */
 :root.dark {
   color-scheme: dark;
+  --color-gray-100: rgb(45, 45, 45);
+  --color-gray-200: rgb(55, 55, 55);
+  --color-gray-300: rgb(75, 75, 75);
+  --color-gray-400: rgb(100, 100, 100);
+  --color-gray-600: rgb(160, 160, 160);
+  --color-gray-700: rgb(180, 180, 180);
+  --color-gray-800: rgb(200, 200, 200);
+  --color-gray-900: rgb(225, 225, 225);
+  --color-tertiary-gray: rgba(255, 255, 255, 0.5);
+  --color-bg: #1a1a1a;
+  --color-fg: #e8e8e8;
+  --color-muted: #888;
+  --color-border: rgba(255, 255, 255, 0.15);
+  --color-link: #8ab4f8;
+  --color-link-hover: #aecbfa;
+  --color-hover: rgba(255, 255, 255, 0.1);
+  --color-border-on-dark: rgba(255, 255, 255, 0.15);
+  --story-step-bg: #2a2a2a;
+  --story-step-fg: #e8e8e8;
+  --story-step-bg-inactive: #222;
+  --story-step-fg-inactive: #666;
 }
 
 /* Interactive elements get pointer cursor by default */
@@ -140,7 +210,7 @@ main > :last-child {
   width: 100%;
   max-width: var(--page-max-width);
   margin-inline: auto;
-  padding-inline: var(--page-padding);
+  padding-inline: var(--page-inline-padding);
   padding-top: var(--padding-top-page);
   padding-bottom: var(--padding-bottom-page);
 }
@@ -160,8 +230,15 @@ main > :last-child {
    ============================================================================= */
 
 .story {
-  /* Stories default to light mode, independent of global dark mode toggle */
+  /* Stories default to light mode, independent of global dark mode toggle.
+     Explicitly set light values so system dark mode doesn't leak in. */
   color-scheme: light;
+  --story-bg: var(--color-beige);
+  --story-fg: rgb(55, 55, 55);
+  --story-step-bg: #fff;
+  --story-step-fg: #333;
+  --story-step-bg-inactive: #f5f5f5;
+  --story-step-fg-inactive: #ccc;
   width: 100%;
   padding-top: var(--padding-top-page);
   padding-bottom: var(--padding-bottom-page);
@@ -196,98 +273,131 @@ main > :last-child {
 }
 
 /* =============================================================================
-   SCROLLY LAYOUT: SIDE-BY-SIDE
-   Content on left, sticky chart on right
+   LAYOUT: SPLIT (Two-Column)
+   Generic side-by-side layout with one sticky panel and one scrolling content area.
+   Default: content on left, sticky panel on right. Add .reversed to flip.
 
    Usage:
-     <section class="scrolly-with-chart">
-       <div class="scrolly-chart">...</div>
-       {@render scrollyContent(...)}
+     <section class="split-layout">
+       <div class="sticky-panel">...</div>
+       <div class="scrolly-content">...</div>
+     </section>
+
+     <!-- Reversed: panel on left, content on right -->
+     <section class="split-layout reversed">
+       ...
      </section>
    ============================================================================= */
 
-.scrolly-with-chart {
+.split-layout {
+  /* Panel configuration (specific to two-column layout) */
+  --panel-min-width: 450px;
+  --panel-width: 45%;
+  --panel-height: 80vh;
+  --panel-top-offset: calc((100vh - var(--panel-height)) / 2); /* auto-center vertically */
+  --panel-max-height: 600px;
+  --layout-gap: 2rem;
+
   position: relative;
   display: grid;
-  grid-template-columns: 1fr minmax(450px, 45%);
-  gap: 2rem;
+  grid-template-columns: 1fr minmax(var(--panel-min-width), var(--panel-width));
+  gap: var(--layout-gap);
   align-items: start;
-  padding-left: var(--page-padding);
-  padding-right: var(--page-padding);
+  padding-inline: var(--content-padding-inline);
 
-  /* Override component defaults via CSS variables */
+  /* Override shared defaults for this layout */
   --scrolly-max-width: none;
-  --step-max-width: 400px;
 }
 
-.scrolly-with-chart .scrolly-chart {
+/* Reversed: panel on left, content on right */
+.split-layout.reversed {
+  grid-template-columns: minmax(var(--panel-min-width), var(--panel-width)) 1fr;
+}
+
+.split-layout .sticky-panel {
   position: sticky;
-  top: calc(50vh - 20vh);
-  height: 80vh;
-  max-height: 600px;
+  top: var(--panel-top-offset);
+  height: var(--panel-height);
+  max-height: var(--panel-max-height);
   grid-column: 2;
 }
 
-.scrolly-with-chart .scrolly-content {
+.split-layout.reversed .sticky-panel {
+  grid-column: 1;
+}
+
+.split-layout .scrolly-content {
   grid-column: 1;
   margin: 0;
 }
 
+.split-layout.reversed .scrolly-content {
+  grid-column: 2;
+}
+
 @media (max-width: 768px) {
-  .scrolly-with-chart {
+  .split-layout {
     grid-template-columns: 1fr;
-    padding-left: 0;
-    padding-right: 0;
+    padding-inline: 0;
     --step-max-width: 100%;
   }
 
-  .scrolly-with-chart .scrolly-chart {
+  .split-layout .sticky-panel {
     position: sticky;
-    top: calc(50vh - 30vh);
-    height: 60vh;
+    top: 0;
+    height: 100vh;
     grid-column: 1;
     grid-row: 1;
     width: 100%;
-    padding: 0;
+    z-index: 0;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  .scrolly-with-chart .scrolly-content {
+  /* On mobile, both occupy same grid cell for natural overlap.
+     Safari mobile needs physical overlap for z-index to work during client-side nav */
+  .split-layout .scrolly-content,
+  .split-layout .scrolly-outer {
     grid-column: 1;
-    grid-row: 2;
-    padding-left: var(--page-padding);
-    padding-right: var(--page-padding);
+    grid-row: 1;
+    z-index: 1;
+    pointer-events: none;
+    padding-inline: var(--content-padding-inline);
+  }
+
+  /* Reversed has no effect on mobile (stacks vertically) */
+  .split-layout.reversed .sticky-panel,
+  .split-layout.reversed .scrolly-content {
+    grid-column: 1;
   }
 }
 
+
 /* =============================================================================
-   SCROLLY LAYOUT: FULLSCREEN
-   Full-viewport background with centered text overlay
+   LAYOUT: FULLSCREEN
+   Full-viewport background with centered text overlay.
+   Use for immersive, full-bleed visualizations.
 
    Usage:
-     <section class="scrolly-fullscreen">
-       <div class="scrolly-chart">...</div>
-       {@render scrollyContent(...)}
+     <section class="fullscreen-layout">
+       <div class="sticky-panel">...</div>
+       <div class="scrolly-content">...</div>
      </section>
    ============================================================================= */
 
-.scrolly-fullscreen {
+.fullscreen-layout {
   position: relative;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
 
-  /* Override component defaults via CSS variables */
-  --step-height: 100vh;
+  /* Override shared defaults for immersive fullscreen experience */
   --step-max-width: 500px;
   --step-padding: 2rem;
-  --step-border-radius: 8px;
-  --scrolly-max-width: 600px;
-  --scrolly-pointer-events: none; /* Let events pass to chart behind */
+  --scrolly-pointer-events: none; /* Let events pass to panel behind */
 }
 
-.scrolly-fullscreen .scrolly-chart {
+.fullscreen-layout .sticky-panel {
   position: sticky;
   top: 0;
   width: 100vw;
@@ -295,11 +405,102 @@ main > :last-child {
   z-index: 0;
 }
 
-.scrolly-fullscreen .scrolly-content {
+.fullscreen-layout .scrolly-content {
   position: relative;
   z-index: 1;
   margin: 0 auto;
 }
+
+
+/* =============================================================================
+   LAYOUT: TRIPLE (Three-Column)
+   Three equal columns: content (steps), code panel, and visualization.
+   All three panels share equal width with the code and chart panels sticky.
+
+   Usage:
+     <section class="triple-layout">
+       <div class="scrolly-content">...</div>
+       <div class="code-panel">...</div>
+       <div class="chart-panel">...</div>
+     </section>
+   ============================================================================= */
+
+.triple-layout {
+  --panel-height: 95vh;
+  --panel-top-offset: calc((100vh - var(--panel-height)) / 2);
+  --panel-max-height: 900px;
+  --layout-gap: 1.5rem;
+
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--layout-gap);
+  align-items: start;
+  padding-inline: var(--content-padding-inline);
+}
+
+.triple-layout .scrolly-content {
+  grid-column: 1;
+}
+
+.triple-layout .code-panel {
+  position: sticky;
+  top: var(--panel-top-offset);
+  height: var(--panel-height);
+  max-height: var(--panel-max-height);
+  grid-column: 2;
+}
+
+.triple-layout .chart-panel {
+  position: sticky;
+  top: var(--panel-top-offset);
+  height: var(--panel-height);
+  max-height: var(--panel-max-height);
+  grid-column: 3;
+}
+
+@media (max-width: 1024px) {
+  .triple-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .triple-layout .chart-panel {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .triple-layout .code-panel {
+    display: none; /* Hide code on tablet, show only steps and chart */
+  }
+}
+
+@media (max-width: 768px) {
+  .triple-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .triple-layout .chart-panel {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    max-height: none;
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .triple-layout .scrolly-content {
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 1;
+    pointer-events: none;
+    padding-inline: var(--content-padding-inline);
+  }
+}
+
 
 /* =============================================================================
    TYPOGRAPHY
@@ -343,6 +544,124 @@ p {
   p {
     font-size: 1.2rem;
   }
+}
+
+/* Code blocks */
+pre {
+  background: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1.5rem 0;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+  line-height: 1.45;
+}
+
+pre code {
+  background: none;
+  padding: 0;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: #1f2328;
+}
+
+/* Code line numbers and highlighting (from rehype-highlight-code-lines) */
+pre code .code-line {
+  display: inline-block;
+  min-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: -1rem;
+  margin-right: -1rem;
+  border-left: 3px solid transparent;
+}
+
+pre code .numbered-code-line::before {
+  content: attr(data-line-number);
+  display: inline-block;
+  width: 2rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: #6e7781;
+  user-select: none;
+}
+
+pre code .highlighted-code-line {
+  background: rgba(255, 220, 100, 0.3);
+  border-left-color: #f0c000;
+}
+
+/* Inline code */
+:where(p, li) code {
+  font-family: var(--mono);
+  font-size: 0.8em;
+  background: var(--color-gray-100);
+  padding: 0.125rem 0.35rem;
+  border-radius: 3px;
+}
+
+/* Blockquotes */
+blockquote {
+  margin: 2rem 0;
+  padding: 0 0 0 1.5rem;
+  font-size: 1.1em;
+  line-height: 1.5;
+  color: #2c5aa0;
+  border-left: 3px solid #2c5aa0;
+}
+
+blockquote p {
+  margin: 0;
+}
+
+/* Dark mode: code and blockquotes */
+@media (prefers-color-scheme: dark) {
+  pre {
+    background: #161b22;
+    border-color: #30363d;
+  }
+  pre code {
+    color: #e6edf3;
+  }
+  pre code .numbered-code-line::before {
+    color: #6e7781;
+  }
+  pre code .highlighted-code-line {
+    background: rgba(255, 220, 100, 0.15);
+    border-left-color: #f0c000;
+  }
+  :where(p, li) code {
+    background: var(--color-gray-200);
+  }
+  blockquote {
+    color: #4a90e2;
+    border-left-color: #4a90e2;
+  }
+}
+
+:root.dark pre {
+  background: #161b22;
+  border-color: #30363d;
+}
+:root.dark pre code {
+  color: #e6edf3;
+}
+:root.dark pre code .numbered-code-line::before {
+  color: #6e7781;
+}
+:root.dark pre code .highlighted-code-line {
+  background: rgba(255, 220, 100, 0.15);
+  border-left-color: #f0c000;
+}
+:root.dark :where(p, li) code {
+  background: var(--color-gray-200);
+}
+:root.dark blockquote {
+  color: #4a90e2;
+  border-left-color: #4a90e2;
 }
 
 /* =============================================================================

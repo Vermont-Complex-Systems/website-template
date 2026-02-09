@@ -1,0 +1,211 @@
+{
+    "FullscreenLayoutExplainer": {
+        "code": ".fullscreen-layout {\n  position: relative;\n  width: 100vw;\n  margin-left: calc(-50vw + 50%);\n\n  /* Override shared defaults for immersive experience */\n  --step-max-width: 500px;\n  --step-padding: 2rem;\n  --scrolly-pointer-events: none;\n}\n\n.fullscreen-layout .sticky-panel {\n  position: sticky;\n  top: 0;\n  width: 100vw;\n  height: 100vh;\n  z-index: 0;\n}\n\n.fullscreen-layout .scrolly-content {\n  position: relative;\n  z-index: 1;\n  margin: 0 auto;\n}\n\n\n\n",
+        "filename": "src/styles/app.css",
+        "language": "css",
+        "steps": [
+            {
+                "type": "markdown",
+                "value": "`.fullscreen-layout` creates an **immersive, full-bleed** experience. The panel fills the viewport while text overlays on top.",
+                "highlightLines": "1,2,3,4"
+            },
+            {
+                "type": "markdown",
+                "value": "`width: 100vw` with the margin trick **breaks out of any container** to span the full viewport width.",
+                "highlightLines": "3,4"
+            },
+            {
+                "type": "markdown",
+                "value": "`--scrolly-pointer-events: none` lets mouse/touch events **pass through** the text to the visualization behind it.",
+                "highlightLines": "9"
+            },
+            {
+                "type": "markdown",
+                "value": "`.sticky-panel` is pinned to `top: 0` and fills the **entire viewport** (100vw × 100vh). It stays fixed as you scroll.",
+                "highlightLines": "12,13,14,15,16"
+            },
+            {
+                "type": "markdown",
+                "value": "`.scrolly-content` sits above (`z-index: 1`) and scrolls over the panel. The **layered effect** creates the immersive feel.",
+                "highlightLines": "20,21,22"
+            }
+        ]
+    },
+    "SplitLayoutExplainer": {
+        "code": ".split-layout {\n  /* Panel configuration */\n  --panel-min-width: 450px;\n  --panel-width: 45%;\n  --panel-height: 80vh;\n  --panel-top-offset: calc((100vh - var(--panel-height)) / 2);\n  --panel-max-height: 600px;\n  --layout-gap: 2rem;\n\n  display: grid;\n  grid-template-columns: 1fr minmax(var(--panel-min-width), var(--panel-width));\n  gap: var(--layout-gap);\n  padding-inline: var(--content-padding-inline);\n}\n\n.split-layout .sticky-panel {\n  position: sticky;\n  top: var(--panel-top-offset);\n  height: var(--panel-height);\n  max-height: var(--panel-max-height);\n  grid-column: 2;\n}\n\n.split-layout .scrolly-content {\n  grid-column: 1;\n}",
+        "language": "css",
+        "filename": "src/styles/app.css",
+        "steps": [
+            {
+                "type": "markdown",
+                "value": "`.split-layout` creates a **two-column grid**. Variables at the top let you customize without editing core CSS.",
+                "highlightLines": "1,2,3,4,5,6,7,8"
+            },
+            {
+                "type": "markdown",
+                "value": "`--panel-height` sets the desired height. The offset is **auto-calculated** to center it vertically: `(100vh - height) / 2`.",
+                "highlightLines": "5,6"
+            },
+            {
+                "type": "markdown",
+                "value": "`--panel-max-height` **caps** the panel on large screens. Without it, 80vh on a 4K monitor could be 800+ pixels. Set to `none` if you want full height.",
+                "highlightLines": "7"
+            },
+            {
+                "type": "markdown",
+                "value": "`.sticky-panel` uses `position: sticky` to stay fixed while scrolling. It applies both height and max-height.",
+                "highlightLines": "17,18,19,20,21"
+            },
+            {
+                "type": "markdown",
+                "value": "`.scrolly-content` is in **column 1** (left). As you scroll through it, the sticky panel stays put.",
+                "highlightLines": "24,25"
+            }
+        ]
+    },
+    "SplitCodeExplainer": {
+        "code": "<script>\n  import Scrolly from './Scrolly.svelte';\n  import { renderTextContent } from './ScrollySnippets.svelte';\n\n  let { story, data } = $props();\n  let scrollyIndex = $state(undefined);\n</script>\n\n<section class='split-layout'>\n  <div class='sticky-panel'>\n    <!-- Your visualization here -->\n  </div>\n  <div class='scrolly-content'>\n    <Scrolly bind:value={scrollyIndex}>\n      {#each data.steps as step, i}\n        {@const active = scrollyIndex === i}\n        <div class='step' class:active>\n          <div class='step-box'>\n            {@render renderTextContent(step)}\n          </div>\n        </div>\n      {/each}\n    </Scrolly>\n  </div>\n</section>\n\n\n",
+        "language": "svelte",
+        "filename": "stories/{story}/components/Index.svelte",
+        "steps": [
+            {
+                "type": "markdown",
+                "value": "Import `Scrolly` ([Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) wrapper) and `renderTextContent` (a custom renderer using [svelte-exmarkdown](https://ssssota.github.io/svelte-exmarkdown/) that can handle html/markdown/math/code types). We don't need to go into those at the moment.",
+                "highlightLines": "2,3"
+            },
+            {
+                "type": "markdown",
+                "value": "The `story` metadata and `data` from `copy.json` are passed as props using [$props](https://svelte.dev/tutorial/svelte/declaring-props).",
+                "highlightLines": "5"
+            },
+            {
+                "type": "markdown",
+                "value": " By declaring `scrollyIndex` as [state](https://svelte.dev/tutorial/svelte/state) variable, we will be able to track which step is active.",
+                "highlightLines": "6"
+            },
+            {
+                "type": "markdown",
+                "value": "`<section class='split-layout'>` applies our **two-column** CSS. Add `.reversed` to flip sides.",
+                "highlightLines": "9"
+            },
+            {
+                "type": "markdown",
+                "value": "`.sticky-panel` holds your chart, map, or any visualization. It stays fixed while users scroll.",
+                "highlightLines": "10,11,12"
+            },
+            {
+                "type": "markdown",
+                "value": "In typical code, these lines are wrapped into the `ScrollyContent.svelte` module. Here we keep it in the code snippet to explain what is going on.",
+                "highlightLines": "13,14,15,16,17,18,19,20,21,22,23,24"
+            },
+            {
+                "type": "markdown",
+                "value": "`bind:value={scrollyIndex}` creates a **two-way binding**. Normally props flow parent → child, but [bind](https://svelte.dev/docs/svelte/bind) lets the child write back. Here, `Scrolly` uses an IntersectionObserver to detect which step is most visible, updates its internal `value`, and that change flows back to our `scrollyIndex` state.",
+                "highlightLines": "14"
+            },
+            {
+                "type": "markdown",
+                "value": "Now, we loop over `data.steps` from your JSON using a [each](https://svelte.dev/tutorial/svelte/each-blocks) block, a svelte way to do for loop.",
+                "highlightLines": "15,16,17,18,19,20,21,22"
+            },
+            {
+                "type": "markdown",
+                "value": "Each step toggles `.active` when `scrollyIndex === i`. Use this to update your visualization reactively. This time around, the magic happens by way of CSS class, where `.step.active` has different property then the inactivated (default) `.step` class.",
+                "highlightLines": "16,17"
+            },
+            {
+                "type": "markdown",
+                "value": "We finally use the [{@render}](https://svelte.dev/docs/svelte/@render) tag to render the underlying [snippet](https://svelte.dev/docs/svelte/snippet).",
+                "highlightLines": "19"
+            }
+        ]
+    },
+    "FullscreenCodeExplainer": {
+        "code": "<script>\n  import Scrolly from './Scrolly.svelte';\n  import { renderTextContent } from './ScrollySnippets.svelte';\n\n  let { story, data } = $props();\n  let scrollyIndex = $state(undefined);\n</script>\n\n<section class='fullscreen-layout'>\n  <div class='sticky-panel'>\n    <!-- Your visualization here -->\n  </div>\n  <div class='scrolly-content'>\n    <Scrolly bind:value={scrollyIndex}>\n      {#each data.steps as step, i}\n        {@const active = scrollyIndex === i}\n        <div class='step' class:active>\n          <div class='step-box'>\n            {@render renderTextContent(step)}\n          </div>\n        </div>\n      {/each}\n    </Scrolly>\n  </div>\n</section>\n\n\n",
+        "language": "svelte",
+        "filename": "stories/{story}/components/Index.svelte",
+        "steps": [
+             {
+                "type": "markdown",
+                "value": "Import `Scrolly` ([Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) wrapper) and `renderTextContent` (a custom renderer using [svelte-exmarkdown](https://ssssota.github.io/svelte-exmarkdown/) that can handle html/markdown/math/code types). We don't need to go into those at the moment.",
+                "highlightLines": "2,3"
+            },
+            {
+                "type": "markdown",
+                "value": "The `story` metadata and `data` from `copy.json` are passed as props using [$props](https://svelte.dev/tutorial/svelte/declaring-props).",
+                "highlightLines": "5"
+            },
+            {
+                "type": "markdown",
+                "value": " By declaring `scrollyIndex` as [state](https://svelte.dev/tutorial/svelte/state) variable, we will be able to track which step is active.",
+                "highlightLines": "6"
+            },
+            {
+                "type": "markdown",
+                "value": "`<section class='fullscreen-layout'>` creates an **immersive full-viewport** experience.",
+                "highlightLines": "6"
+            },
+            {
+                "type": "markdown",
+                "value": "`.sticky-panel` holds your chart, map, or any visualization. It stays fixed while users scroll.",
+                "highlightLines": "10,11,12"
+            },
+            {
+                "type": "markdown",
+                "value": "In typical code, these lines are wrapped into the `ScrollyContent.svelte` module. Here we keep it in the code snippet to explain what is going on.",
+                "highlightLines": "13,14,15,16,17,18,19,20,21,22,23,24"
+            },
+            {
+                "type": "markdown",
+                "value": "`bind:value={scrollyIndex}` creates a **two-way binding**. Normally props flow parent → child, but [bind](https://svelte.dev/docs/svelte/bind) lets the child write back. Here, `Scrolly` uses an IntersectionObserver to detect which step is most visible, updates its internal `value`, and that change flows back to our `scrollyIndex` state.",
+                "highlightLines": "14"
+            },
+            {
+                "type": "markdown",
+                "value": "Now, we loop over `data.steps` from your JSON using a [each](https://svelte.dev/tutorial/svelte/each-blocks) block, a svelte way to do for loop.",
+                "highlightLines": "15,16,17,18,19,20,21,22"
+            },
+            {
+                "type": "markdown",
+                "value": "Each step toggles `.active` when `scrollyIndex === i`. Use this to update your visualization reactively. This time around, the magic happens by way of CSS class, where `.step.active` has different property then the inactivated (default) `.step` class.",
+                "highlightLines": "16,17"
+            },
+            {
+                "type": "markdown",
+                "value": "We finally use the [{@render}](https://svelte.dev/docs/svelte/@render) tag to render the underlying [snippet](https://svelte.dev/docs/svelte/snippet).",
+                "highlightLines": "19"
+            }
+        ]
+    },
+    "LiveDemoExplainer": {
+        "code": "<div class='sticky-panel'>\n  <div class='chart-container'>\n    <svg viewBox='0 0 300 200'>\n      <rect width='300' height='200' fill='#f4efea' rx='8'/>\n      {#each chartData as value, i}\n        <rect\n          x={30 + i * 65}\n          y={180 - value * 3}\n          width='50'\n          height={value * 3}\n          fill={scrollyIndex === i ? '#ff6b6b' : '#4ecdc4'}\n          rx='4'\n        />\n      {/each}\n      <text x='150' y='30' text-anchor='middle'>\n        Step: {scrollyIndex ?? '–'}\n      </text>\n    </svg>\n  </div>\n</div>\n\n<style>\n  .chart-container {\n    width: 100%;\n    height: 100%;\n  }\n  svg {\n    width: 100%;\n    height: 100%;\n  }\n</style>",
+        "language": "svelte",
+        "steps": [
+            {
+                "type": "markdown",
+                "value": "The `.chart-container` needs `width: 100%; height: 100%` to fill the panel. In svelte, you can add a [style tag](https://svelte.dev/tutorial/svelte/styling) to customize your html code. Svelte components are reusable self-contained block of code that encapsulates HTML, CSS and JavaScript that belong together.",
+                "highlightLines": "2,23,24,25,26"
+            },
+            {
+                "type": "markdown",
+                "value": "Similarly, the **SVG** needs to take the full space of its container. The viewBox defines the coordinate system.",
+                "highlightLines": "3,27,28,29,30"
+            },
+            {
+                "type": "markdown",
+                "value": "This is one secret power of the `each` keyword in svelte. I like how readable is the for loop here, compared to, say [D3js Enter, Exit and Update](https://www.d3indepth.com/enterexit/) pattern (although this pattern is genius and has its _reason d'être_). We loop through `chartData` to create them dynamically. Each bar is a `<rect>` mapped onto the value.",
+                "highlightLines": "5,6,7,8,9,10,11,12,13,14"
+            },
+            {
+                "type": "markdown",
+                "value": "As you might have noticed by now, the **fill color changes** based on `scrollyIndex`, which we talk below. Active bars turn red, others are teal.",
+                "highlightLines": "11"
+            },
+            {
+                "type": "markdown",
+                "value": "A text element shows the current step. It updates reactively as you scroll. This is a nice way to annotate tailored made plot. Note that the svelte magic operates really in two key ways; (i) binding scrolly steps and (ii) through [logic blocks](https://svelte.dev/tutorial/svelte/if-blocks) like if-else and for loops, which both are missing from html.",
+                "highlightLines": "15,16,17"
+            }
+        ]
+    }
+}

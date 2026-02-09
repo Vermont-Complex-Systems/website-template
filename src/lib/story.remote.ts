@@ -21,7 +21,7 @@ export const getMember = prerender(
     { dynamic: true }
 );
 
-// STORIES 
+// STORIES
 
 export interface Story {
   slug: string;
@@ -33,8 +33,14 @@ export interface Story {
   tags: string;
 }
 
-
 const stories = storiesData as Story[];
+
+// Glob for copy data - eager since it's small JSON
+// https://vite.dev/guide/features#glob-import
+const copyModules = import.meta.glob<{ default: Record<string, unknown> }>(
+  '$lib/stories/*/data/copy.json',
+  { eager: true }
+);
 
 // Query for getting all stories
 export const getStories = prerender(async () => {
@@ -54,14 +60,9 @@ export const getStory = prerender(v.string(), async (slug) => {
     redirect(302, story.externalUrl);
   }
 
-  // Load copy data for internal stories
-  let copyData = {};
-  try {
-    const module = await import(`$lib/stories/${slug}/data/copy.json`);
-    copyData = module.default || module;
-  } catch (e) {
-    console.warn(`No copy.json found for ${slug}`);
-  }
+  // Load copy data using glob
+  const copyPath = `/src/lib/stories/${slug}/data/copy.json`;
+  const copyData = copyModules[copyPath]?.default ?? {};
 
   return {
     story,

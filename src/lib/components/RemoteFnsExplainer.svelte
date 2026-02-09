@@ -109,7 +109,7 @@ export const getStory = prerender(v.string(), async (slug) => {
 
 <style>
 .remote-functions {
-  padding: 4rem var(--page-padding);
+  padding: 4rem var(--page-inline-padding);
   margin-bottom: var(--padding-bottom-page); /* here we add margin-bottom so that we don't extends the shaded background */
   background: rgba(0, 0, 0, 0.02);
   overflow-x: hidden;
@@ -289,7 +289,7 @@ export const getStory = prerender(v.string(), async (slug) => {
 
 @media (max-width: 768px) {
   .remote-functions {
-    padding: 2.5rem var(--page-padding);
+    padding: 2.5rem var(--page-inline-padding);
   }
 
   .section-intro {

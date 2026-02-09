@@ -21,12 +21,13 @@ function closeMenu(skipFocus = false) {
 <div class="header-inner">
   <div class="header-left">
     <a href="{base}/" class="title-link">
-       <img src="/waxSealSmall.png" alt="Verso seal" class="site-title"/>
+       <img src="/waxSealSmall.png" alt="Verso seal" class="site-logo"/>
     </a>
   </div>
 
   <div class="header-right">
     <a href="{base}/about" class="about-button">About</a>
+    <a href="{base}/getting-started" class="about-button">Videos & Tutorials</a>
 
     <ThemeToggle />
 
@@ -71,7 +72,7 @@ function closeMenu(skipFocus = false) {
   width: 100%;
   max-width: var(--page-max-width);
   margin-inline: auto;
-  padding-inline: var(--page-padding);
+  padding-inline: var(--page-inline-padding);
 
   display: flex;
   align-items: center;
@@ -101,7 +102,7 @@ function closeMenu(skipFocus = false) {
   transform: translateY(-0.125rem);
 }
 
-.site-title {
+.site-logo {
   height: 5rem;
   width: auto;
   display: block;
@@ -178,16 +179,14 @@ function closeMenu(skipFocus = false) {
   border: 0;
 }
 
-/* Mobile adjustments */
-@media (max-width: 960px) {
+@media (max-width: 768px) {
   .mobile-menu-button {
     display: flex;
   }
-}
 
-@media (max-width: 768px) {
   .header-inner {
-    padding-inline: var(--page-padding);
+    padding-inline: var(--page-inline-padding);
+    min-height: 0;
   }
 
   .header-left {
@@ -201,6 +200,15 @@ function closeMenu(skipFocus = false) {
   .icon-button {
     width: 3.5rem;
     height: 3.5rem;
+  }
+  
+  .site-logo {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .header-left {
+    margin-top: 0.25rem; /* smaller compensation... */
   }
 }
 </style>

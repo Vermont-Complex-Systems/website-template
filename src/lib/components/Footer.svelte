@@ -49,8 +49,8 @@
 	.footer {
 		width: 100%;
 		/* Use story-defined variables with sensible defaults */
-		background-color: var(--footer-bg, light-dark(var(--color-uvm-green), #0d0d0d));
-		border-top: 1px solid var(--footer-border, light-dark(var(--color-border), rgba(255, 255, 255, 0.1)));
+		background-color: var(--footer-bg, var(--color-uvm-green));
+		border-top: 1px solid var(--footer-border, var(--color-border));
 		padding: 3rem 0 2rem; /* vertical padding only */
 	}
 
@@ -64,7 +64,7 @@
 		width: 100%;
 		max-width: var(--page-max-width);
 		margin-inline: auto;
-		padding-inline: var(--page-padding);
+		padding-inline: var(--page-inline-padding);
 
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
