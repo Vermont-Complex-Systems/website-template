@@ -18,20 +18,18 @@
 <ScrollIndicator threshold={50} />
 
 <article class="story" id="geo-story-1">
-    <div class="prose">
-        <StoryHeader
-            title={data.title}
-            subtitle={data.subtitle}
-            authors={data.authors}
-            date={data.date}
-        />
+    <StoryHeader
+        title={data.title}
+        subtitle={data.subtitle}
+        authors={data.authors}
+        date={data.date}
+    />
 
-    <section id="intro" class="prose">
-            {#each data.introduction as item}
-                {@render renderTextContent(item)}
-            {/each}
-        </section>
-    </div>
+    <section id="intro">
+        {#each data.introduction as item}
+            {@render renderTextContent(item)}
+        {/each}
+    </section>
 
     <section id="scrolly" class="fullscreen-layout">
         <div class="sticky-panel">
@@ -40,15 +38,15 @@
         <ScrollyContent steps={data.steps} bind:value={scrollyIndex} />
     </section>
 
-    <h2 class="prose">Conclusion</h2>
-    <section id="conclusion" class="prose">
+    <h2>Conclusion</h2>
+    <section id="conclusion">
         {#each data.conclusion as item}
             {@render renderTextContent(item)}
         {/each}
     </section>
-    
-    <h2 class="prose">Appendix</h2>
-    <section id="appendix" class="prose">
+
+    <h2>Appendix</h2>
+    <section id="appendix">
         {#each data.appendix as item}
             {@render renderTextContent(item)}
         {/each}

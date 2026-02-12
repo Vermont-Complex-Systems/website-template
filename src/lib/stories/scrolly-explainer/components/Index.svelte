@@ -1,11 +1,14 @@
 <script>
-    import BackToHome from '$lib/components/helpers/BackToHome.svelte';
     import ScrollyContent from '$lib/components/helpers/ScrollyContent.svelte';
     import CodeExplainer from '$lib/components/helpers/CodeExplainer.svelte';
     import Md from '$lib/components/helpers/MarkdownRenderer.svelte';
-    import { renderCodeHtml } from '$lib/components/helpers/ScrollySnippets.svelte';
+    import ToggleLayout from './ToggleLayout.svelte';
+    import SimpleChart from './simpleChart.svelte';
+    
     import Footer from '$lib/components/Footer.svelte';
-    import { resolve } from '$app/paths';
+    import BackToHome from '$lib/components/helpers/BackToHome.svelte';
+    import { renderCodeHtml } from '$lib/components/helpers/ScrollySnippets.svelte';
+    
     let { story, data } = $props();
 
     let scrollyIndex = $state(undefined);
@@ -23,43 +26,28 @@
     let currentHighlight = $derived(
         scrollyIndex !== undefined ? data.LiveDemoExplainer.steps[scrollyIndex]?.highlightLines || '' : ''
     );
-
-    const chartData = [20, 35, 25, 45];
 </script>
 
 <BackToHome />
 
-<article class="story docs">
+<article class="story">
 
-<h1 class="prose">Deep Scrolly Dive</h1>
+    <h1 >Deep Scrolly Dive</h1>
 
-<section class="prose">
-    <p>In this story, we take a fun deep dive into the mechanics behind data-driven scrolly stories. The goal is to provide a general understanding of the different components we need to build such interactive stories.</p> 
-    <p>Along the way, we will introduce key features of <a href="https://svelte.dev/">Svelte</a>, our framework of choice for interactive data visualization. Although it might be intimidating at first, Svelte, in my view, is much easier than, say, doing CSS right. Or vanilla <a href="https://d3js.org/">d3js</a> for that matter, the programming language of choice in the web development world (we will still be using d3js in our dataviz, but we won’t need it here).</p> 
-    <p>Let’s start with the fun part: charting.</p>
-</section>
+    <section >
+        <p>In this story, we take a fun deep dive into the mechanics behind data-driven scrolly stories. The goal is to provide a general understanding of the different components we need to build such interactive stories.</p> 
+        <p>Along the way, we will introduce key features of <a href="https://svelte.dev/">Svelte</a>, our framework of choice for interactive data visualization. Although it might be intimidating at first, Svelte, in my view, is much easier than, say, doing CSS right. Or vanilla <a href="https://d3js.org/">d3js</a> for that matter, the programming language of choice in the web development world (we will still be using d3js in our dataviz, but we won’t need it here).</p> 
+        <p>Let’s start with the fun part: charting.</p>
+    </section>
 
-        <h2 class="prose">Charting</h2>
+    <h2 >Charting</h2>
 
-    <section class="prose">
+    <section >
         <p>This section shows how to add a chart that responds to scroll position. The chart here is written directly as SVG, using the Svelte <a href="https://svelte.dev/tutorial/svelte/each-blocks">each</a> block to loop over the data. This is a technique I first encountered <a href="https://2019.wattenberger.com/blog/react-and-d3">here</a> in the world of <a href="https://react.dev/">React</a>, and later in this <a href="https://www.youtube.com/watch?v=5IcY0biPhoQ&t=57s">series of videos</a> by Connor Rotschild.</p>
     </section>
 
     <div class="scrolly-section">
-        <div class="layout-toggle right">
-            <button
-                class:active={layoutMode === 'split'}
-                onclick={() => layoutMode = 'split'}
-            >
-                Split
-            </button>
-            <button
-                class:active={layoutMode === 'fullscreen'}
-                onclick={() => layoutMode = 'fullscreen'}
-            >
-                Fullscreen
-            </button>
-        </div>
+        <ToggleLayout bind:layoutMode={layoutMode} />
 
         {#if layoutMode === 'split'}
             <!-- Split/Triple layout: text | code | chart -->
@@ -71,50 +59,14 @@
                     </div>
                 </div>
                 <div class="chart-panel">
-                    <div class="chart-container">
-                        <svg viewBox="0 0 300 200" class="chart-svg">
-                            <rect width="300" height="200" fill="#f4efea" rx="8"/>
-                            {#each chartData as value, i}
-                                <rect
-                                    x={30 + i * 65}
-                                    y={180 - value * 3}
-                                    width="50"
-                                    height={value * 3}
-                                    fill={scrollyIndex === i ? '#ff6b6b' : '#4ecdc4'}
-                                    rx="4"
-                                    class="chart-bar"
-                                />
-                            {/each}
-                            <text x="150" y="30" text-anchor="middle" class="chart-label">
-                                Step: {scrollyIndex ?? '–'}
-                            </text>
-                        </svg>
-                    </div>
+                    <SimpleChart {scrollyIndex}/>
                 </div>
             </section>
         {:else}
             <!-- Fullscreen layout: chart as background, text+code overlay -->
             <section class="fullscreen-layout live-demo">
                 <div class="sticky-panel">
-                    <div class="chart-container">
-                        <svg viewBox="0 0 300 200" class="chart-svg">
-                            <rect width="300" height="200" fill="#f4efea" rx="8"/>
-                            {#each chartData as value, i}
-                                <rect
-                                    x={30 + i * 65}
-                                    y={180 - value * 3}
-                                    width="50"
-                                    height={value * 3}
-                                    fill={scrollyIndex === i ? '#ff6b6b' : '#4ecdc4'}
-                                    rx="4"
-                                    class="chart-bar"
-                                />
-                            {/each}
-                            <text x="150" y="15" font-size=10px text-anchor="middle" class="chart-label">
-                                Step: {scrollyIndex ?? '–'}
-                            </text>
-                        </svg>
-                    </div>
+                    <SimpleChart {scrollyIndex}/>
                 </div>
                 <div class="scrolly-content split-overlay">
                     <ScrollyContent steps={data.LiveDemoExplainer.steps} bind:value={scrollyIndex} topSpacer={false} bottomSpacer={false} />
@@ -128,37 +80,25 @@
         {/if}
     </div>
 
-    <section class="prose">
+    <section >
         <p>Now, how does that work? What does it mean for <code>scrollyIndex</code> to be reactive? Below, we go over the global styling first, showing how it defines the two layouts, and then we describe the <code>ScrollyContent</code> module where the above code snippet lives.</p>
     </section>
 
-    <h2 class="prose">The CSS Layout</h2>
+    <h2 >The CSS Layout</h2>
 
-    <section class="prose">
+    <section >
         <p>We offer two main scrolly layouts at the moment. Toggle below to explore the CSS code underlying each of them:</p>
     </section>
 
     <div class="scrolly-section">
-        <div class="layout-toggle">
-            <button
-                class:active={layoutMode === 'split'}
-                onclick={() => layoutMode = 'split'}
-            >
-                Split
-            </button>
-            <button
-                class:active={layoutMode === 'fullscreen'}
-                onclick={() => layoutMode = 'fullscreen'}
-            >
-                Fullscreen
-            </button>
-        </div>
+        <ToggleLayout bind:layoutMode={layoutMode} />
+
         <CodeExplainer data={layoutExplainer} />
     </div>
 
-    <h2 class="prose">The Svelte Component</h2>
+    <h2 >The Svelte Component</h2>
 
-    <section class="prose">
+    <section >
         <p>Your story’s content lives in <code>data/copy.json</code>, a file-based approach taken from <a href="https://github.com/the-pudding/svelte-starter/blob/main/src/data/copy.json">The Pudding</a>. It has the benefit of clearly separating content from code, so that non-technical collaborators can contribute to the story. In our implementation, each step has at minimum a <code>type</code> and <code>value</code> (but can take more if needed):</p>
 <pre><code class="language-json">&#123;
   "steps": [
@@ -172,24 +112,12 @@
 
     <div class="scrolly-section">
         
-        <div class="layout-toggle">
-            <button
-                class:active={layoutMode === 'split'}
-                onclick={() => layoutMode = 'split'}
-            >
-                Split
-            </button>
-            <button
-                class:active={layoutMode === 'fullscreen'}
-                onclick={() => layoutMode = 'fullscreen'}
-            >
-                Fullscreen
-            </button>
-        </div>
+        <ToggleLayout bind:layoutMode={layoutMode}/>
+
         <CodeExplainer data={codeExplainer} />
     </div>
 
-    <section class="prose">
+    <section >
         <p>This section was hardcore, but if you got through it, you now know most of what you need to build interactive data visualizations using <code>Svelte</code>. We covered the following concepts:</p>
             <ul>
                 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a>: A native web API that detects when elements enter or leave the viewport—essential for triggering scroll-based animations.</li>
@@ -199,13 +127,13 @@
                 <li><a href="https://svelte.dev/docs/svelte/bind">bind</a>: Enables two-way data flow, letting child components send data back to parents.</li>
                 <li><a href="https://svelte.dev/docs/svelte/@render">@render</a> and <a href="https://svelte.dev/docs/svelte/snippet">snippet</a>: Useful for rendering different types of content, such as <code>code</code>, <code>markdown</code>, or <code>math</code>.</li>
             </ul>
-        <p class="prose">It might feel like a lot, but it’s not too bad. If you want to go further, my recommendation is to spend some time with Svelte’s excellent <a href="https://svelte.dev/tutorial/svelte/welcome-to-svelte">tutorial</a>, together with Joy of Code’s <a href="https://www.youtube.com/watch?v=B2MhkPtBWs4&t=4891s">Introduction to Svelte</a>. For most people who already understand a programming language and have a bit of HTML/CSS knowledge, half a day with that material can go a long way toward confidently tweaking existing charts and codebases.</p>
+        <p >It might feel like a lot, but it’s not too bad. If you want to go further, my recommendation is to spend some time with Svelte’s excellent <a href="https://svelte.dev/tutorial/svelte/welcome-to-svelte">tutorial</a>, together with Joy of Code’s <a href="https://www.youtube.com/watch?v=B2MhkPtBWs4&t=4891s">Introduction to Svelte</a>. For most people who already understand a programming language and have a bit of HTML/CSS knowledge, half a day with that material can go a long way toward confidently tweaking existing charts and codebases.</p>
     </section>
 
     
-    <h2 class="prose">Conclusion</h2>
+    <h2 >Conclusion</h2>
 
-    <section class="prose">
+    <section >
         <p>Here’s how the CSS layers work together:</p>
 <pre class="architecture-diagram"><code>┌─────────────────────────────────────────────────────────────┐
 │  app.css (Global Layouts)                                   │
@@ -296,52 +224,6 @@
         .split-overlay .code-panel {
             display: none;
         }
-    }
-
-    .layout-toggle {
-        position: sticky;
-        top: 1rem;
-        z-index: 100;
-        display: flex;
-        gap: 0.5rem;
-        background: var(--story-bg, var(--color-bg));
-        padding: 0.5rem;
-        border-radius: 8px;
-        width: fit-content;
-    }
-
-    .layout-toggle.right {
-        margin-left: auto;
-    }
-
-    .layout-toggle button {
-        padding: 0.5rem 1rem;
-        border: 1px solid #ccc;
-        background: white;
-        border-radius: 4px;
-        font-size: 0.875rem;
-        transition: all 150ms ease;
-    }
-
-    .layout-toggle button:hover {
-        border-color: #999;
-    }
-
-    .layout-toggle button.active {
-        background: #333;
-        color: white;
-        border-color: #333;
-    }
-
-    .chart-container {
-        position: relative;
-        width: 100%;
-        height: 100%;
-    }
-
-    svg {
-        width: 100%;
-        height: 100%;
     }
 
     .code-explainer-chart {

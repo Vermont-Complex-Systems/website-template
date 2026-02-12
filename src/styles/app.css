@@ -208,6 +208,25 @@ main > :last-child {
   }
 }
 
+
+
+/* =============================================================================
+   LIGHT STORY THEME (default)
+   Stories default to light mode, independent of global dark mode toggle.
+   Customize with: style="--story-bg: #fff; --story-fg: #333;"
+   ============================================================================= */
+
+.story {
+  color-scheme: light;
+  --story-bg: var(--color-beige);
+  --story-fg: rgb(55, 55, 55);
+  --story-step-bg: #fff;
+  --story-step-fg: #333;
+  --story-step-bg-inactive: #f5f5f5;
+  --story-step-fg-inactive: #ccc;
+  --story-max-width: 600px;
+}
+
 /* =============================================================================
    LAYOUT: STORY
    Full-width container for scrollytelling stories.
@@ -227,42 +246,36 @@ main > :last-child {
   }
 }
 
-/* Prose sections get centered, readable width */
-.story .prose {
+/* =============================================================================
+   STORY PROSE (default for content)
+   Direct children get centered, readable width by default.
+   Layout classes break out to full width.
+   ============================================================================= */
+
+.story > h1,
+.story > h2,
+.story > h3,
+.story > p,
+.story > section,
+.story > header,
+.story > ul,
+.story > ol,
+.story > blockquote,
+.story > pre {
   width: 100%;
-  max-width: 600px;
+  max-width: var(--story-max-width);
   margin-inline: auto;
-  margin-top: 2rem;
   padding-inline: 1rem;
 }
 
-.story #intro {
-  margin-bottom: 2rem;
-}
 
-.story h2.prose {
-  margin-top: 4rem;
-}
-
-.story #conclusion {
-  margin-bottom: 0;
-}
-
-
-/* =============================================================================
-   LIGHT STORY THEME (default)
-   Stories default to light mode, independent of global dark mode toggle.
-   Customize with: style="--story-bg: #fff; --story-fg: #333;"
-   ============================================================================= */
-
-.story {
-  color-scheme: light;
-  --story-bg: var(--color-beige);
-  --story-fg: rgb(55, 55, 55);
-  --story-step-bg: #fff;
-  --story-step-fg: #333;
-  --story-step-bg-inactive: #f5f5f5;
-  --story-step-fg-inactive: #ccc;
+/* Layout classes break out to full width */
+.story > .split-layout,
+.story > .fullscreen-layout,
+.story > .triple-layout,
+.story > .scrolly-section {
+  max-width: none;
+  padding-inline: 0;
 }
 
 
@@ -284,12 +297,12 @@ main > :last-child {
 
 /* Ensure all text in dark stories uses the story foreground color */
 .story.dark,
-.story.dark .prose,
-.story.dark .prose h1,
-.story.dark .prose h2,
-.story.dark .prose h3,
-.story.dark .prose p,
-.story.dark .prose a {
+.story.dark h1,
+.story.dark h2,
+.story.dark h3,
+.story.dark p,
+.story.dark a,
+.story.dark section {
   color: var(--story-fg);
 }
 

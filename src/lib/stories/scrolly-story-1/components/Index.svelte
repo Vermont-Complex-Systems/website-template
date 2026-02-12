@@ -24,7 +24,8 @@
         authors={data.authors}
         date={data.date}
     />
-    <section id="intro" class="prose">
+
+    <section id="intro">
         {#each data.introduction as item}
             {@render renderTextContent(item)}
         {/each}
@@ -35,20 +36,20 @@
             <ScrollyPlot {scrollyIndex} />
         </div>
 
-        <div class=stepContainer>
+        <div class="stepContainer">
             <ScrollyContent steps={data.steps} bind:value={scrollyIndex} topSpacer={false}/>
         </div>
     </section>
 
-    <h2 class="prose">Markdown Renderer</h2>
-    <section id="markdown" class="prose">
+    <h2>Markdown Renderer</h2>
+    <section id="markdown">
         {#each data.markdownRenderer as item}
             {@render renderTextContent(item)}
         {/each}
     </section>
 
-    <h2 class="prose">Conclusion</h2>
-    <section id="conclusion" class="prose">
+    <h2>Conclusion</h2>
+    <section id="conclusion">
         {#each data.conclusion as item}
             {@render renderTextContent(item)}
         {/each}

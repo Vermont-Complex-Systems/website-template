@@ -16,21 +16,19 @@ let scrollyIndex = $state(undefined);
 <BackToHome />
 <ScrollIndicator />
 
-<article class="story dark" style="--story-bg: #353839; --story-fg: white;">
-        <div class="prose">
-            <StoryHeader
-                title={data.title}
-                subtitle={data.subtitle}
-                authors={data.authors}
-                date={data.date}
-            />
+<article class="story dark" style="--story-bg: #353839; --story-fg: white; --story-step-bg: #222; --story-step-bg-inactive: #333;">
+        <StoryHeader
+            title={data.title}
+            subtitle={data.subtitle}
+            authors={data.authors}
+            date={data.date}
+        />
 
-            <section id="intro" class="prose">
-                {#each data.introduction as item}
-                    {@render renderTextContent(item)}
-                {/each}
-            </section>
-        </div>
+        <section id="intro">
+            {#each data.introduction as item}
+                {@render renderTextContent(item)}
+            {/each}
+        </section>
 
         <section id="scrolly" class="fullscreen-layout">
             <div class="sticky-panel">
@@ -39,8 +37,8 @@ let scrollyIndex = $state(undefined);
             <ScrollyContent steps={data.steps} bind:value={scrollyIndex} />
         </section>
 
-        <h2 class="prose">Conclusion</h2>
-        <section id="conclusion" class="prose">
+        <h2>Conclusion</h2>
+        <section id="conclusion">
             {#each data.conclusion as item}
                 {@render renderTextContent(item)}
             {/each}

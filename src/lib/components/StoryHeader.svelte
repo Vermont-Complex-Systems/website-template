@@ -8,7 +8,7 @@
   } = $props();
 </script>
 
-<header class={`story-header prose ${className}`}>
+<header class={`story-header ${className}`}>
   <h1>{title}</h1>
 
   {#if subtitle}
