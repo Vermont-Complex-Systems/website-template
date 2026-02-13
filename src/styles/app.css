@@ -6,6 +6,13 @@
    Global CSS variables for colors, typography, and layout.
    ============================================================================= */
 
+@property --myColor {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: rebeccapurple;
+}
+
+
 :root {
   color-scheme: light dark;
 
@@ -38,6 +45,17 @@
   --color-link: var(--color-fg);
   --color-link-hover: var(--color-accent);
 
+    /* Raw tokens */
+  --bg-light: var(--color-beige);
+  --bg-dark: rgb(45, 45, 45);
+
+  --fg-light: black;
+  --fg-dark: whitesmoke;
+
+  --hover-light: rgba(0, 0, 0, 0.05);
+  --hover-dark: rgba(255, 255, 255, 0.08);
+
+    
   /* Interactive states */
   --color-hover: rgba(0, 0, 0, 0.05);
   --color-border-on-dark: rgba(255, 255, 255, 0.2);
@@ -91,9 +109,55 @@
   --step-max-width: 400px;
   --step-padding: 1.5rem;
   --step-border-radius: 8px;
-
   /* Section spacing (vertical breathing room around scrolly sections) */
+
+  /* --nav-bg: var(--color-bg);
+  --nav-fg: var(--color-fg);
+  --color-fg-light: var(--color-fg);
+  --nav-border: var(--color-gray-400);
+  --nav-hover: var(--color-hover);
+
+  --footer-bg: var(--color-uvm-green);
+	--footer-border: rgba(255, 255, 255, 0.2); */
+
+    /* ─────────────────────────────
+     RAW LIGHT/DARK BASE TOKENS
+     These never change.
+     ───────────────────────────── */
+
+  --color-bg-light: var(--color-beige);
+  --color-bg-dark: #1a1a1a;
+
+  --color-fg-light: rgb(55, 55, 55);
+  --color-fg-dark: #e8e8e8;
+
+  --color-hover-light: rgba(0, 0, 0, 0.05);
+  --color-hover-dark: rgba(255, 255, 255, 0.1);
+
+  --color-border-light: rgb(202, 202, 202);
+  --color-border-dark: rgba(255, 255, 255, 0.15);
+
+  /* ─────────────────────────────
+     ACTIVE SEMANTIC TOKENS
+     (KEEPING OLD NOMENCLATURE)
+     ───────────────────────────── */
+
+  --color-bg: var(--color-bg-light);
+  --color-fg: var(--color-fg-light);
+  --color-hover: var(--color-hover-light);
+  --color-border: var(--color-border-light);
+
+  /* Component defaults follow global theme */
+  --nav-bg: var(--color-bg);
+  --nav-fg: var(--color-fg);
+  --nav-hover: var(--color-hover);
+  --nav-border: var(--color-gray-400);
+
+  --footer-bg: var(--color-uvm-green);
+  --footer-border: rgba(255, 255, 255, 0.2);
+
 }
+
 
 /* Dark mode via system preference */
 @media (prefers-color-scheme: dark) {
@@ -146,6 +210,18 @@
   --story-step-fg: #e8e8e8;
   --story-step-bg-inactive: #222;
   --story-step-fg-inactive: #666;
+
+  --bg: var(--bg-dark);
+  --fg: var(--fg-dark);
+  --hover: var(--hover-dark);
+
+  --footer-bg: rgb(45, 45, 45);
+	--footer-border: rgba(255, 255, 255, 0.1);
+
+  --nav-bg: rgb(45, 45, 45);
+  --nav-fg: var(--color-fg);
+  --nav-border: rgba(255, 255, 255, 0.1);
+
 }
 
 /* Interactive elements get pointer cursor by default */
@@ -193,6 +269,8 @@ main > :last-child {
    Centered container for standard pages (About, etc.)
    ============================================================================= */
 
+
+
 .page {
   width: 100%;
   max-width: var(--page-max-width);
@@ -207,7 +285,6 @@ main > :last-child {
     padding-bottom: 3rem;
   }
 }
-
 
 
 /* =============================================================================

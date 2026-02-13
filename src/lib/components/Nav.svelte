@@ -1,6 +1,9 @@
 <script lang="ts">
 import { base } from '$app/paths';
 import Menu from "./Nav.Menu.svelte";
+
+let { theme }: { theme?: 'light' | 'dark' } = $props();
+
 import ThemeToggle from "./helpers/ThemeToggle.svelte";
 import { Menu as MenuIcon } from "@lucide/svelte";
 
@@ -17,7 +20,17 @@ function closeMenu(skipFocus = false) {
 
 <svelte:window bind:scrollY />
 
-<header class="header" class:scrolled={isScrolled}>
+<header
+  class={[
+    'header',
+    isScrolled && 'scrolled',
+    {
+      'theme-light': theme === 'light',
+      'theme-dark': theme === 'dark'
+    }
+  ]}
+>
+
 <div class="header-inner">
   <div class="header-left">
     <a href="{base}/" class="title-link">
@@ -118,6 +131,7 @@ function closeMenu(skipFocus = false) {
   color: var(--color-fg);
   text-decoration: none;
   background: transparent;
+  text-decoration: none;
   border: none;
   border-radius: 0.5rem;
   transition: all var(--transition-medium);
