@@ -42,6 +42,12 @@
   --step-border-radius: var(--scrolly-step-border-radius);
   --step-box-shadow: var(--scrolly-step-box-shadow);
 
+  /* Step box colors */
+  --story-step-bg: var(--scrolly-story-step-bg);
+  --story-step-fg: var(--scrolly-story-step-fg);
+  --story-step-bg-inactive: var(--scrolly-story-step-bg-inactive);
+  --story-step-fg-inactive: var(--scrolly-story-step-fg-inactive);
+
   /* Theme color aliases for Nav component */
   --color-bg-light: var(--scrolly-bg-light);
   --color-fg-light: var(--scrolly-fg-light);
