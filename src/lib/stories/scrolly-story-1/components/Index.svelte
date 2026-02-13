@@ -65,7 +65,7 @@
             --story-step-bg: transparent;
             --story-step-bg-inactive: transparent;
             --step-box-shadow: none;
-            --step-height: 40vh;
+            --step-height: 90vh;
         }
     }
 </style>

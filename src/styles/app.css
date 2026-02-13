@@ -2,7 +2,6 @@
 @import "fonts.css";
 
 /* =============================================================================
-   APP.CSS - Design System
 
    TOKENS (in :root)
    ├─ Core palette ........... black, white, beige, brand colors, grays
@@ -12,18 +11,7 @@
    ├─ Raw tokens ............. *-light, *-dark (fixed values, don't use directly)
    ├─ Semantic tokens ........ color-bg, color-fg, etc. (use these!)
    └─ Component tokens ....... nav-*, footer-* (follow semantic by default)
-
-   STYLES
-   ├─ Base document .......... body, main
-   ├─ Layout: Page ........... .page (centered content)
-   ├─ Layout: Story .......... .story, .story.dark
-   ├─ Typography ............. headings, paragraphs, code, blockquotes
-   └─ Layout: Scrolly ........ .split-layout, .fullscreen-layout, .triple-layout
-
-   THEMING
-   - Semantic tokens auto-switch with global dark mode
-   - Stories are isolated: use .story (light) or .story.dark
-   - Components accept theme="light" or theme="dark" to override
+   
    ============================================================================= */
 
 :root {
@@ -174,8 +162,17 @@ a:hover {
   color: var(--color-link-hover);
 }
 
+
+
 /* =============================================================================
-   BASE DOCUMENT
+   
+   STYLES
+   ├─ Base document .......... body, main
+   ├─ Layout: Page ........... .page (centered content)
+   ├─ Layout: Story .......... .story, .story.dark
+   ├─ Typography ............. headings, paragraphs, code, blockquotes
+   └─ Layout: Scrolly ........ .split-layout, .fullscreen-layout, .triple-layout
+
    ============================================================================= */
 
 body {
