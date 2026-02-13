@@ -1,11 +1,12 @@
 <script>
     let {
-        data, 
-        xScale, 
-        yScale, 
-        colorScale, 
-        radiusScale, 
-        hoveredCourse = $bindable()
+        data,
+        xScale,
+        yScale,
+        colorScale,
+        radiusScale,
+        hoveredCourse = $bindable(),
+        isMobile = false
     } = $props();
 
 </script>
@@ -22,8 +23,9 @@
         style="transition: cx 0.8s ease-in-out, cy 0.8s ease-in-out, r 0.4s ease-out;"
         role="graphics-symbol"
         aria-label={d.code}
-        onmouseenter={() => hoveredCourse = d.code}
-        onmouseleave={() => hoveredCourse = null}
+        onclick={() => hoveredCourse = d.code}
+        onmouseenter={() => { if (!isMobile) hoveredCourse = d.code; }}
+        onmouseleave={() => { if (!isMobile) hoveredCourse = null; }}
     />
 {/each}
 

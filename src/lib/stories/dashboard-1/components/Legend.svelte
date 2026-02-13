@@ -1,60 +1,73 @@
 <script lang="ts">
     import type { ScaleOrdinal } from 'd3';
 
-    let { colleges, colorScale, innerWidth }: {
+    let { colleges, colorScale, selectedColleges = $bindable() }: {
         colleges: string[];
         colorScale: ScaleOrdinal<string, string>;
-        innerWidth: number;
+        selectedColleges: Set<string>;
     } = $props();
 
-    // Legend layout - wrap on smaller screens
-    const legendItemWidth = 110;
-    const legendItemHeight = 20;
-    let legendItemsPerRow = $derived(Math.max(2, Math.floor((innerWidth - 40) / legendItemWidth)));
-
-    function getLegendPosition(index: number) {
-        const row = Math.floor(index / legendItemsPerRow);
-        const col = index % legendItemsPerRow;
-        return { x: col * legendItemWidth, y: row * legendItemHeight };
+    function toggleCollege(college: string) {
+        selectedColleges = selectedColleges.has(college)
+            ? new Set([...selectedColleges].filter(c => c !== college))
+            : new Set([...selectedColleges, college]);
     }
-
-
 </script>
 
-{#each colleges.filter(r => r !== 'Unknown') as college, i (college)}
-    {@const pos = getLegendPosition(i)}
-    <g
-        transform={`translate(${pos.x}, ${pos.y})`}
-        class="legend-item"
-    >
-        <circle
-            cx={0}
-            cy={0}
-            r={6}
-            fill={colorScale(college)}
-            opacity={0.7}
-        />
-        <text
-            x={12}
-            y={4}
-            font-size="10"
-            fill="black"
+<div class="legend">
+    {#each colleges.filter(c => c !== 'Unknown') as college (college)}
+        <button
+            class="legend-item"
+            class:dimmed={selectedColleges.size > 0 && !selectedColleges.has(college)}
+            onclick={() => toggleCollege(college)}
         >
-            {college}
-        </text>
-    </g>
-{/each}
+            <span
+                class="legend-dot"
+                style:background-color={colorScale(college)}
+            ></span>
+            <span class="legend-label">{college}</span>
+        </button>
+    {/each}
+</div>
 
 <style>
+    .legend {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
     .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.375rem 0.5rem;
+        border: none;
+        background: transparent;
         cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 150ms ease;
+        text-align: left;
     }
 
-    .legend-item:hover circle {
-        transform: scale(1.2);
+    .legend-item:hover {
+        background-color: rgba(0, 0, 0, 0.05);
     }
 
-    .legend-item:hover text {
-        font-weight: bold;
+    .legend-item.dimmed {
+        opacity: 0.4;
+    }
+
+    .legend-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+
+    .legend-label {
+        font-size: 0.85rem;
+        color: var(--color-text);
+        line-height: 1.2;
     }
 </style>
