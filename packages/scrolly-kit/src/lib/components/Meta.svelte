@@ -1,4 +1,28 @@
-<!-- SEO meta tags component for pages and stories -->
+<!--
+@component
+SEO meta tags for pages and stories.
+
+Adds title, description, Open Graph, and Twitter Card meta tags.
+
+## Props
+- `title` - Page title (required)
+- `description` - Page description (required)
+- `baseUrl` - Base URL for canonical/OG URLs
+- `siteName` - Site name for OG tags
+- `keywords` - Meta keywords
+- `image` - OG image URL (default: "/default-og-image.jpg")
+- `author` - Author name
+
+## Usage
+```svelte
+<Meta
+  title="My Story"
+  description="A data-driven exploration"
+  baseUrl="https://example.com"
+  siteName="My Site"
+/>
+```
+-->
 <script>
   import { page } from "$app/state";
   import { base } from "$app/paths";

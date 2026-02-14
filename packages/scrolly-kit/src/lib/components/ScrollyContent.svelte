@@ -1,3 +1,27 @@
+<!--
+@component
+Scrollytelling content container with step boxes.
+
+Renders an array of content steps as scrollable boxes that trigger
+index changes as they enter the viewport.
+
+## Props
+- `steps` - Array of `ContentItem` objects with `type` and `value`
+- `value` - Current step index (bindable)
+- `topSpacer` - Add spacer before first step (default: true)
+- `bottomSpacer` - Add spacer after last step (default: true)
+- `contentRenderer` - Custom snippet for rendering step content
+
+## Usage
+```ts
+let index = $state(0);
+const steps = [
+  { type: 'markdown', value: '## Step 1' },
+  { type: 'markdown', value: '## Step 2' }
+];
+// Use with: <ScrollyContent {steps} bind:value={index} />
+```
+-->
 <script lang="ts">
     import Scrolly from './Scrolly.svelte';
     import Md from './MarkdownRenderer.svelte';

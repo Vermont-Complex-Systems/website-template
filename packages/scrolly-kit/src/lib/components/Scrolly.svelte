@@ -1,17 +1,22 @@
-<script>
-	/**
-	 * This component manages which item is most in view for scroll triggering
-	 * example:
-	 * <Scrolly
-	 * 	bind:value={scrollIndex}
-	 * >
-	 * **items here**
-	 * </Scrolly>
-	 *
-	 * optional params with defaults
-	 * <Scrolly root={null} top={0} bottom={0} increments={100}>
-	 */
+<!--
+@component
+Base scroll detection using IntersectionObserver.
 
+Tracks which child element is most in view and updates the `value` binding.
+Used internally by ScrollyContent, but can be used directly for custom layouts.
+
+## Props
+- `value` - Index of most visible child (bindable)
+- `root` - IntersectionObserver root element (default: null = viewport)
+- `top` - Top margin offset in pixels (default: 0)
+- `bottom` - Bottom margin offset in pixels (default: 0)
+- `increments` - Number of threshold steps (default: 100)
+
+## Usage
+Wrap step elements and bind to track active index:
+`<Scrolly bind:value={index}>...steps...</Scrolly>`
+-->
+<script>
 	let {
 		root = null,
 		top = 0,

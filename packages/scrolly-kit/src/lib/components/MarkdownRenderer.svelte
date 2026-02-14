@@ -1,3 +1,23 @@
+<!--
+@component
+Markdown renderer with KaTeX math and syntax highlighting.
+
+Supports GitHub Flavored Markdown, LaTeX math ($...$, $$...$$),
+and code blocks with syntax highlighting.
+
+## Props
+- `text` - Markdown string to render
+
+## Usage
+```svelte
+<MarkdownRenderer text="## Hello\n\nThis is **bold** and $E = mc^2$" />
+```
+
+## Supported Features
+- GFM (tables, strikethrough, autolinks)
+- KaTeX math (inline and block)
+- Code highlighting (JS, CSS, R, HTML)
+-->
 <script>
     import Markdown from 'svelte-exmarkdown';
     import { gfmPlugin } from 'svelte-exmarkdown/gfm';

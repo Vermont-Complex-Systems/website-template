@@ -1,5 +1,26 @@
+<!--
+@component
+Story header with title, subtitle, authors, and date.
+
+## Props
+- `title` - Story title (required)
+- `subtitle` - Optional subtitle
+- `authors` - Array of `{ name: string, url?: string }`
+- `date` - Publication date string
+- `class` - Additional CSS classes
+
+## Usage
+```svelte
+<StoryHeader
+  title="My Story"
+  subtitle="A deep dive into data"
+  authors={[{ name: "Alice", url: "https://..." }]}
+  date="February 2025"
+/>
+```
+-->
 <script lang="ts">
-  
+
   interface Author {
     name: string;
     url?: string;
