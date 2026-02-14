@@ -1,43 +1,70 @@
-import type { Snippet } from 'svelte';
+import type { ComponentProps } from 'svelte';
+
+// Import components to extract their prop types
+import type Scrolly from './components/Scrolly.svelte';
+import type ScrollyContent from './components/ScrollyContent.svelte';
+import type MarkdownRenderer from './components/MarkdownRenderer.svelte';
+import type CodeBlock from './components/CodeBlock.svelte';
+import type SimpleToggle from './components/SimpleToggle.svelte';
+import type Tooltip from './components/Tooltip.svelte';
+import type ScrollIndicator from './components/ScrollIndicator.svelte';
+import type CopyCodeBlock from './components/CopyCodeBlock.svelte';
+import type CodeExplainer from './components/CodeExplainer.svelte';
+import type Spinner from './components/Spinner.svelte';
+import type Meta from './components/Meta.svelte';
+import type StoryHeader from './components/StoryHeader.svelte';
+import type RenderTextContent from './components/RenderTextContent.svelte';
 
 // ============================================================================
-// Component Props Types
-// These are exported so users get better TypeScript hints
+// Component Props - extracted using ComponentProps<typeof Component>
 // ============================================================================
 
 /** Props for Scrolly component */
-export interface ScrollyProps {
-  /** Root element for IntersectionObserver */
-  root?: Element | null;
-  /** Top margin for intersection */
-  top?: number;
-  /** Bottom margin for intersection */
-  bottom?: number;
-  /** Number of threshold increments */
-  increments?: number;
-  /** Current scroll index (bindable) */
-  value?: number;
-  /** Children snippet */
-  children?: Snippet;
-}
+export type ScrollyProps = ComponentProps<typeof Scrolly>;
 
 /** Props for ScrollyContent component */
-export interface ScrollyContentProps {
-  /** Array of content steps */
-  steps: ContentItem[];
-  /** Current step index (bindable) */
-  value?: number;
-  /** Add spacer at top */
-  topSpacer?: boolean;
-  /** Add spacer at bottom */
-  bottomSpacer?: boolean;
-  /** Custom content renderer snippet */
-  contentRenderer?: Snippet<[{ item: ContentItem; index: number }]>;
-}
+export type ScrollyContentProps = ComponentProps<typeof ScrollyContent>;
+
+/** Props for MarkdownRenderer component */
+export type MarkdownRendererProps = ComponentProps<typeof MarkdownRenderer>;
+
+/** Props for CodeBlock component */
+export type CodeBlockProps = ComponentProps<typeof CodeBlock>;
+
+/** Props for SimpleToggle component */
+export type SimpleToggleProps = ComponentProps<typeof SimpleToggle>;
+
+/** Props for Tooltip component */
+export type TooltipProps = ComponentProps<typeof Tooltip>;
+
+/** Props for ScrollIndicator component */
+export type ScrollIndicatorProps = ComponentProps<typeof ScrollIndicator>;
+
+/** Props for CopyCodeBlock component */
+export type CopyCodeBlockProps = ComponentProps<typeof CopyCodeBlock>;
+
+/** Props for CodeExplainer component */
+export type CodeExplainerProps = ComponentProps<typeof CodeExplainer>;
+
+/** Props for Spinner component */
+export type SpinnerProps = ComponentProps<typeof Spinner>;
+
+/** Props for Meta component */
+export type MetaProps = ComponentProps<typeof Meta>;
+
+/** Props for StoryHeader component */
+export type StoryHeaderProps = ComponentProps<typeof StoryHeader>;
+
+/** Props for RenderTextContent component */
+export type RenderTextContentProps = ComponentProps<typeof RenderTextContent>;
+
+// ============================================================================
+// Data types used by components (not component props)
+// ============================================================================
 
 /** Content item for ScrollyContent steps */
 export interface ContentItem {
-  /** Content type: 'html' | 'markdown' | 'math' | 'code' */
+  /** Content type */
   type: 'html' | 'markdown' | 'math' | 'code';
   /** Content value */
   value: string;
@@ -49,104 +76,6 @@ export interface Author {
   name: string;
   /** Optional URL to author page */
   url?: string;
-}
-
-/** Props for StoryHeader component */
-export interface StoryHeaderProps {
-  /** Story title */
-  title: string;
-  /** Optional subtitle */
-  subtitle?: string;
-  /** Array of authors */
-  authors?: Author[];
-  /** Publication date */
-  date?: string;
-  /** Additional CSS class */
-  class?: string;
-}
-
-/** Props for MarkdownRenderer component */
-export interface MarkdownRendererProps {
-  /** Markdown text to render */
-  text: string;
-}
-
-/** Props for CodeBlock component */
-export interface CodeBlockProps {
-  /** Code to display */
-  code: string;
-  /** Optional filename to show */
-  filename?: string;
-  /** Syntax highlighting language */
-  language?: string;
-}
-
-/** Props for CopyCodeBlock component */
-export interface CopyCodeBlockProps {
-  /** Command/code to copy */
-  command: string;
-  /** Optional label */
-  label?: string;
-}
-
-/** Props for SimpleToggle component */
-export interface SimpleToggleProps {
-  /** Toggle state (bindable) */
-  isTrue?: boolean;
-  /** Text when on */
-  onText?: string;
-  /** Text when off */
-  offText?: string;
-}
-
-/** Props for Tooltip component */
-export interface TooltipProps {
-  /** Whether tooltip is visible */
-  visible?: boolean;
-  /** X position */
-  x?: number;
-  /** Y position */
-  y?: number;
-  /** Tooltip content */
-  content?: string;
-  /** Position offset */
-  offset?: { x: number; y: number };
-}
-
-/** Props for ScrollIndicator component */
-export interface ScrollIndicatorProps {
-  /** Scroll threshold to hide indicator */
-  threshold?: number;
-}
-
-/** Props for Spinner component */
-export interface SpinnerProps {
-  /** Loading text */
-  text?: string;
-}
-
-/** Props for Meta component */
-export interface MetaProps {
-  /** Page title */
-  title: string;
-  /** Page description */
-  description: string;
-  /** Base URL for canonical/OG URLs */
-  baseUrl?: string;
-  /** Site name for OG */
-  siteName?: string;
-  /** Keywords for meta tag */
-  keywords?: string;
-  /** OG image URL */
-  image?: string;
-  /** Author name */
-  author?: string;
-}
-
-/** Props for RenderTextContent component */
-export interface RenderTextContentProps {
-  /** Content item to render */
-  item: ContentItem;
 }
 
 /** Code step for CodeExplainer */
@@ -165,14 +94,4 @@ export interface CodeExplainerData {
   language?: string;
   /** Array of explanation steps */
   steps: CodeStep[];
-}
-
-/** Props for CodeExplainer component */
-export interface CodeExplainerProps {
-  /** Code explainer data */
-  data: CodeExplainerData;
-  /** Reverse layout (code on right) */
-  reversed?: boolean;
-  /** Current step index (bindable) */
-  value?: number;
 }
