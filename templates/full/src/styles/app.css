@@ -13,61 +13,25 @@
    ============================================================================= */
 
 :root {
-  /* Brand colors */
+  /* Brand colors - override scrolly-kit defaults */
   --scrolly-color-accent: #154734; /* UVM Green */
+  --color-uvm-green: #154734;
+  --color-uvm-gold: rgb(255, 209, 0);
 
-  /* Custom fonts (loaded from fonts.css) */
+  /* Custom fonts - override scrolly-kit defaults */
   --scrolly-sans: "Atlas Grotesk", system-ui, sans-serif;
   --scrolly-serif: "Baskerville", Georgia, serif;
   --scrolly-mono: "Atlas Typewriter", "SF Mono", monospace;
 
-  /* Keep the original non-prefixed variables for backward compatibility */
-  --color-uvm-green: #154734;
-  --color-uvm-gold: rgb(255, 209, 0);
-  --color-accent: var(--color-uvm-green);
-
-  /* Typography aliases */
-  --sans: var(--scrolly-sans);
-  --serif: var(--scrolly-serif);
-  --mono: var(--scrolly-mono);
-
-  /* Layout aliases for Nav component */
-  --page-max-width: var(--scrolly-page-max-width);
+  /* Template-specific layout */
+  --nav-height: 4.5rem;
   --page-inline-padding: 5%;
-
-  /* Step box aliases for ScrollyContent */
-  --step-max-width: var(--scrolly-step-max-width);
-  --step-height: var(--scrolly-step-height);
-  --step-padding: var(--scrolly-step-padding);
-  --step-border-radius: var(--scrolly-step-border-radius);
-  --step-box-shadow: var(--scrolly-step-box-shadow);
-
-  /* Step box colors */
-  --story-step-bg: var(--scrolly-story-step-bg);
-  --story-step-fg: var(--scrolly-story-step-fg);
-  --story-step-bg-inactive: var(--scrolly-story-step-bg-inactive);
-  --story-step-fg-inactive: var(--scrolly-story-step-fg-inactive);
-
-  /* Theme color aliases for Nav component */
-  --color-bg-light: var(--scrolly-bg-light);
-  --color-fg-light: var(--scrolly-fg-light);
-  --color-hover-light: var(--scrolly-hover-light);
-  --color-border-light: var(--scrolly-border-light);
-  --color-bg-dark: var(--scrolly-bg-dark);
-  --color-fg-dark: var(--scrolly-fg-dark);
-  --color-hover-dark: var(--scrolly-hover-dark);
-  --color-border-dark: var(--scrolly-border-dark);
 }
 
 /* =============================================================================
    TEMPLATE-SPECIFIC STYLES
    Styles specific to this template (Nav, Footer, Home, About, etc.)
    ============================================================================= */
-
-/* Interactive elements */
-button, [role="button"], summary {
-  cursor: pointer;
-}
 
 /* Nav styling - the Nav component uses <header class="header"> */
 header.header {
@@ -121,16 +85,6 @@ main {
 /* Spacing before Footer for app layout pages */
 #content > :last-child {
   padding-bottom: 7.5rem;
-}
-
-/* Link styling */
-a {
-  color: var(--scrolly-fg);
-  cursor: pointer !important;
-}
-
-a:hover {
-  color: var(--scrolly-color-accent);
 }
 
 /* =============================================================================

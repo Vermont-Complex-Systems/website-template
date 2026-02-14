@@ -1,15 +1,12 @@
 <script lang="ts">
-  import { Scrolly, ScrollyContent, type ContentItem } from '@vcsi/scrolly-kit';
+  import { ScrollyContent, type ContentItem } from '@vcsi/scrolly-kit';
 
   let { story, data } = $props();
 
   let scrollIndex = $state(0);
 
-  const steps: ContentItem[] = data.steps || [
-    { type: 'markdown', value: '## Step 1\n\nYour first step content here.' },
-    { type: 'markdown', value: '## Step 2\n\nAdd more steps as needed.' },
-    { type: 'markdown', value: '## Step 3\n\nTell your story!' }
-  ];
+  const steps: ContentItem[] = data.steps;
+
 </script>
 
 <article class="story">

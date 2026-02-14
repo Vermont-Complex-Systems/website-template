@@ -66,12 +66,17 @@ blockquote p { margin: 0; }
 
 /* Links */
 a {
-  color: var(--scrolly-fg);
+  color: var(--color-link, var(--scrolly-fg));
   cursor: pointer;
 }
 
 a:hover {
   color: var(--scrolly-color-accent, #154734);
+}
+
+/* Interactive elements */
+button, [role="button"], summary {
+  cursor: pointer;
 }
 
 /* Code line highlighting */

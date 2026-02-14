@@ -5,7 +5,7 @@
 
   /* Core palette - customize these for your brand */
   --scrolly-color-black: #000;
-  --scrolly-color-white: #fff;
+  --scrolly-color-white: rgb(245, 245, 245);
   --scrolly-color-beige: #f4efea;
   --scrolly-color-accent: #154734;
 
@@ -63,6 +63,55 @@
   --scrolly-fg: var(--scrolly-fg-light);
   --scrolly-hover: var(--scrolly-hover-light);
   --scrolly-border: var(--scrolly-border-light);
+
+  /* Link colors */
+  --scrolly-link-light: var(--scrolly-fg-light);
+  --scrolly-link-dark: #8ab4f8;
+  --scrolly-link: var(--scrolly-link-light);
+
+  /* =============================================================================
+     CONVENIENCE ALIASES
+     Non-prefixed versions for simpler usage in templates/components.
+     Templates can override these or use --scrolly-* directly.
+     ============================================================================= */
+
+  /* Colors */
+  --color-white: var(--scrolly-color-white);
+  --color-black: var(--scrolly-color-black);
+  --color-accent: var(--scrolly-color-accent);
+
+  /* Semantic colors (auto-switch) */
+  --color-bg: var(--scrolly-bg);
+  --color-fg: var(--scrolly-fg);
+  --color-hover: var(--scrolly-hover);
+  --color-border: var(--scrolly-border);
+  --color-muted: var(--scrolly-gray-600);
+  --color-link: var(--scrolly-link);
+
+  /* Light/dark pairs for components that need explicit access */
+  --color-bg-light: var(--scrolly-bg-light);
+  --color-fg-light: var(--scrolly-fg-light);
+  --color-hover-light: var(--scrolly-hover-light);
+  --color-border-light: var(--scrolly-border-light);
+  --color-bg-dark: var(--scrolly-bg-dark);
+  --color-fg-dark: var(--scrolly-fg-dark);
+  --color-hover-dark: var(--scrolly-hover-dark);
+  --color-border-dark: var(--scrolly-border-dark);
+
+  /* Step box aliases (used by ScrollyContent) */
+  --step-max-width: var(--scrolly-step-max-width);
+  --step-height: var(--scrolly-step-height);
+  --step-padding: var(--scrolly-step-padding);
+  --step-border-radius: var(--scrolly-step-border-radius);
+  --step-box-shadow: var(--scrolly-step-box-shadow);
+
+  /* Layout aliases */
+  --page-max-width: var(--scrolly-page-max-width);
+
+  /* Typography aliases */
+  --sans: var(--scrolly-sans);
+  --serif: var(--scrolly-serif);
+  --mono: var(--scrolly-mono);
 }
 
 /* Dark mode via system preference */
@@ -72,6 +121,8 @@
     --scrolly-fg: var(--scrolly-fg-dark);
     --scrolly-hover: var(--scrolly-hover-dark);
     --scrolly-border: var(--scrolly-border-dark);
+    --scrolly-link: var(--scrolly-link-dark);
+    --color-link: var(--scrolly-link-dark);
   }
 }
 
@@ -82,4 +133,6 @@
   --scrolly-fg: var(--scrolly-fg-dark);
   --scrolly-hover: var(--scrolly-hover-dark);
   --scrolly-border: var(--scrolly-border-dark);
+  --scrolly-link: var(--scrolly-link-dark);
+  --color-link: var(--scrolly-link-dark);
 }

@@ -25,6 +25,12 @@
   --scrolly-story-step-bg-inactive: #f5f5f5;
   --scrolly-story-step-fg-inactive: #ccc;
   --scrolly-story-max-width: 600px;
+
+  /* Step box color aliases (used by ScrollyContent) */
+  --story-step-bg: var(--scrolly-story-step-bg);
+  --story-step-fg: var(--scrolly-story-step-fg);
+  --story-step-bg-inactive: var(--scrolly-story-step-bg-inactive);
+  --story-step-fg-inactive: var(--scrolly-story-step-fg-inactive);
 }
 
 /* =============================================================================
@@ -93,6 +99,12 @@
   --scrolly-story-step-fg: #e8e8e8;
   --scrolly-story-step-bg-inactive: #222;
   --scrolly-story-step-fg-inactive: #666;
+
+  /* Step box color aliases (used by ScrollyContent) */
+  --story-step-bg: var(--scrolly-story-step-bg);
+  --story-step-fg: var(--scrolly-story-step-fg);
+  --story-step-bg-inactive: var(--scrolly-story-step-bg-inactive);
+  --story-step-fg-inactive: var(--scrolly-story-step-fg-inactive);
 }
 
 /* Ensure all text in dark stories uses the story foreground color */
