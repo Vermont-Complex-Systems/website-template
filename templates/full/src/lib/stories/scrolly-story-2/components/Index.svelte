@@ -12,7 +12,7 @@ let scrollyIndex = $state(undefined);
 <BackToHome />
 <ScrollIndicator />
 
-<article class="story dark">
+<article class="story" data-theme="dark">
     <StoryHeader
         title={data.title}
         subtitle={data.subtitle}

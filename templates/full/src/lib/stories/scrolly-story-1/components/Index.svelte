@@ -18,7 +18,12 @@
 <ScrollIndicator />
 
 <article class="story">
-	<StoryHeader />
+	<StoryHeader 
+		title={data.title}
+		subtitle={data.subtitle}
+		authors={data.authors}
+		date={data.date}
+	/>
 
 	<section id="intro">
 		{#each data.introduction as item}

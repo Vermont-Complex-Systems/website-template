@@ -1,18 +1,37 @@
-<script>
+<script lang="ts">
     import { scrollReveal } from '@the-vcsi/scrolly-kit';
     import BackToHome from '$lib/components/helpers/BackToHome.svelte';
     import Footer from '$lib/components/Footer.svelte';
+    import skylineImage from './assets/skyline.jpg?enhanced';
+
+    // Enhanced image sources for preloading
+    const sources = skylineImage.sources;
 </script>
+
+<svelte:head>
+    <link rel="preload" as="image" type="image/avif" imagesrcset={sources.avif} imagesizes="100vw" fetchpriority="high" />
+    <link rel="preload" as="image" type="image/webp" imagesrcset={sources.webp} imagesizes="100vw" fetchpriority="high" />
+</svelte:head>
+
 
 <BackToHome />
 
 <div class="landing-page">
     <!-- Hero -->
     <section class="hero">
-        <div class="hero-content">
-        <h1>Not all stories are scrolly</h1>
-            <p class="subtitle">Some of the best stories are about creative themes</p>
-            <p class="caption">(story taken from <a href="https://vermontcomplexsystems.org/events/cnww/">CNWW</a>. The story shows how we can build custom layout given a theme.)</p>
+        <enhanced:img
+            src={skylineImage}
+            alt=""
+            class="hero-bg"
+            sizes="100vw"
+            fetchpriority="high"
+        />
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h1>Not all stories are scrolly</h1>
+                <p class="subtitle">Some of the best stories are about creative themes</p>
+                <p class="caption">(story taken from <a href="https://vermontcomplexsystems.org/events/cnww/">CNWW</a>. The story shows how we can build custom layout given a theme.)</p>
+            </div>
         </div>
     </section>
 
@@ -157,9 +176,23 @@
 
     /* Hero */
     .hero {
+        position: relative;
         height: 100vh;
-        background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)),
-                    url('/common/assets/events/skyline.jpg') center/cover;
+        overflow: hidden;
+    }
+
+    .hero :global(.hero-bg) {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.35);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -168,6 +201,8 @@
     .hero-content {
         text-align: center;
         color: var(--story-fg);
+        position: relative;
+        z-index: 1;
     }
 
     .hero h1 {
