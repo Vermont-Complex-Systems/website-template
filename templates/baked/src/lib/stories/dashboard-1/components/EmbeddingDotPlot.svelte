@@ -21,9 +21,11 @@
         stroke={hoveredCourse === d.code ? '#333' : 'white'}
         stroke-width={hoveredCourse === d.code ? 2 : 0.5}
         style="transition: cx 0.8s ease-in-out, cy 0.8s ease-in-out, r 0.4s ease-out;"
-        role="graphics-symbol"
+        role="button"
+        tabindex="0"
         aria-label={d.code}
         onclick={() => hoveredCourse = d.code}
+        onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') hoveredCourse = d.code; }}
         onmouseenter={() => { if (!isMobile) hoveredCourse = d.code; }}
         onmouseleave={() => { if (!isMobile) hoveredCourse = null; }}
     />

@@ -1,6 +1,9 @@
 /* =============================================================================
    VCSI DESIGN TOKENS
-   Following GC Design System patterns: https://design-system.canada.ca/en/styles/design-tokens/
+   Inspired by the following patterns: 
+   - GC Design System: https://design-system.canada.ca/en/styles/design-tokens/
+   - GOV.UK Frontend: https://frontend.design-system.service.gov.uk/
+   - picocss, a minimal CSS framework for semantic HTML: https://picocss.com/
 
    Token tiers:
    - Base tokens: Raw values (colors, sizes) - non-semantic fallbacks
@@ -161,6 +164,10 @@
     --vcsi-hover: var(--vcsi-hover-dark);
     --vcsi-border: var(--vcsi-border-dark);
     --vcsi-link: var(--vcsi-link-dark);
+
+    /* Footer defaults for dark mode */
+    --footer-bg: rgb(45, 45, 45);
+    --footer-border: rgba(255, 255, 255, 0.1);
   }
 }
 
@@ -176,6 +183,10 @@
   --vcsi-hover: var(--vcsi-hover-dark);
   --vcsi-border: var(--vcsi-border-dark);
   --vcsi-link: var(--vcsi-link-dark);
+
+  /* Footer defaults for dark mode */
+  --footer-bg: rgb(45, 45, 45);
+  --footer-border: rgba(255, 255, 255, 0.1);
 }
 
 /* =============================================================================

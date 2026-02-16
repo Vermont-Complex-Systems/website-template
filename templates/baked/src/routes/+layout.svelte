@@ -1,6 +1,6 @@
 <script>
 	import { ModeWatcher } from 'mode-watcher';
-	import '$styles/app.css';
+	import '$lib/styles/app.css';
 
 	let { children } = $props();
 </script>

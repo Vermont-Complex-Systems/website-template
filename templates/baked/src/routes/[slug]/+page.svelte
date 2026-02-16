@@ -1,25 +1,23 @@
 <script>
+  import { page } from '$app/state';
   import { getStory } from '$lib/story.remote.js';
   import { error } from '@sveltejs/kit';
 
-  const { params } = $props();
-  const slug = params.slug;
-
-  // Explicit glob - Vite knows exactly whatna to bundle
+  // Explicit glob - Vite knows exactly what to bundle
   // https://vite.dev/guide/features#glob-import
   const storyModules = import.meta.glob(
     '$lib/stories/*/components/Index.svelte',
   );
 
-  const modulePath = `/src/lib/stories/${slug}/components/Index.svelte`;
+  const modulePath = `/src/lib/stories/${page.params.slug}/components/Index.svelte`;
 
   if (!(modulePath in storyModules)) {
-    error(404, `Story "${slug}" not found`);
+    error(404, `Story "${page.params.slug}" not found`);
   }
 
   // Load story data and component in parallel
   const [storyData, storyModule] = await Promise.all([
-    getStory(slug),
+    getStory(page.params.slug),
     storyModules[modulePath]()
   ]);
 

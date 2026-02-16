@@ -24,7 +24,7 @@ const config = {
 import { prerender } from '$app/state';
 import { error, redirect } from '@sveltejs/kit';
 import * as v from 'valibot';
-import storiesData from '$data/stories.csv';
+import storiesData from '$lib/data/stories.csv';
 
 export interface Story {
   slug: string;

@@ -8,6 +8,11 @@ declare global {
 		// interface PageState {}
 		// interface Platform {}
 	}
-}
+
+// prevent typescript error when importing csv with plugin-dsv
+declare module '*.csv' {
+  const data: any[]; 
+  export default data;
+}}
 
 export {};

@@ -15,17 +15,14 @@
       <p>A maintainable, reusable and extensible website template to tell your stories.</p>
       <div class="code-blocks">
         <CopyCodeBlock
-        command="npx degit Vermont-Complex-Systems/vcsi-starter example"
-        label="Main branch"
+        command="npx degit Vermont-Complex-Systems/vcsi-starter/templates/baked example"
+        label="Static template"
         />
         <CopyCodeBlock
-          command="npx degit Vermont-Complex-Systems/vcsi-starter#annotated-boxes example"
-          label="Annotated branch"
+        command="npx degit Vermont-Complex-Systems/vcsi-starter/templates/fresh example"
+        label="Dynamic template"
         />
         <span class="github-row">For installation details, features, and more visit <a href="https://github.com/Vermont-Complex-Systems/website-template" target="_blank" rel="noopener noreferrer" class="github-link">GitHub <ArrowRight size={16} /></a></span>
-      </div>
-      <div class="tip-row">
-        <p>P.S. Here we provide templates for building <a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Frameworks_libraries/Introduction#static_site_generators">static website</a>. For a sister project providing similar templates but with <a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Server-side">server-side logic</a>, visit <a href="https://jso.cool/">jso.cool/</a>.</p>
       </div>
     </div>
     <DotsToImage imgFilePath='/octopus-swim-right.png' />
@@ -83,17 +80,15 @@
     ├── lib
     │   ├── components/         # Reusable UI components
     │   │   ├── About.svelte
-    │   │   ├── Nav.svelte
-    │   │   ...
-    │   │   └── Home.svelte
+    │   │   ├── StoryGrid.svelte
+    │   │   ├── Home.svelte
+    │   │   └── ...
     │   ├── server
     │   ├── stories             # Your scrollytelling content
     │   │   └── story-1
     │   │       ├── components/Index.svelte
     │   │       └── data/copy.json
-    │   ├── story.remote.ts
-    │   └── utils
-    │       └── scrollReveal.ts  # Reusable javscript modules
+    │   └── story.remote.ts
     ├── routes                   # Pages & layouts
     │   ├── (app)
     │   │   ├── +layout.svelte   # Non-story default layouts
@@ -107,7 +102,7 @@
     │   ├── [story]             # Dynamic story routes
     │   │   └── +page.svelte
     │   └── +layout.svelte      # Minimal layouts
-    └── styles                  # Global CSS
+    └── styles                  # Import @the-vcsi/scrolly-kit styling
   </code></pre>
     <div class="structure-explanations">
       <div class="explanation">
@@ -210,19 +205,6 @@ Uses padding-bottom: 0 to make the centering symmetric
 
 .github-link:hover {
   gap: var(--vcsi-space-sm);
-}
-
-.tip-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.35rem;
-  color: var(--vcsi-muted);
-}
-
-.tip-row p {
-  margin: 0;
-  font-size: 1rem;
-  line-height: 1.5;
 }
 
 /* Make DotsToImage grow to fill space */

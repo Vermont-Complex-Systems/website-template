@@ -7,7 +7,7 @@ A framework for data-driven visual essays built with SvelteKit.
 ### Baked Template (static, pre-rendered)
 
 ```bash
-npx degit Vermont-Complex-Systems/vcsi-scrollytelling/templates/baked my-project
+npx degit Vermont-Complex-Systems/vcsi-starter/templates/baked my-project
 cd my-project
 npm install
 npm run dev
@@ -16,7 +16,7 @@ npm run dev
 ### Fresh Template (dynamic, server-rendered)
 
 ```bash
-npx degit Vermont-Complex-Systems/vcsi-scrollytelling/templates/fresh my-project
+npx degit Vermont-Complex-Systems/vcsi-starter/templates/fresh my-project
 cd my-project
 npm install
 npm run dev
