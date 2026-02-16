@@ -1,6 +1,6 @@
 {
   "name": "@the-vcsi/scrolly-kit",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Scrollytelling components and layouts for SvelteKit",
   "type": "module",
   "svelte": "./dist/index.js",
@@ -17,7 +17,9 @@
     "./styles/typography.css": "./dist/styles/typography.css",
     "./styles/all.css": "./dist/styles/all.css"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite dev",
     "build": "vite build && npm run package",
@@ -51,10 +53,16 @@
     "remark-math": "^6.0.0",
     "svelte-exmarkdown": "^5.0.2"
   },
-  "keywords": ["svelte", "sveltekit", "scrollytelling", "data-visualization", "journalism"],
+  "keywords": [
+    "svelte",
+    "sveltekit",
+    "scrollytelling",
+    "data-visualization",
+    "journalism"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Vermont-Complex-Systems/vcsi-scrollytelling"
+    "url": "https://github.com/Vermont-Complex-Systems/vcsi-starter"
   },
   "license": "MIT"
 }
