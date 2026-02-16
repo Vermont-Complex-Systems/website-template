@@ -238,30 +238,51 @@ main {
 /* =============================================================================
    DARK MODE OVERRIDES
    Override static gray tokens for docs-specific elements
+   Note: Using .dark (not :global(.dark)) because this is a plain CSS file
    ============================================================================= */
 
-:global(.dark) .docs-nav-version {
+.dark .docs-nav-logo {
+  filter: brightness(1.5);
+}
+
+.dark .docs-nav-version {
   background: var(--vcsi-gray-800);
   color: var(--vcsi-gray-300);
 }
 
-:global(.dark) .docs-code {
+.dark .docs-code {
   background: var(--vcsi-gray-900);
   border-color: var(--vcsi-border);
+  color: var(--vcsi-gray-200);
 }
 
-:global(.dark) .docs-table th {
+.dark .docs-table th {
   background: var(--vcsi-gray-800);
 }
 
-:global(.dark) .docs-table code {
+.dark .docs-table code {
   background: var(--vcsi-gray-800);
 }
 
-:global(.dark) .layout-diagram {
+.dark .layout-diagram {
   background: var(--vcsi-gray-900);
 }
 
-:global(.dark) .example-card:hover {
+.dark .example-card:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Global inline code styling for dark mode */
+.dark code {
+  background: var(--vcsi-gray-800);
+  color: var(--vcsi-gray-200);
+}
+
+/* Table cells in dark mode */
+.dark .docs-table td {
+  border-color: var(--vcsi-gray-700);
+}
+
+.dark .docs-table tr:hover {
+  background: var(--vcsi-gray-900);
 }

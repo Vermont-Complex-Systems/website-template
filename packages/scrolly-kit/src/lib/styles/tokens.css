@@ -128,6 +128,26 @@
   --vcsi-link-light: var(--vcsi-fg-light);
   --vcsi-link-dark: #8ab4f8;
 
+  /* Code blocks */
+  --vcsi-code-bg-light: #f6f8fa;
+  --vcsi-code-bg-dark: #161b22;
+  --vcsi-code-fg-light: #1f2328;
+  --vcsi-code-fg-dark: #e6edf3;
+  --vcsi-code-border-light: #d1d9e0;
+  --vcsi-code-border-dark: #30363d;
+
+  /* Inline code */
+  --vcsi-code-inline-bg-light: rgb(235, 235, 235);
+  --vcsi-code-inline-bg-dark: rgb(55, 55, 55);
+
+  /* Blockquotes */
+  --vcsi-blockquote-light: #2c5aa0;
+  --vcsi-blockquote-dark: #4a90e2;
+
+  /* Code highlighting */
+  --vcsi-code-highlight-light: rgba(255, 220, 100, 0.3);
+  --vcsi-code-highlight-dark: rgba(255, 220, 100, 0.15);
+
   /* =============================================================================
      GLOBAL TOKENS - SEMANTIC (auto-switch with theme)
      These are the primary tokens to use in components.
@@ -139,6 +159,14 @@
   --vcsi-border: var(--vcsi-border-light);
   --vcsi-link: var(--vcsi-link-light);
   --vcsi-muted: var(--vcsi-gray-600);
+
+  /* Code tokens (semantic) */
+  --vcsi-code-bg: var(--vcsi-code-bg-light);
+  --vcsi-code-fg: var(--vcsi-code-fg-light);
+  --vcsi-code-border: var(--vcsi-code-border-light);
+  --vcsi-code-inline-bg: var(--vcsi-code-inline-bg-light);
+  --vcsi-blockquote: var(--vcsi-blockquote-light);
+  --vcsi-code-highlight: var(--vcsi-code-highlight-light);
 
   /* =============================================================================
      LAYOUT TOKENS
@@ -165,6 +193,14 @@
     --vcsi-border: var(--vcsi-border-dark);
     --vcsi-link: var(--vcsi-link-dark);
 
+    /* Code tokens */
+    --vcsi-code-bg: var(--vcsi-code-bg-dark);
+    --vcsi-code-fg: var(--vcsi-code-fg-dark);
+    --vcsi-code-border: var(--vcsi-code-border-dark);
+    --vcsi-code-inline-bg: var(--vcsi-code-inline-bg-dark);
+    --vcsi-blockquote: var(--vcsi-blockquote-dark);
+    --vcsi-code-highlight: var(--vcsi-code-highlight-dark);
+
     /* Footer defaults for dark mode */
     --footer-bg: rgb(45, 45, 45);
     --footer-border: rgba(255, 255, 255, 0.1);
@@ -183,6 +219,14 @@
   --vcsi-hover: var(--vcsi-hover-dark);
   --vcsi-border: var(--vcsi-border-dark);
   --vcsi-link: var(--vcsi-link-dark);
+
+  /* Code tokens */
+  --vcsi-code-bg: var(--vcsi-code-bg-dark);
+  --vcsi-code-fg: var(--vcsi-code-fg-dark);
+  --vcsi-code-border: var(--vcsi-code-border-dark);
+  --vcsi-code-inline-bg: var(--vcsi-code-inline-bg-dark);
+  --vcsi-blockquote: var(--vcsi-blockquote-dark);
+  --vcsi-code-highlight: var(--vcsi-code-highlight-dark);
 
   /* Footer defaults for dark mode */
   --footer-bg: rgb(45, 45, 45);

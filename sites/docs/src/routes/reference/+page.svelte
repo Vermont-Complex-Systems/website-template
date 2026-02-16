@@ -331,7 +331,7 @@
 
   <aside class="sidebar">
     <nav class="sidebar-nav">
-      <div class="sidebar-header">Contents</div>
+      <div class="sidebar-header">Content</div>
       <ul>
         {#each sections as { id, label }}
           <li>
@@ -578,5 +578,43 @@
     grid-template-columns: 100px 1fr;
     gap: 0.5rem;
     height: 200px;
+  }
+
+  /* Dark mode overrides */
+  :global(.dark) .sidebar-header {
+    color: var(--vcsi-gray-400);
+  }
+
+  :global(.dark) .sidebar-nav ul {
+    border-left-color: var(--vcsi-gray-700);
+  }
+
+  :global(.dark) .sidebar-nav a {
+    color: var(--vcsi-gray-400);
+  }
+
+  :global(.dark) .sidebar-nav a:hover,
+  :global(.dark) .sidebar-nav a.active {
+    color: var(--vcsi-fg);
+  }
+
+  :global(.dark) code {
+    background: var(--vcsi-gray-800);
+    color: var(--vcsi-gray-200);
+  }
+
+  :global(.dark) .diagram-step {
+    background: var(--vcsi-gray-800);
+    color: var(--vcsi-fg);
+  }
+
+  :global(.dark) .diagram-viz,
+  :global(.dark) .diagram-controls {
+    background: var(--vcsi-gray-800);
+    color: var(--vcsi-gray-400);
+  }
+
+  :global(.dark) .diagram-label {
+    color: var(--vcsi-gray-400);
   }
 </style>
