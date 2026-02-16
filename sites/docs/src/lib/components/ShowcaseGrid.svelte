@@ -1,9 +1,11 @@
 <script>
+  import { base } from '$app/paths';
+
   /**
    * @typedef {Object} Example
    * @property {string} title - Example title
    * @property {string} url - Link to the example
-   * @property {string} thumbnail - Path to thumbnail image
+   * @property {string} thumbnail - Path to thumbnail image (relative, e.g., "/hello.jpg")
    * @property {string} [source] - Source attribution (e.g., "The Pudding")
    */
 
@@ -15,7 +17,7 @@
   {#each examples as example (example.url)}
     <a href={example.url} target="_blank" rel="noopener noreferrer" class="showcase-card">
       <div class="card-image">
-        <img src={example.thumbnail} alt={example.title} />
+        <img src="{base}{example.thumbnail}" alt={example.title} />
       </div>
       <div class="card-content">
         <h4>{example.title}</h4>
