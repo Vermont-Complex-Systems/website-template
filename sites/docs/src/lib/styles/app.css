@@ -32,25 +32,60 @@ main {
 
 /* Simple nav for docs */
 .docs-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 1rem 2rem;
+  border-bottom: transparent;
+  background: color-mix(in srgb, var(--vcsi-bg) 80%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.docs-nav-inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 2rem;
-  border-bottom: 1px solid var(--vcsi-border);
-  background: var(--vcsi-bg);
+  margin: 0 auto;
+}
+
+.docs-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .docs-nav-logo {
   font-family: var(--vcsi-font-sans);
-  font-weight: 600;
-  font-size: 1.25rem;
+  height: auto;
+  padding-top: 0.3rem;
   color: var(--vcsi-fg);
   text-decoration: none;
 }
 
+.docs-nav-logo-desktop {
+  max-width: 15rem;
+}
+
+.docs-nav-logo-mobile {
+  display: none;
+  height: 4.5rem;
+  width: auto;
+}
+
+.docs-nav-version {
+  font-family: var(--vcsi-font-mono);
+  font-size: 0.75rem;
+  color: var(--vcsi-gray-500);
+  background: var(--vcsi-gray-100);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
 .docs-nav-links {
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  gap: 1rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -68,6 +103,46 @@ main {
 .docs-nav-links a:hover,
 .docs-nav-links a[aria-current="page"] {
   opacity: 1;
+}
+
+.docs-nav-links .github-link {
+  display: flex;
+  align-items: center;
+}
+
+/* Mobile nav */
+@media (max-width: 600px) {
+  .docs-nav {
+    padding: 0.5rem 1rem 0rem 0rem;
+  }
+
+  .docs-nav-logo-desktop {
+    display: none;
+  }
+
+  .docs-nav-logo-mobile {
+    display: block;
+    height: auto;
+    max-height: 6rem;
+    object-fit: contain;
+  }
+
+  .docs-nav-links {
+    gap: 1rem;
+  }
+
+  .docs-nav-links a {
+    font-size: 0.8rem;
+  }
+
+  .docs-nav-version {
+    display: none;
+  }
+
+  /* Reduce page padding on mobile for docs */
+  .page {
+    padding-top: 1.5rem;
+  }
 }
 
 /* Code blocks in docs */
@@ -158,4 +233,35 @@ main {
   margin: 0;
   font-size: 0.9rem;
   opacity: 0.8;
+}
+
+/* =============================================================================
+   DARK MODE OVERRIDES
+   Override static gray tokens for docs-specific elements
+   ============================================================================= */
+
+:global(.dark) .docs-nav-version {
+  background: var(--vcsi-gray-800);
+  color: var(--vcsi-gray-300);
+}
+
+:global(.dark) .docs-code {
+  background: var(--vcsi-gray-900);
+  border-color: var(--vcsi-border);
+}
+
+:global(.dark) .docs-table th {
+  background: var(--vcsi-gray-800);
+}
+
+:global(.dark) .docs-table code {
+  background: var(--vcsi-gray-800);
+}
+
+:global(.dark) .layout-diagram {
+  background: var(--vcsi-gray-900);
+}
+
+:global(.dark) .example-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }

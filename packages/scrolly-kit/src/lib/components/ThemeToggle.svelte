@@ -20,10 +20,10 @@
     height: 2.25rem;
     border-radius: 0.5rem;
     background: transparent;
-    color: var(--nav-fg, var(--fg));
+    color: var(--vcsi-fg);
     border: none;
     cursor: pointer;
-    transition: all var(--transition-medium);
+    transition: all var(--vcsi-transition-base, 200ms ease);
   }
 
   .theme-toggle:hover {

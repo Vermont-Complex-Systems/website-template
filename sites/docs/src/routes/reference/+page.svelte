@@ -3,6 +3,7 @@
 
   const sections = [
     { id: 'story', label: 'Story Container' },
+    { id: 'step-styling', label: 'Step Styling' },
     { id: 'split-layout', label: 'Split Layout' },
     { id: 'fullscreen-layout', label: 'Fullscreen Layout' },
     { id: 'dashboard-layout', label: 'Dashboard Layout' },
@@ -37,24 +38,6 @@
 </svelte:head>
 
 <div class="reference-layout">
-  <aside class="sidebar">
-    <nav class="sidebar-nav">
-      <div class="sidebar-header">Contents</div>
-      <ul>
-        {#each sections as { id, label }}
-          <li>
-            <a
-              href="#{id}"
-              class:active={activeSection === id}
-            >
-              {label}
-            </a>
-          </li>
-        {/each}
-      </ul>
-    </nav>
-  </aside>
-
   <article class="page">
     <h1>Reference</h1>
     <p>Layout patterns and CSS variables for scrollytelling stories.</p>
@@ -85,6 +68,63 @@
       <pre class="docs-code">{`<article class="story" data-theme="dark">
   <!-- Dark background, light text -->
 </article>`}</pre>
+    </section>
+
+    <!-- STEP STYLING -->
+    <section id="step-styling">
+      <h2>Step Styling</h2>
+      <p>Step boxes in scrolly layouts use these CSS variables for colors and sizing. These apply to both <code>.split-layout</code> and <code>.fullscreen-layout</code>.</p>
+
+      <div class="layout-diagram">
+        <div class="diagram-themes">
+          <div class="diagram-theme diagram-theme-light">
+            <div class="diagram-label">Light Theme</div>
+            <div class="diagram-step-preview active">Active Step</div>
+            <div class="diagram-step-preview inactive">Inactive Step</div>
+          </div>
+          <div class="diagram-theme diagram-theme-dark">
+            <div class="diagram-label">Dark Theme</div>
+            <div class="diagram-step-preview active">Active Step</div>
+            <div class="diagram-step-preview inactive">Inactive Step</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>CSS Variables</h3>
+      <table class="docs-table">
+        <thead>
+          <tr><th>Variable</th><th>Light</th><th>Dark</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>--story-step-bg</code></td><td>#fff</td><td>#2a2a2a</td><td>Active step background</td></tr>
+          <tr><td><code>--story-step-fg</code></td><td>#333</td><td>#e8e8e8</td><td>Active step text color</td></tr>
+          <tr><td><code>--story-step-bg-inactive</code></td><td>#f5f5f5</td><td>#222</td><td>Inactive step background</td></tr>
+          <tr><td><code>--story-step-fg-inactive</code></td><td>#ccc</td><td>#666</td><td>Inactive step text color</td></tr>
+          <tr><td><code>--step-box-shadow</code></td><td colspan="2">1px 1px 10px rgba(0,0,0,0.2)</td><td>Step box shadow</td></tr>
+          <tr><td><code>--step-max-width</code></td><td colspan="2">600px</td><td>Maximum width of step box</td></tr>
+          <tr><td><code>--step-padding</code></td><td colspan="2">1rem</td><td>Padding inside step box</td></tr>
+          <tr><td><code>--step-border-radius</code></td><td colspan="2">5px</td><td>Step box corner radius</td></tr>
+          <tr><td><code>--step-text-align</code></td><td colspan="2">center</td><td>Text alignment in steps</td></tr>
+        </tbody>
+      </table>
+      <p><strong><code>--story-step-*</code></strong> variables control colors and are typically set globally in <code>app.css</code> for consistent theming across your story. <strong><code>--step-*</code></strong> variables control layout and can be set per-section for local customization.</p>
+
+      <h3>Example Override</h3>
+      <pre class="docs-code">{`<section class="split-layout" style="
+  --story-step-bg: #154734;
+  --story-step-fg: #fff;
+">
+  ...
+</section>`}</pre>
+
+      <p>For a minimal look where only text floats over the visualization:</p>
+      <pre class="docs-code">{`<section class="split-layout" style="
+  --story-step-bg: transparent;
+  --story-step-bg-inactive: transparent;
+  --step-box-shadow: none;
+">
+  ...
+</section>`}</pre>
     </section>
 
     <!-- SPLIT LAYOUT -->
@@ -230,7 +270,7 @@
     <!-- CSS VARIABLES -->
     <section id="css-variables">
       <h2>Global CSS Variables</h2>
-      <p>These tokens are available throughout your project.</p>
+      <p>These tokens are available throughout your project. See the full <a href="https://github.com/Vermont-Complex-Systems/vcsi-starter/blob/main/packages/scrolly-kit/src/lib/styles/tokens.css" target="_blank" rel="noopener">tokens.css source</a> for all available variables.</p>
 
       <h3>Colors</h3>
       <table class="docs-table">
@@ -282,31 +322,51 @@
           <tr><td><code>--vcsi-story-bg</code></td><td>Story background color</td></tr>
           <tr><td><code>--vcsi-story-fg</code></td><td>Story text color</td></tr>
           <tr><td><code>--vcsi-story-max-width</code></td><td>Max width for prose (600px)</td></tr>
-          <tr><td><code>--story-step-bg</code></td><td>Active step background</td></tr>
-          <tr><td><code>--story-step-fg</code></td><td>Active step text</td></tr>
         </tbody>
       </table>
+
+      <p>For step styling variables (<code>--story-step-*</code>), see the <a href="#step-styling">Step Styling</a> section.</p>
     </section>
   </article>
+
+  <aside class="sidebar">
+    <nav class="sidebar-nav">
+      <div class="sidebar-header">Contents</div>
+      <ul>
+        {#each sections as { id, label }}
+          <li>
+            <a
+              href="#{id}"
+              class:active={activeSection === id}
+            >
+              {label}
+            </a>
+          </li>
+        {/each}
+      </ul>
+    </nav>
+  </aside>
 </div>
 
 <style>
   .reference-layout {
-    display: grid;
-    grid-template-columns: 200px 1fr;
-    gap: 2rem;
-    max-width: 1200px;
+    position: relative;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 2rem 2rem 0;
   }
 
   .sidebar {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: calc(100% + 2rem);
+    width: 180px;
+    height: 100%; /* Full height so sticky nav works */
   }
 
   .sidebar-nav {
     position: sticky;
-    top: 2rem;
+    top: 5rem;
   }
 
   .sidebar-header {
@@ -350,15 +410,14 @@
     font-weight: 500;
   }
 
-  .page {
-    max-width: none;
-    padding: 0;
+  .page h1 {
+    margin-top: 0;
   }
 
   section {
     margin-top: 4rem;
     padding-top: 1rem;
-    scroll-margin-top: 2rem;
+    scroll-margin-top: 5rem;
   }
 
   h3 {
@@ -372,18 +431,16 @@
     font-size: 0.9em;
   }
 
-  /* Hide sidebar on mobile */
-  @media (max-width: 900px) {
-    .reference-layout {
-      grid-template-columns: 1fr;
-    }
-
+  /* Hide sidebar on narrower screens */
+  @media (max-width: 1100px) {
     .sidebar {
       display: none;
     }
+  }
 
-    .page {
-      padding: 0 1rem;
+  @media (max-width: 900px) {
+    .reference-layout {
+      padding: 1rem;
     }
   }
 
@@ -428,6 +485,63 @@
     padding: 0.5rem;
     text-align: center;
     font-size: 0.8rem;
+  }
+
+  /* Step theme diagram */
+  .diagram-themes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .diagram-theme {
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .diagram-theme-light {
+    background: #f8f8f8;
+  }
+
+  .diagram-theme-dark {
+    background: #1a1a1a;
+  }
+
+  .diagram-theme-dark .diagram-label {
+    color: #999;
+  }
+
+  .diagram-step-preview {
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .diagram-theme-light .diagram-step-preview.active {
+    background: #fff;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .diagram-theme-light .diagram-step-preview.inactive {
+    background: #f5f5f5;
+    color: #ccc;
+  }
+
+  .diagram-theme-dark .diagram-step-preview.active {
+    background: #2a2a2a;
+    color: #e8e8e8;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  .diagram-theme-dark .diagram-step-preview.inactive {
+    background: #222;
+    color: #666;
   }
 
   .diagram-viz,

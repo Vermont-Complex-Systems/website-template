@@ -7,8 +7,8 @@
 </svelte:head>
 
 <article class="page">
-  <h1>scrolly-kit</h1>
-  <p class="lead">A toolkit for building scrollytelling stories with SvelteKit.</p>
+  <h1 class="tagline">Minimal CSS Framework<br />for visual data essays</h1>
+  <p class="subheader">Ready-to-use layouts and components for building interactive data stories with SvelteKit.</p>
 
   <h2>Quick Start</h2>
 
@@ -62,15 +62,38 @@ npm install</pre>
   <h2>Next Steps</h2>
   <ul>
     <li><a href="{base}/reference">Reference</a> - Layout patterns and CSS variables</li>
-    <li><a href="https://vcsi.cmplxsys.w3.uvm.edu/" target="_blank" rel="noopener">Examples</a> - See real stories built with scrolly-kit</li>
+    <li><a href="https://vcsi.cmplxsys.w3.uvm.edu/" target="_blank" rel="noopener">Examples</a> - See pedagogical stories built with scrolly-kit</li>
   </ul>
 </article>
 
 <style>
-  .lead {
-    font-size: 1.25rem;
-    opacity: 0.8;
-    margin-bottom: 2rem;
+  .tagline {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+
+  .subheader {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.7;
+    margin-bottom: 3rem;
+  }
+
+  @media (max-width: 600px) {
+    .tagline {
+      text-align: left;
+      font-size: 1.75rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .subheader {
+      text-align: left;
+      margin-bottom: 2rem;
+    }
   }
 
   h2 {

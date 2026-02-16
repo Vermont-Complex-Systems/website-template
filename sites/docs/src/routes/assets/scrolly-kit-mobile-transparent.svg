@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="400" height="120" xmlns="http://www.w3.org/2000/svg">
+    <text x="20" y="30" font-family="JetBrains Mono, monospace" font-size="20" font-weight="600" fill="#6b7280" text-anchor="start">@the-vcsi/</text>
+    <text x="20" y="80" font-family="JetBrains Mono, monospace" font-size="36" font-weight="600" fill="#3b82f6" text-anchor="start">scrolly-kit</text>
+</svg>
