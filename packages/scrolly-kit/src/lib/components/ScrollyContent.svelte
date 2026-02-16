@@ -126,7 +126,7 @@ const steps = [
     }
 
     .step {
-        min-height: var(--step-height);
+        min-height: var(--step-height, 90vh);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -137,18 +137,18 @@ const steps = [
         width: 100%;
         max-width: var(--step-max-width, 600px);
         padding: var(--step-padding, 1rem);
-        background-color: var(--story-step-bg-inactive);
-        color: var(--story-step-fg-inactive);
+        background-color: var(--story-step-bg-inactive, #f5f5f5);
+        color: var(--story-step-fg-inactive, #ccc);
         border-radius: var(--step-border-radius, 5px);
-        box-shadow: var(--step-box-shadow);
+        box-shadow: var(--step-box-shadow, 1px 1px 10px rgba(0, 0, 0, 0.2));
         transition: background-color 400ms ease, color 400ms ease;
         text-align: var(--step-text-align, center);
         pointer-events: auto;
     }
 
     .step.active .step-box {
-        background-color: var(--story-step-bg);
-        color: var(--story-step-fg);
+        background-color: var(--story-step-bg, #fff);
+        color: var(--story-step-fg, #333);
     }
 
     /* Links and nested elements inherit step text color */

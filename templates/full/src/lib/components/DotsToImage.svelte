@@ -432,7 +432,7 @@
     #dot-container {
   width: 100%;
   height: 400px;
-  background-color: var(--color-bg);
+  background-color: var(--vcsi-bg);
 }
 canvas {
   width: 100%;

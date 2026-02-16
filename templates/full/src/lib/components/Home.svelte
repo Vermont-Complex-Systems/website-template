@@ -80,11 +80,11 @@
     <pre class="tree-view"><code>.
 └── src
     ├── data                    # CSV data for routes
-    ├── lib                 
+    ├── lib
     │   ├── components/         # Reusable UI components
     │   │   ├── About.svelte
     │   │   ├── Nav.svelte
-    │   │   ... 
+    │   │   ...
     │   │   └── Home.svelte
     │   ├── server
     │   ├── stories             # Your scrollytelling content
@@ -96,7 +96,7 @@
     │       └── scrollReveal.ts  # Reusable javscript modules
     ├── routes                   # Pages & layouts
     │   ├── (app)
-    │   │   ├── +layout.svelte   # Non-story default layouts 
+    │   │   ├── +layout.svelte   # Non-story default layouts
     │   │   ├── +page.svelte     # Home page
     │   │   ├── about
     │   │   │   ├── [name]
@@ -137,18 +137,18 @@
 
 
 
-/* 
+/*
 Centering vertically the hero
 Fills the full viewport (100dvh)
-Uses padding-top: var(--nav-height) to create space for the fixed nav
-Uses padding-bottom: 0 to make the centering symmetric 
+Uses padding-top: var(--vcsi-nav-height) to create space for the fixed nav
+Uses padding-bottom: 0 to make the centering symmetric
 */
 .hero {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100dvh;
-  padding-top: var(--nav-height);
+  padding-top: var(--vcsi-nav-height);
   padding-bottom: 0;
   box-sizing: border-box;
 }
@@ -157,15 +157,15 @@ Uses padding-bottom: 0 to make the centering symmetric
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 3rem;
+  gap: var(--vcsi-space-2xl);
   width: 100%;
-  max-width: var(--page-max-width);
+  max-width: var(--vcsi-page-max-width);
 }
 
 .hero-text {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--vcsi-space-md);
   max-width: 55%;
 }
 
@@ -173,50 +173,50 @@ Uses padding-bottom: 0 to make the centering symmetric
   font-size: clamp(2.5rem, 6vw, 4.5rem);
   line-height: 1.3;
   margin: 0;
-  font-family: var(--serif);
+  font-family: var(--vcsi-font-serif);
 }
 
 .hero-text p {
   font-size: clamp(1.2rem, 2.5vw, 1.5rem);
   margin: 0;
-  color: var(--color-muted);
+  color: var(--vcsi-muted);
 }
 
 .code-blocks {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--vcsi-space-sm);
 }
 
 .github-row {
   display: inline-flex;
   align-items: center;
-  font-family: var(--sans);
+  font-family: var(--vcsi-font-sans);
   font-size: 0.9rem;
-  color: var(--color-muted);
-  margin-top: 0.25rem;
+  color: var(--vcsi-muted);
+  margin-top: var(--vcsi-space-xs);
 }
 
 .github-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: var(--vcsi-space-xs);
   font-weight: 500;
-  color: var(--color-fg);
+  color: var(--vcsi-fg);
   text-decoration: none;
-  margin-left: 0.25rem;
-  transition: gap 0.2s ease;
+  margin-left: var(--vcsi-space-xs);
+  transition: gap var(--vcsi-transition-base);
 }
 
 .github-link:hover {
-  gap: 0.5rem;
+  gap: var(--vcsi-space-sm);
 }
 
 .tip-row {
   display: flex;
   align-items: flex-start;
   gap: 0.35rem;
-  color: var(--color-muted);
+  color: var(--vcsi-muted);
 }
 
 .tip-row p {
@@ -233,94 +233,94 @@ Uses padding-bottom: 0 to make the centering symmetric
 
 /* ---------------- Stories Section ---------------- */
 .stories {
-  padding: 4rem var(--page-inline-padding);
+  padding: 4rem var(--vcsi-page-inline-padding);
 }
 
 .loading {
   text-align: center;
-  padding: 3rem;
+  padding: var(--vcsi-space-2xl);
   font-size: 1.2rem;
-  color: var(--color-fg);
+  color: var(--vcsi-fg);
   opacity: 0.7;
 }
 
 /* ---------------- Why Svelte Section ---------------- */
 .why-svelte {
-  padding: 4rem var(--page-inline-padding);
-  background: var(--color-hover);
+  padding: 4rem var(--vcsi-page-inline-padding);
+  background: var(--vcsi-hover);
 }
 
 .why-svelte h2 {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
-  font-family: var(--serif);
-  margin: 0 0 2rem 0;
+  font-family: var(--vcsi-font-serif);
+  margin: 0 0 var(--vcsi-space-xl) 0;
   text-align: center;
 }
 
 .reasons-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
+  gap: var(--vcsi-space-xl);
 }
 
 .reason {
-  padding: 1.5rem;
-  background: var(--color-bg);
+  padding: var(--vcsi-space-lg);
+  background: var(--vcsi-bg);
   border-radius: 12px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--vcsi-border);
 }
 
 .reason h3 {
-  font-family: var(--sans);
+  font-family: var(--vcsi-font-sans);
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 0.75rem 0;
-  color: var(--color-fg);
+  color: var(--vcsi-fg);
 }
 
 .reason p {
   font-size: 0.95rem;
   line-height: 1.6;
   margin: 0;
-  color: var(--color-muted);
+  color: var(--vcsi-muted);
 }
 
 .svelte-cta {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: var(--vcsi-space-xl);
   font-size: 1rem;
-  color: var(--color-muted);
+  color: var(--vcsi-muted);
 }
 
 .svelte-cta a {
-  color: var(--color-fg);
+  color: var(--vcsi-fg);
   font-weight: 500;
 }
 
 /* ---------------- Project Structure Section ---------------- */
 .project-structure {
-  padding: 4rem var(--page-inline-padding);
+  padding: 4rem var(--vcsi-page-inline-padding);
 }
 
 .project-structure h2 {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
-  font-family: var(--serif);
-  margin: 0 0 2rem 0;
+  font-family: var(--vcsi-font-serif);
+  margin: 0 0 var(--vcsi-space-xl) 0;
   text-align: center;
 }
 
 .structure-layout {
   display: grid;
   grid-template-columns: auto 1fr;
-  gap: 3rem;
+  gap: var(--vcsi-space-2xl);
   align-items: start;
 }
 
 .tree-view {
   background: #f6f8fa;
   border: 1px solid #d1d9e0;
-  border-radius: 8px;
-  padding: 1.5rem;
+  border-radius: var(--vcsi-radius-lg);
+  padding: var(--vcsi-space-lg);
   margin: 0;
   overflow-x: auto;
   font-size: 0.85rem;
@@ -342,44 +342,44 @@ Uses padding-bottom: 0 to make the centering symmetric
 .structure-explanations {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
+  gap: var(--vcsi-space-lg);
 }
 
 .explanation {
   padding: 1.25rem;
-  background: var(--color-bg);
+  background: var(--vcsi-bg);
   border-radius: 10px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--vcsi-border);
 }
 
 .explanation h3 {
-  font-family: var(--sans);
+  font-family: var(--vcsi-font-sans);
   font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 0.5rem 0;
-  color: var(--color-fg);
+  margin: 0 0 var(--vcsi-space-sm) 0;
+  color: var(--vcsi-fg);
 }
 
 .explanation p {
   font-size: 0.9rem;
   line-height: 1.5;
   margin: 0;
-  color: var(--color-muted);
+  color: var(--vcsi-muted);
 }
 
 .explanation code {
-  font-family: var(--mono);
+  font-family: var(--vcsi-font-mono);
   font-size: 0.8em;
-  background: var(--color-hover);
+  background: var(--vcsi-hover);
   padding: 0.15rem 0.35rem;
-  border-radius: 4px;
+  border-radius: var(--vcsi-radius-sm);
 }
 
 /* ---------------- Responsive ---------------- */
 @media (max-width: 768px) {
   .hero-inner {
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--vcsi-space-xl);
     text-align: center;
   }
   .hero-text {

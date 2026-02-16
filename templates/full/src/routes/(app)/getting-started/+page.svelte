@@ -121,7 +121,7 @@
     .video-card {
         position: relative;
         transition: transform 200ms ease, box-shadow 200ms ease;
-        border-radius: var(--border-radius);
+        border-radius: var(--vcsi-radius-md);
         overflow: visible;
         background: light-dark(#fff, #2a2a2a);
         border: 1px solid light-dark(rgb(202, 202, 202), rgba(255, 255, 255, 0.15));
@@ -186,7 +186,7 @@
     .video-title {
         font-size: 1.2rem;
         font-weight: 600;
-        font-family: var(--serif);
+        font-family: var(--vcsi-font-serif);
         margin: 0;
         color: light-dark(rgb(55, 55, 55), #e8e8e8);
         line-height: 1.3;
@@ -216,7 +216,7 @@
         background: light-dark(rgb(55, 55, 55), #1a1a1a);
         color: #fff;
         padding: 2rem;
-        border-radius: var(--border-radius);
+        border-radius: var(--vcsi-radius-md);
         font-size: 0.9rem;
         line-height: 1.6;
         width: calc(45vw);

@@ -29,7 +29,7 @@
             {#each levelStories as story (story.slug)}
                 <a href="/{story.slug}" class="story-card">
                     <div class="card-content">
-                        <h3>{story.title}</h3>
+                        <h4>{story.title}</h4>
                         <p class="description">{story.description}</p>
                         {#if story.tags}
                             <div class="tags">
@@ -51,7 +51,7 @@
 
 <style>
     .level-section {
-        margin-bottom: 3rem;
+        margin-bottom: var(--vcsi-space-2xl);
     }
 
     .level-section:last-child {
@@ -59,18 +59,18 @@
     }
 
     .level-heading {
-        font-size: 1.5rem;
-        font-family: var(--serif);
-        margin: 0 0 1.5rem 0;
-        color: var(--color-fg);
-        border-bottom: 2px solid var(--color-border);
-        padding-bottom: 0.5rem;
+        font-size: var(--vcsi-font-size-md);
+        font-family: var(--vcsi-font-serif);
+        margin: 0 0 var(--vcsi-space-lg) 0;
+        color: var(--vcsi-fg);
+        border-bottom: 2px solid var(--vcsi-border);
+        padding-bottom: var(--vcsi-space-sm);
     }
 
     .story-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
-        gap: 2rem;
+        gap: var(--vcsi-space-xl);
         margin: 0;
     }
 
@@ -108,19 +108,20 @@
     }
 
     .card-content {
-        padding: 0rem 1.5rem;
+        padding: 0rem var(--vcsi-space-lg);
         display: flex;
         flex-direction: column;
         height: 100%;
-        gap: 1rem;
+        gap: var(--vcsi-space-md);
     }
 
     .card-footer {
         margin-top: auto;
+        margin-bottom: var(--vcsi-space-md);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding-top: 1rem;
+        padding-top: var(--vcsi-space-md);
         border-top: 1px solid rgba(0, 0, 0, 0.08);
     }
 
@@ -131,8 +132,8 @@
     .read-more {
         font-size: 0.95rem;
         font-weight: 600;
-        color: var(--color-primary, #007a87);
-        transition: transform 0.2s ease;
+        color: var(--vcsi-color-accent, #007a87);
+        transition: transform var(--vcsi-transition-base);
     }
 
     .story-card:hover .read-more {
@@ -151,9 +152,10 @@
     }
 
     .date {
+        margin: 0;
         font-size: 0.9rem;
         color: rgba(0, 0, 0, 0.5);
-        font-family: var(--sans);
+        font-family: var(--vcsi-font-sans);
     }
 
     :global(.dark) .date {
@@ -163,13 +165,13 @@
     .tags {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
+        gap: var(--vcsi-space-sm);
     }
 
     .tag {
         font-size: 0.75rem;
-        font-family: var(--sans);
-        padding: 0.25rem 0.6rem;
+        font-family: var(--vcsi-font-sans);
+        padding: var(--vcsi-space-xs) 0.6rem;
         background: rgba(0, 0, 0, 0.06);
         border-radius: 12px;
         color: rgba(0, 0, 0, 0.6);
@@ -183,7 +185,7 @@
     @media (max-width: 768px) {
         .story-grid {
             grid-template-columns: 1fr;
-            gap: 1.5rem;
+            gap: var(--vcsi-space-lg);
         }
 
         .story-card {
@@ -191,7 +193,7 @@
         }
 
         .card-content {
-            padding: 1.5rem;
+            padding: var(--vcsi-space-lg);
         }
     }
 </style>

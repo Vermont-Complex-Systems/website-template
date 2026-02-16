@@ -113,26 +113,26 @@ export const getStory = prerender(v.string(), async (slug) => {
 
 <style>
 .remote-functions {
-  padding: 4rem var(--page-inline-padding);
-  margin-bottom: var(--padding-bottom-page); /* here we add margin-bottom so that we don't extends the shaded background */
+  padding: 4rem var(--vcsi-page-inline-padding);
+  padding-bottom: 7.5rem; /* spacing before footer */
   background: rgba(0, 0, 0, 0.02);
   overflow-x: hidden;
 }
 
 .remote-functions h2 {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
-  font-family: var(--serif);
-  margin: 0 0 1rem 0;
+  font-family: var(--vcsi-font-serif);
+  margin: 0 0 var(--vcsi-space-md) 0;
   text-align: center;
 }
 
 .section-intro {
   max-width: 700px;
-  margin: 0 auto 2rem;
+  margin: 0 auto var(--vcsi-space-xl);
   text-align: center;
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--color-gray-700);
+  color: var(--vcsi-gray-700);
 }
 
 .section-intro code {
@@ -166,25 +166,25 @@ export const getStory = prerender(v.string(), async (slug) => {
 }
 
 .explanation {
-  padding: 1rem 1.25rem;
-  background: var(--color-bg);
+  padding: var(--vcsi-space-md) 1.25rem;
+  background: var(--vcsi-bg);
   border-radius: 10px;
   border: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 .explanation h3 {
-  font-family: var(--sans);
+  font-family: var(--vcsi-font-sans);
   font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 0.5rem 0;
-  color: var(--color-fg);
+  margin: 0 0 var(--vcsi-space-sm) 0;
+  color: var(--vcsi-fg);
 }
 
 .explanation p {
   font-size: 0.9rem;
   line-height: 1.5;
   margin: 0;
-  color: var(--color-gray-700);
+  color: var(--vcsi-gray-700);
 }
 
 .explanation code {
@@ -210,9 +210,9 @@ export const getStory = prerender(v.string(), async (slug) => {
 .static-note .note-label {
   position: absolute;
   top: -0.6rem;
-  left: 1rem;
-  background: var(--color-bg);
-  padding: 0 0.5rem;
+  left: var(--vcsi-space-md);
+  background: var(--vcsi-bg);
+  padding: 0 var(--vcsi-space-sm);
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -269,9 +269,9 @@ export const getStory = prerender(v.string(), async (slug) => {
 
 .remote-cta {
   text-align: center;
-  margin-top: 1.5rem;
+  margin-top: var(--vcsi-space-lg);
   font-size: 0.95rem;
-  color: var(--color-gray-700);
+  color: var(--vcsi-gray-700);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -293,7 +293,8 @@ export const getStory = prerender(v.string(), async (slug) => {
 
 @media (max-width: 768px) {
   .remote-functions {
-    padding: 2.5rem var(--page-inline-padding);
+    padding: 2.5rem var(--vcsi-page-inline-padding);
+    padding-bottom: var(--vcsi-space-2xl, 3rem); /* reduced spacing on mobile */
   }
 
   .section-intro {

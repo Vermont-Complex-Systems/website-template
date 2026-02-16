@@ -1,7 +1,6 @@
 <script lang="ts">
-    import { scrollReveal } from '@the-vcsi/scrolly-kit';
+    import { scrollReveal, Footer } from '@the-vcsi/scrolly-kit';
     import BackToHome from '$lib/components/helpers/BackToHome.svelte';
-    import Footer from '$lib/components/Footer.svelte';
     import skylineImage from './assets/skyline.jpg?enhanced';
 
     // Enhanced image sources for preloading
@@ -216,7 +215,7 @@
 
     .hero .subtitle {
         font-size: clamp(1.2rem, 3vw, 2rem);
-        font-family: var(--serif);
+        font-family: var(--vcsi-font-serif);
     }
 
     .hero .caption {
@@ -228,14 +227,14 @@
     .intro {
         max-width: 900px;
         margin: 0 auto;
-        padding: 4rem var(--page-inline-padding);
+        padding: 4rem var(--vcsi-page-inline-padding);
         text-align: center;
     }
 
     .intro p {
         font-size: 1.25rem;
         line-height: 1.6;
-        font-family: var(--serif);
+        font-family: var(--vcsi-font-serif);
         color: var(--story-fg);
     }
 
@@ -244,7 +243,7 @@
         display: grid;
         grid-template-columns: 0.8fr 1.2fr;
         gap: 3rem;
-        padding: 4rem var(--page-inline-padding);
+        padding: 4rem var(--vcsi-page-inline-padding);
         align-items: center;
         max-width: 1200px;
         margin: 0 auto;
@@ -260,7 +259,7 @@
 
     .image-col img {
         width: 100%;
-        border-radius: var(--border-radius);
+        border-radius: var(--vcsi-radius-md);
     }
 
     .text-col {
@@ -273,7 +272,7 @@
     }
 
     .text-col p {
-        font-family: var(--serif);
+        font-family: var(--vcsi-font-serif);
         line-height: 1.6;
         margin-bottom: 1rem;
     }
@@ -281,7 +280,7 @@
     .text-col ul {
         padding-left: 1.5rem;
         margin-bottom: 1.5rem;
-        font-family: var(--serif);
+        font-family: var(--vcsi-font-serif);
     }
 
     .text-col li {
@@ -295,7 +294,7 @@
         background: var(--story-fg);
         color: var(--story-bg);
         font-weight: 600;
-        border-radius: var(--border-radius);
+        border-radius: var(--vcsi-radius-md);
         text-decoration: none;
         transition: transform 0.2s, box-shadow 0.2s;
     }
@@ -307,7 +306,7 @@
 
     /* Testimonials */
     .testimonials {
-        padding: 4rem var(--page-inline-padding);
+        padding: 4rem var(--vcsi-page-inline-padding);
         max-width: 1400px;
         margin: 0 auto;
     }
@@ -337,7 +336,7 @@
     }
 
     blockquote p {
-        font-family: var(--serif);
+        font-family: var(--vcsi-font-serif);
         font-style: italic;
         font-size: 1.1rem;
         line-height: 1.7;
@@ -362,12 +361,12 @@
 
     .testimonials-images img {
         width: 100%;
-        border-radius: var(--border-radius);
+        border-radius: var(--vcsi-radius-md);
     }
 
     /* Gallery */
     .gallery {
-        padding: 4rem var(--page-inline-padding);
+        padding: 4rem var(--vcsi-page-inline-padding);
     }
 
     .gallery-grid {
@@ -382,12 +381,12 @@
         width: 100%;
         aspect-ratio: 1;
         object-fit: cover;
-        border-radius: var(--border-radius);
+        border-radius: var(--vcsi-radius-md);
     }
 
     /* Logos */
     .logos {
-        padding: 4rem var(--page-inline-padding);
+        padding: 4rem var(--vcsi-page-inline-padding);
         border-top: 1px solid var(--story-border);
     }
 
@@ -433,7 +432,7 @@
         .content-row,
         .content-row.reverse {
             grid-template-columns: 1fr;
-            padding: 2rem var(--page-inline-padding);
+            padding: 2rem var(--vcsi-page-inline-padding);
         }
 
         .content-row .image-col,

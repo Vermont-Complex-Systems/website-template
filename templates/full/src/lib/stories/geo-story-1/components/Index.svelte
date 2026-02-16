@@ -1,8 +1,7 @@
 <script>
     import BackToHome from '$lib/components/helpers/BackToHome.svelte';
     import GeoScrollyPlot from './GeoScrollyPlot.svelte';
-    import { ScrollIndicator, RenderTextContent, ScrollyContent, StoryHeader } from '@the-vcsi/scrolly-kit';
-    import Footer from '$lib/components/Footer.svelte';
+    import { ScrollIndicator, RenderTextContent, ScrollyContent, StoryHeader, Footer } from '@the-vcsi/scrolly-kit';
 
     let { story, data } = $props();
 

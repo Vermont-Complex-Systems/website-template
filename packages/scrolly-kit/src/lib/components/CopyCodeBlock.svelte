@@ -29,27 +29,27 @@
     .code-block-wrapper {
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: var(--vcsi-space-xs);
     }
 
     .code-label {
         font-size: 0.8rem;
-        font-family: var(--sans);
-        color: var(--color-gray-700);
+        font-family: var(--vcsi-font-sans);
+        color: var(--vcsi-gray-700);
         font-weight: 500;
     }
 
     .code-block {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: var(--vcsi-space-sm);
         background: rgba(0, 0, 0, 0.06);
-        border-radius: 6px;
+        border-radius: var(--vcsi-radius-md);
         padding: 0.75rem 1rem;
-        font-family: var(--mono);
+        font-family: var(--vcsi-font-mono);
         font-size: 0.85rem;
         max-width: fit-content;
-        transition: background-color 200ms ease;
+        transition: background-color var(--vcsi-transition-base);
     }
 
     :global(.dark) .code-block {
@@ -57,7 +57,7 @@
     }
 
     .code-block code {
-        color: var(--color-fg);
+        color: var(--vcsi-fg);
     }
 
     .copy-btn {
@@ -66,11 +66,11 @@
         justify-content: center;
         background: none;
         border: none;
-        padding: 0.25rem;
+        padding: var(--vcsi-space-xs);
         cursor: pointer;
-        color: var(--color-fg);
+        color: var(--vcsi-fg);
         opacity: 0.6;
-        transition: opacity 0.2s;
+        transition: opacity var(--vcsi-transition-base);
     }
 
     .copy-btn:hover {

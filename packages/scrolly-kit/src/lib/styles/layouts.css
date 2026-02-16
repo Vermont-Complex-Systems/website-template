@@ -1,36 +1,32 @@
 /* =============================================================================
-   SCROLLY-KIT LAYOUTS
+   VCSI LAYOUTS
    Layout patterns for scrollytelling stories.
    ============================================================================= */
 
 /* =============================================================================
    LIGHT STORY THEME (default)
    Stories default to light mode, independent of global dark mode toggle.
-   Customize with: style="--scrolly-story-bg: #fff; --scrolly-story-fg: #333;"
+   Customize with: style="--vcsi-story-bg: #fff; --vcsi-story-fg: #333;"
    ============================================================================= */
 
 .story {
   color-scheme: light;
   /* Isolate from global dark mode - force light semantic tokens */
-  --scrolly-bg: var(--scrolly-bg-light);
-  --scrolly-fg: var(--scrolly-fg-light);
-  --scrolly-hover: var(--scrolly-hover-light);
-  --scrolly-border: var(--scrolly-border-light);
+  --vcsi-bg: var(--vcsi-bg-light);
+  --vcsi-fg: var(--vcsi-fg-light);
+  --vcsi-hover: var(--vcsi-hover-light);
+  --vcsi-border: var(--vcsi-border-light);
 
   /* Story-specific tokens */
-  --scrolly-story-bg: var(--scrolly-color-beige, #f4efea);
-  --scrolly-story-fg: rgb(55, 55, 55);
-  --scrolly-story-step-bg: #fff;
-  --scrolly-story-step-fg: #333;
-  --scrolly-story-step-bg-inactive: #f5f5f5;
-  --scrolly-story-step-fg-inactive: #ccc;
-  --scrolly-story-max-width: 600px;
+  --vcsi-story-bg: var(--vcsi-color-beige, #f4efea);
+  --vcsi-story-fg: rgb(55, 55, 55);
+  --vcsi-story-max-width: 600px;
 
-  /* Step box color aliases (used by ScrollyContent) */
-  --story-step-bg: var(--scrolly-story-step-bg);
-  --story-step-fg: var(--scrolly-story-step-fg);
-  --story-step-bg-inactive: var(--scrolly-story-step-bg-inactive);
-  --story-step-fg-inactive: var(--scrolly-story-step-fg-inactive);
+  /* ScrollyContent step colors (component reads these with fallbacks) */
+  --story-step-bg: #fff;
+  --story-step-fg: #333;
+  --story-step-bg-inactive: #f5f5f5;
+  --story-step-fg-inactive: #ccc;
 }
 
 /* =============================================================================
@@ -42,8 +38,8 @@
   width: 100%;
   padding-top: 5.5rem;
   padding-bottom: 7.5rem;
-  background: var(--scrolly-story-bg);
-  color: var(--scrolly-story-fg);
+  background: var(--vcsi-story-bg);
+  color: var(--vcsi-story-fg);
 }
 
 @media (max-width: 768px) {
@@ -69,9 +65,9 @@
 .story > blockquote,
 .story > pre {
   width: 100%;
-  max-width: var(--scrolly-story-max-width);
+  max-width: var(--vcsi-story-max-width);
   margin-inline: auto;
-  padding-inline: 1rem;
+  padding-inline: var(--vcsi-space-md);
 }
 
 
@@ -88,23 +84,19 @@
 /* =============================================================================
    DARK STORY THEME
    Add data-theme="dark" for stories with dark backgrounds.
-   Customize with: style="--scrolly-story-bg: #353839; --scrolly-story-fg: white;"
+   Customize with: style="--vcsi-story-bg: #353839; --vcsi-story-fg: white;"
    ============================================================================= */
 
 .story[data-theme="dark"] {
   color-scheme: dark;
-  --scrolly-story-bg: #353839;
-  --scrolly-story-fg: white;
-  --scrolly-story-step-bg: #2a2a2a;
-  --scrolly-story-step-fg: #e8e8e8;
-  --scrolly-story-step-bg-inactive: #222;
-  --scrolly-story-step-fg-inactive: #666;
+  --vcsi-story-bg: #353839;
+  --vcsi-story-fg: white;
 
-  /* Step box color aliases (used by ScrollyContent) */
-  --story-step-bg: var(--scrolly-story-step-bg);
-  --story-step-fg: var(--scrolly-story-step-fg);
-  --story-step-bg-inactive: var(--scrolly-story-step-bg-inactive);
-  --story-step-fg-inactive: var(--scrolly-story-step-fg-inactive);
+  /* ScrollyContent step colors for dark theme */
+  --story-step-bg: #2a2a2a;
+  --story-step-fg: #e8e8e8;
+  --story-step-bg-inactive: #222;
+  --story-step-fg-inactive: #666;
 }
 
 /* Ensure all text in dark stories uses the story foreground color */
@@ -115,7 +107,7 @@
 .story[data-theme="dark"] p,
 .story[data-theme="dark"] a,
 .story[data-theme="dark"] section {
-  color: var(--scrolly-story-fg);
+  color: var(--vcsi-story-fg);
 }
 
 
@@ -138,32 +130,32 @@
 
 .split-layout {
   /* Panel configuration (specific to two-column layout) */
-  --scrolly-panel-min-width: 450px;
-  --scrolly-panel-width: 45%;
-  --scrolly-panel-height: min(80vh, 600px); /* Capped so top-offset calc stays accurate */
-  --scrolly-panel-top-offset: calc((100vh - var(--scrolly-panel-height)) / 2); /* auto-center vertically */
-  --scrolly-layout-gap: 2rem;
+  --vcsi-panel-min-width: 450px;
+  --vcsi-panel-width: 45%;
+  --vcsi-panel-height: min(80vh, 600px); /* Capped so top-offset calc stays accurate */
+  --vcsi-panel-top-offset: calc((100vh - var(--vcsi-panel-height)) / 2); /* auto-center vertically */
+  --vcsi-layout-gap: 2rem;
 
   position: relative;
   display: grid;
-  grid-template-columns: 1fr minmax(var(--scrolly-panel-min-width), var(--scrolly-panel-width));
-  gap: var(--scrolly-layout-gap);
+  grid-template-columns: 1fr minmax(var(--vcsi-panel-min-width), var(--vcsi-panel-width));
+  gap: var(--vcsi-layout-gap);
   align-items: start;
-  padding-inline: var(--scrolly-content-padding-inline, 2rem);
+  padding-inline: var(--vcsi-content-padding-inline, 2rem);
 
   /* Override shared defaults for this layout */
-  --scrolly-max-width: none;
+  --vcsi-content-max-width: none;
 }
 
 /* Reversed: panel on left, content on right */
 .split-layout.reversed {
-  grid-template-columns: minmax(var(--scrolly-panel-min-width), var(--scrolly-panel-width)) 1fr;
+  grid-template-columns: minmax(var(--vcsi-panel-min-width), var(--vcsi-panel-width)) 1fr;
 }
 
 .split-layout .sticky-panel {
   position: sticky;
-  top: var(--scrolly-panel-top-offset);
-  height: var(--scrolly-panel-height);
+  top: var(--vcsi-panel-top-offset);
+  height: var(--vcsi-panel-height);
   grid-column: 2;
   display: flex;
   align-items: center;
@@ -187,7 +179,7 @@
   .split-layout {
     grid-template-columns: 1fr;
     padding-inline: 0;
-    --scrolly-step-max-width: 100%;
+    --vcsi-step-max-width: 100%;
     max-width: 100vw;
     overflow-x: clip; /* clip instead of hidden to preserve sticky */
   }
@@ -214,7 +206,7 @@
     grid-row: 1;
     z-index: 1;
     pointer-events: none;
-    padding-inline: var(--scrolly-content-padding-inline, 2rem);
+    padding-inline: var(--vcsi-content-padding-inline, 2rem);
   }
 
   /* Reversed has no effect on mobile (stacks vertically) */
@@ -243,9 +235,9 @@
   margin-left: calc(-50vw + 50%);
 
   /* Override shared defaults for immersive fullscreen experience */
-  --scrolly-step-max-width: 500px;
-  --scrolly-step-padding: 2rem;
-  --scrolly-pointer-events: none; /* Let events pass to panel behind */
+  --vcsi-step-max-width: 500px;
+  --vcsi-step-padding: 2rem;
+  --vcsi-step-pointer-events: none; /* Let events pass to panel behind */
 }
 
 .fullscreen-layout .sticky-panel {
@@ -277,16 +269,16 @@
    ============================================================================= */
 
 .triple-layout {
-  --scrolly-panel-height: min(95vh, 900px);
-  --scrolly-panel-top-offset: calc((100vh - var(--scrolly-panel-height)) / 2);
-  --scrolly-layout-gap: 1.5rem;
+  --vcsi-panel-height: min(95vh, 900px);
+  --vcsi-panel-top-offset: calc((100vh - var(--vcsi-panel-height)) / 2);
+  --vcsi-layout-gap: 1.5rem;
 
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: var(--scrolly-layout-gap);
+  gap: var(--vcsi-layout-gap);
   align-items: start;
-  padding-inline: var(--scrolly-content-padding-inline, 2rem);
+  padding-inline: var(--vcsi-content-padding-inline, 2rem);
 }
 
 .triple-layout .scrolly-content {
@@ -295,15 +287,15 @@
 
 .triple-layout .code-panel {
   position: sticky;
-  top: var(--scrolly-panel-top-offset);
-  height: var(--scrolly-panel-height);
+  top: var(--vcsi-panel-top-offset);
+  height: var(--vcsi-panel-height);
   grid-column: 2;
 }
 
 .triple-layout .chart-panel {
   position: sticky;
-  top: var(--scrolly-panel-top-offset);
-  height: var(--scrolly-panel-height);
+  top: var(--vcsi-panel-top-offset);
+  height: var(--vcsi-panel-height);
   grid-column: 3;
 }
 
@@ -345,7 +337,7 @@
     grid-row: 1;
     z-index: 1;
     pointer-events: none;
-    padding-inline: var(--scrolly-content-padding-inline, 2rem);
+    padding-inline: var(--vcsi-content-padding-inline, 2rem);
   }
 }
 
@@ -363,46 +355,46 @@
    ============================================================================= */
 
 .dashboard-layout {
-  --scrolly-sidebar-width: 280px;
-  --scrolly-sidebar-collapsed-width: 48px;
-  --scrolly-sidebar-transition: 300ms ease;
-  --scrolly-sidebar-bg: #ebe6e1;
-  --scrolly-z-overlay: 1000;
+  --vcsi-sidebar-width: 280px;
+  --vcsi-sidebar-collapsed-width: 48px;
+  --vcsi-sidebar-transition: var(--vcsi-transition-slow);
+  --vcsi-sidebar-bg: #ebe6e1;
+  --vcsi-z-overlay: 1000;
 
   display: grid;
-  grid-template-columns: var(--scrolly-sidebar-width) 1fr;
+  grid-template-columns: var(--vcsi-sidebar-width) 1fr;
   height: 100vh;
   width: 100%;
-  transition: grid-template-columns var(--scrolly-sidebar-transition);
+  transition: grid-template-columns var(--vcsi-sidebar-transition);
 }
 
 .dashboard-layout.sidebar-collapsed {
-  grid-template-columns: var(--scrolly-sidebar-collapsed-width) 1fr;
+  grid-template-columns: var(--vcsi-sidebar-collapsed-width) 1fr;
 }
 
 .dashboard-sidebar {
   position: relative;
-  background: var(--scrolly-sidebar-bg);
-  border-right: 1px solid var(--scrolly-border);
+  background: var(--vcsi-sidebar-bg);
+  border-right: 1px solid var(--vcsi-border);
   overflow: hidden;
-  transition: width var(--scrolly-sidebar-transition);
+  transition: width var(--vcsi-sidebar-transition);
 }
 
 .dashboard-layout .sidebar-toggle {
   position: absolute;
-  top: 1rem;
-  left: calc(var(--scrolly-sidebar-width) - 32px - 1rem);
+  top: var(--vcsi-space-md);
+  left: calc(var(--vcsi-sidebar-width) - 32px - var(--vcsi-space-md));
   width: 32px;
   height: 32px;
   padding: 0;
-  border: 1px solid var(--scrolly-border);
+  border: 1px solid var(--vcsi-border);
   border-radius: 4px;
-  background: var(--scrolly-color-white, #fff);
+  background: var(--vcsi-color-white, #fff);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: left var(--scrolly-sidebar-transition), transform var(--scrolly-sidebar-transition);
+  transition: left var(--vcsi-sidebar-transition), transform var(--vcsi-sidebar-transition);
   z-index: 10;
 }
 
@@ -412,9 +404,9 @@
 }
 
 .dashboard-sidebar .sidebar-content {
-  padding: 4rem 1.5rem 1.5rem;
+  padding: 4rem var(--vcsi-space-lg) var(--vcsi-space-lg);
   opacity: 1;
-  transition: opacity calc(var(--scrolly-sidebar-transition) / 2);
+  transition: opacity calc(var(--vcsi-sidebar-transition) / 2);
 }
 
 .dashboard-layout.sidebar-collapsed .sidebar-content {
@@ -425,7 +417,7 @@
 .dashboard-main {
   position: relative;
   overflow: hidden;
-  padding: 1.5rem;
+  padding: var(--vcsi-space-lg);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -433,59 +425,59 @@
 
 /* Dashboard sidebar form elements */
 .dashboard-sidebar h3 {
-  font-family: var(--scrolly-sans, system-ui, sans-serif);
-  font-size: var(--scrolly-font-size-small, 14px);
+  font-family: var(--vcsi-font-sans, system-ui, sans-serif);
+  font-size: var(--vcsi-font-size-small, 14px);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin: 0 0 1.5rem;
-  color: var(--scrolly-gray-700, rgb(78, 78, 78));
+  margin: 0 0 var(--vcsi-space-lg);
+  color: var(--vcsi-gray-700, rgb(78, 78, 78));
 }
 
 .dashboard-sidebar label {
   display: block;
-  font-family: var(--scrolly-sans, system-ui, sans-serif);
-  font-size: var(--scrolly-font-size-sm, 12px);
+  font-family: var(--vcsi-font-sans, system-ui, sans-serif);
+  font-size: var(--vcsi-font-size-xs, 12px);
   font-weight: 500;
-  margin-bottom: 0.5rem;
-  color: var(--scrolly-gray-700, rgb(78, 78, 78));
+  margin-bottom: var(--vcsi-space-sm);
+  color: var(--vcsi-gray-700, rgb(78, 78, 78));
 }
 
 .dashboard-sidebar select {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  font-family: var(--scrolly-sans, system-ui, sans-serif);
-  font-size: var(--scrolly-font-size-small, 14px);
-  border: 1px solid var(--scrolly-border);
+  padding: var(--vcsi-space-sm) 0.75rem;
+  font-family: var(--vcsi-font-sans, system-ui, sans-serif);
+  font-size: var(--vcsi-font-size-small, 14px);
+  border: 1px solid var(--vcsi-border);
   border-radius: 4px;
-  background: var(--scrolly-color-white, #fff);
-  margin-bottom: 1.5rem;
+  background: var(--vcsi-color-white, #fff);
+  margin-bottom: var(--vcsi-space-lg);
 }
 
 .dashboard-sidebar fieldset {
   border: none;
   padding: 0;
-  margin: 0 0 1.5rem;
+  margin: 0 0 var(--vcsi-space-lg);
 }
 
 .dashboard-sidebar legend {
-  font-family: var(--scrolly-sans, system-ui, sans-serif);
-  font-size: var(--scrolly-font-size-sm, 12px);
+  font-family: var(--vcsi-font-sans, system-ui, sans-serif);
+  font-size: var(--vcsi-font-size-xs, 12px);
   font-weight: 500;
   margin-bottom: 0.75rem;
-  color: var(--scrolly-gray-700, rgb(78, 78, 78));
+  color: var(--vcsi-gray-700, rgb(78, 78, 78));
 }
 
 .dashboard-sidebar .checkbox-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--vcsi-space-sm);
 }
 
 .dashboard-sidebar .checkbox-group label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--vcsi-space-sm);
   font-weight: 400;
   margin-bottom: 0;
   cursor: pointer;
@@ -494,7 +486,7 @@
 .dashboard-sidebar .checkbox-group input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: var(--scrolly-color-accent, #154734);
+  accent-color: var(--vcsi-color-accent, #154734);
 }
 
 /* Dashboard mobile: slide-down drawer from top */
@@ -512,11 +504,11 @@
     width: 100%;
     max-height: 95vh;
     height: auto;
-    z-index: var(--scrolly-z-overlay);
+    z-index: var(--vcsi-z-overlay);
     transform: translateY(-100%);
-    transition: transform var(--scrolly-sidebar-transition);
+    transition: transform var(--vcsi-sidebar-transition);
     border-right: none;
-    border-bottom: 1px solid var(--scrolly-border);
+    border-bottom: 1px solid var(--vcsi-border);
     overflow-y: auto;
   }
 
@@ -527,21 +519,21 @@
   .dashboard-sidebar .sidebar-content {
     opacity: 1;
     pointer-events: auto;
-    padding: 1rem 1.5rem 1.5rem;
+    padding: var(--vcsi-space-md) var(--vcsi-space-lg) var(--vcsi-space-lg);
   }
 
   .dashboard-layout .sidebar-toggle {
     position: fixed;
-    top: 1rem;
-    right: 1rem;
+    top: var(--vcsi-space-md);
+    right: var(--vcsi-space-md);
     left: auto;
     width: 2.5rem;
     height: 2.5rem;
     border: none;
-    border-radius: 0.5rem;
+    border-radius: var(--vcsi-radius-md);
     background: transparent;
-    color: var(--scrolly-gray-900, rgb(38, 38, 38));
-    z-index: calc(var(--scrolly-z-overlay) + 1);
+    color: var(--vcsi-gray-900, rgb(38, 38, 38));
+    z-index: calc(var(--vcsi-z-overlay) + 1);
     transform: none;
   }
 
@@ -550,8 +542,8 @@
   }
 
   .dashboard-layout.sidebar-open .sidebar-toggle {
-    top: 1rem;
-    right: 1rem;
+    top: var(--vcsi-space-md);
+    right: var(--vcsi-space-md);
     left: auto;
     transform: none;
   }
@@ -567,7 +559,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: calc(var(--scrolly-z-overlay) - 1);
+    z-index: calc(var(--vcsi-z-overlay) - 1);
   }
 
   .dashboard-layout.sidebar-open .dashboard-backdrop {
@@ -578,5 +570,33 @@
 @media (min-width: 769px) {
   .dashboard-backdrop {
     display: none;
+  }
+}
+
+
+/* =============================================================================
+   LAYOUT: PAGE
+   Centered container for app pages (Home, About, etc).
+   Provides consistent max-width and padding for non-story content.
+
+   Usage:
+     <article class="page">
+       <h1>Page Title</h1>
+       <p>Content...</p>
+     </article>
+   ============================================================================= */
+
+.page {
+  width: 100%;
+  max-width: var(--vcsi-page-max-width, 1200px);
+  margin-inline: auto;
+  padding-inline: var(--vcsi-page-inline-padding, 5%);
+  padding-top: 5.5rem;
+  padding-bottom: 7.5rem;
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding-bottom: var(--vcsi-space-2xl, 3rem);
   }
 }

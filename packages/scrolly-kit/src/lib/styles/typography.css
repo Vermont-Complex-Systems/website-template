@@ -1,25 +1,57 @@
 /* Typography styles for scrollytelling */
 
 body {
-  font-family: var(--scrolly-serif, Georgia, serif);
-  font-size: var(--scrolly-font-size-base, 1rem);
-  background: var(--scrolly-bg);
-  color: var(--scrolly-fg);
+  font-family: var(--vcsi-font-serif, Georgia, serif);
+  font-size: var(--vcsi-font-text, 1.125rem);
+  line-height: var(--vcsi-line-height-relaxed, 1.6);
+  background: var(--vcsi-bg);
+  color: var(--vcsi-fg);
 }
 
-h1, h2, h3, h4 {
-  font-family: var(--scrolly-serif, Georgia, serif);
-  font-weight: 700;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--vcsi-font-heading, var(--vcsi-font-serif, Georgia, serif));
+  font-weight: var(--vcsi-font-weight-bold, 700);
 }
 
-h1 { font-size: var(--scrolly-font-size-xl); margin: 2.5rem 0 1rem; }
-h2 { font-size: var(--scrolly-font-size-lg); margin: 2.5rem 0 1rem; }
-h3 { font-size: var(--scrolly-font-size-md); margin: 2rem 0 0.75rem; }
-h4 { font-size: var(--scrolly-font-size-base); margin: 1.5rem 0 0.5rem; }
+h1 {
+  font-size: var(--vcsi-font-h1);
+  line-height: var(--vcsi-line-height-tight, 1.17);
+  margin: 2.5rem 0 1rem;
+}
+
+h2 {
+  font-size: var(--vcsi-font-h2);
+  line-height: var(--vcsi-line-height-tight, 1.17);
+  margin: 2.5rem 0 1rem;
+}
+
+h3 {
+  font-size: var(--vcsi-font-h3);
+  line-height: var(--vcsi-line-height-snug, 1.33);
+  margin: 2rem 0 0.75rem;
+}
+
+h4 {
+  font-size: var(--vcsi-font-h4);
+  line-height: var(--vcsi-line-height-snug, 1.33);
+  margin: 1.5rem 0 0.5rem;
+}
+
+h5 {
+  font-size: var(--vcsi-font-h5);
+  line-height: var(--vcsi-line-height-normal, 1.5);
+  margin: 1.25rem 0 0.5rem;
+}
+
+h6 {
+  font-size: var(--vcsi-font-h6);
+  line-height: var(--vcsi-line-height-normal, 1.5);
+  margin: 1rem 0 0.5rem;
+}
 
 p {
-  font-size: var(--scrolly-font-size-base);
-  line-height: 1.6;
+  font-size: var(--vcsi-font-text, 1.125rem);
+  line-height: var(--vcsi-line-height-relaxed, 1.6);
   margin-bottom: 1rem;
 }
 
@@ -27,11 +59,11 @@ p {
 pre {
   background: light-dark(#f6f8fa, #161b22);
   border: 1px solid light-dark(#d1d9e0, #30363d);
-  border-radius: 6px;
-  padding: 1rem;
-  margin: 1.5rem 0;
+  border-radius: var(--vcsi-radius-md);
+  padding: var(--vcsi-space-md);
+  margin: var(--vcsi-space-lg) 0;
   overflow-x: auto;
-  font-family: var(--scrolly-mono, monospace);
+  font-family: var(--vcsi-font-mono, monospace);
   font-size: 0.85em;
   line-height: 1.45;
 }
@@ -45,17 +77,17 @@ pre code {
 
 /* Inline code */
 :where(p, li) code {
-  font-family: var(--scrolly-mono, monospace);
+  font-family: var(--vcsi-font-mono, monospace);
   font-size: 0.8em;
   background: light-dark(rgb(235, 235, 235), rgb(55, 55, 55));
   padding: 0.125rem 0.35rem;
-  border-radius: 3px;
+  border-radius: var(--vcsi-radius-sm);
 }
 
 /* Blockquotes */
 blockquote {
-  margin: 2rem 0;
-  padding: 0 0 0 1.5rem;
+  margin: var(--vcsi-space-xl) 0;
+  padding: 0 0 0 var(--vcsi-space-lg);
   font-size: 1.1em;
   line-height: 1.5;
   color: light-dark(#2c5aa0, #4a90e2);
@@ -66,12 +98,12 @@ blockquote p { margin: 0; }
 
 /* Links */
 a {
-  color: var(--color-link, var(--scrolly-fg));
+  color: var(--vcsi-link, var(--vcsi-fg));
   cursor: pointer;
 }
 
 a:hover {
-  color: var(--scrolly-color-accent, #154734);
+  color: var(--vcsi-color-accent, #154734);
 }
 
 /* Interactive elements */
@@ -83,10 +115,10 @@ button, [role="button"], summary {
 pre code .code-line {
   display: inline-block;
   min-width: 100%;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  margin-left: -1rem;
-  margin-right: -1rem;
+  padding-left: var(--vcsi-space-md);
+  padding-right: var(--vcsi-space-md);
+  margin-left: calc(-1 * var(--vcsi-space-md));
+  margin-right: calc(-1 * var(--vcsi-space-md));
   border-left: 3px solid transparent;
 }
 
@@ -94,7 +126,7 @@ pre code .numbered-code-line::before {
   content: attr(data-line-number);
   display: inline-block;
   width: 2rem;
-  margin-right: 1rem;
+  margin-right: var(--vcsi-space-md);
   text-align: right;
   color: #6e7781;
   user-select: none;

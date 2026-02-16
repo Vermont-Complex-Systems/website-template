@@ -1,8 +1,7 @@
 <script>
 import BackgroundPlot from './BackgroundPlot.svelte';
-import { ScrollIndicator, RenderTextContent, ScrollyContent, StoryHeader } from '@the-vcsi/scrolly-kit';
+import { ScrollIndicator, RenderTextContent, ScrollyContent, StoryHeader, Footer } from '@the-vcsi/scrolly-kit';
 import BackToHome from '$lib/components/helpers/BackToHome.svelte';
-import Footer from '$lib/components/Footer.svelte';
 
 let { story, data } = $props();
 let scrollyIndex = $state(undefined);

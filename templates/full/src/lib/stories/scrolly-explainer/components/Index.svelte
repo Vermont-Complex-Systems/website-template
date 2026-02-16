@@ -1,9 +1,7 @@
 <script>
-    import { ScrollyContent, CodeExplainer, MarkdownRenderer as Md, renderCodeHtml } from '@the-vcsi/scrolly-kit';
+    import { ScrollyContent, CodeExplainer, MarkdownRenderer as Md, renderCodeHtml, Footer } from '@the-vcsi/scrolly-kit';
     import ToggleLayout from './ToggleLayout.svelte';
     import SimpleChart from './simpleChart.svelte';
-
-    import Footer from '$lib/components/Footer.svelte';
     import BackToHome from '$lib/components/helpers/BackToHome.svelte';
     
     let { story, data } = $props();

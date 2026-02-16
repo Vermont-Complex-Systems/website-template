@@ -20,20 +20,20 @@
 <style>
   .tooltip {
     position: fixed;
-    background: var(--color-bg);
-    color: var(--color-fg);
-    border: 1px solid var(--color-border);
-    padding: 0.75rem 1rem; /* More generous padding */
-    border-radius: var(--border-radius);
-    font-size: var(--font-size-xsmall);
-    font-family: var(--sans);
+    background: var(--vcsi-bg);
+    color: var(--vcsi-fg);
+    border: 1px solid var(--vcsi-border);
+    padding: 0.75rem 1rem;
+    border-radius: var(--vcsi-radius-sm);
+    font-size: var(--vcsi-font-size-xs);
+    font-family: var(--vcsi-font-sans);
     white-space: pre-line;
     line-height: 1.4;
     pointer-events: none;
     z-index: 1000;
     max-width: 300px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: opacity var(--transition-fast);
+    transition: opacity var(--vcsi-transition-fast);
   }
 
   :global(.dark) .tooltip {

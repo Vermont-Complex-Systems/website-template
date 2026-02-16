@@ -14,22 +14,22 @@
     align-items: center;
     justify-content: center;
     min-height: 300px;
-    gap: 1rem;
+    gap: var(--vcsi-space-md);
   }
 
   .spinner {
     width: 40px;
     height: 40px;
     border: 3px solid #f3f3f3;
-    border-top: 3px solid var(--color-primary, #007acc);
+    border-top: 3px solid var(--vcsi-color-accent, #007acc);
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
 
   .loading-text {
-    font-family: var(--serif);
+    font-family: var(--vcsi-font-serif);
     font-size: 1.1rem;
-    color: var(--color-gray-600);
+    color: var(--vcsi-gray-600);
   }
 
   @keyframes spin {

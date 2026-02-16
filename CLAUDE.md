@@ -65,7 +65,7 @@ The "engine" - provides CSS and components that templates import.
 packages/scrolly-kit/src/lib/
 ├── styles/
 │   ├── reset.css        # CSS reset
-│   ├── tokens.css       # Design tokens (--scrolly-* variables)
+│   ├── tokens.css       # Design tokens (--vcsi-* variables)
 │   ├── typography.css   # Base typography
 │   ├── layouts.css      # Story layouts (.story, .split-layout, etc.)
 │   └── all.css          # Combined import
@@ -88,13 +88,13 @@ Templates customize the package defaults for their brand:
 ```css
 /* templates/full/src/styles/app.css */
 :root {
-  /* Override package tokens */
-  --scrolly-color-accent: #154734;  /* UVM Green */
-  --scrolly-sans: "Atlas Grotesk", system-ui;
+  /* Override VCSI tokens */
+  --vcsi-color-accent: #154734;  /* UVM Green */
+  --vcsi-font-sans: "Atlas Grotesk", system-ui;
 
   /* Template-specific variables */
-  --color-uvm-green: #154734;
-  --nav-height: 4.5rem;
+  --vcsi-color-uvm-green: #154734;
+  --vcsi-nav-height: 4.5rem;
 }
 ```
 
@@ -193,7 +193,7 @@ Floating home button for stories. Positioned top-left, stays visible during scro
 ### Package vs Template CSS
 
 **Package (@the-vcsi/scrolly-kit)** provides the engine:
-- `tokens.css` - Design tokens (`--scrolly-*` variables + convenience aliases)
+- `tokens.css` - Design tokens (`--vcsi-*` variables)
 - `typography.css` - Base typography, links, code blocks
 - `layouts.css` - Story layouts (`.story`, `.split-layout`, `.fullscreen-layout`)
 - `reset.css` - CSS reset
@@ -207,20 +207,20 @@ src/styles/
 
 ### Customizing Tokens
 
-Override `--scrolly-*` variables in your template's `app.css`:
+Override `--vcsi-*` variables in your template's `app.css`:
 
 ```css
 :root {
   /* Brand colors */
-  --scrolly-color-accent: #154734;
+  --vcsi-color-accent: #154734;
 
   /* Custom fonts */
-  --scrolly-sans: "Atlas Grotesk", system-ui;
-  --scrolly-serif: "Baskerville", Georgia;
+  --vcsi-font-sans: "Atlas Grotesk", system-ui;
+  --vcsi-font-serif: "Baskerville", Georgia;
 }
 ```
 
-The package provides convenience aliases (`--color-fg`, `--sans`, etc.) that map to `--scrolly-*` tokens.
+The token architecture follows GCDS patterns with semantic naming: `--vcsi-[category]-[property]`.
 
 ### Key Principles
 

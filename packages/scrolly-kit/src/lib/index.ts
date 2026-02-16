@@ -13,6 +13,9 @@ export { default as CodeExplainer } from './components/CodeExplainer.svelte';
 export { default as Spinner } from './components/Spinner.svelte';
 export { default as Meta } from './components/Meta.svelte';
 export { default as StoryHeader } from './components/StoryHeader.svelte';
+export { default as Nav } from './components/Nav.svelte';
+export { default as NavMenu } from './components/NavMenu.svelte';
+export { default as Footer } from './components/Footer.svelte';
 
 // Content rendering
 export { default as RenderTextContent } from './components/RenderTextContent.svelte';
@@ -40,4 +43,7 @@ export type {
   CodeStep,
   CodeExplainerData,
   CodeExplainerProps,
+  NavProps,
+  NavMenuProps,
+  FooterProps,
 } from './types';
