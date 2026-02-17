@@ -7,7 +7,7 @@
   <title>Components - scrolly-kit</title>
 </svelte:head>
 
-<div class="components-page" data-palette="yellow-red">
+<div class="components-page">
   <header class="page-header">
     <h1>Components</h1>
     <p>Reusable Svelte components for scrollytelling and data-driven stories.</p>
@@ -43,6 +43,7 @@
 
   .page-header h1 {
     margin: 0 0 0.5rem;
+    color: var(--matisse-blue);
   }
 
   .page-header p {
@@ -59,6 +60,7 @@
   .category h2 {
     margin: 0 0 0.25rem;
     font-size: 1.5rem;
+    color: var(--matisse-orange);
   }
 
   .category-desc {
@@ -85,7 +87,7 @@
   }
 
   .component-card:hover {
-    border-color: var(--matisse-accent);
+    border-color: #6b7280;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transform: translateY(-2px);
   }
@@ -94,7 +96,7 @@
     margin: 0 0 0.5rem;
     font-size: 1rem;
     font-family: var(--vcsi-font-mono);
-    color: var(--matisse-accent);
+    color: #6b7280;
   }
 
   .component-card p {
@@ -116,6 +118,14 @@
   }
 
   /* Dark mode */
+  :global(.dark) .page-header h1 {
+    color: oklch(70% 0.14 255);
+  }
+
+  :global(.dark) .category h2 {
+    color: oklch(75% 0.14 55);
+  }
+
   :global(.dark) .page-header p,
   :global(.dark) .category-desc {
     color: var(--vcsi-gray-400);
@@ -126,12 +136,12 @@
   }
 
   :global(.dark) .component-card:hover {
-    border-color: var(--matisse-accent);
+    border-color: #60a5fa;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   :global(.dark) .component-card h3 {
-    color: color-mix(in oklch, var(--matisse-accent) 100%, white 20%);
+    color: #60a5fa;
   }
 
   :global(.dark) .component-card p {
