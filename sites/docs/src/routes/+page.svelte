@@ -9,7 +9,7 @@
 
 <article class="page">
   <header class="hero">
-    <h1 class="tagline">Minimal CSS Framework<br />for visual data essays</h1>
+    <h1 class="tagline">Minimal CSS Framework<br />for data-driven stories</h1>
     <p class="subheader">Built for scientists in a hurry who want to tell data stories without learning full web development. <a href="https://www.npmjs.com/package/@the-vcsi/scrolly-kit">@the-vcsi/scrolly-kit</a> provides the engine—CSS tokens and reusable components—while templates give you a ready-to-customize website. Extend with <code>sv</code> add-ons for integrations like SharePoint or <a href="https://openalex.org/">OpenAlex</a>.</p>
   </header>
 
@@ -19,9 +19,7 @@
   <CopyCodeBlock command={`npx degit Vermont-Complex-Systems/vcsi-starter/templates/baked my-project
 cd my-project
 npm install`} />
-  <p>At the moment, we have a single static-site generator template, or the <code>baked</code> template. It is baked because the website content is baked-in when building, or pre-rendered. We are planning to provide a second template soon enough, the <code>fresh</code> template, where we showcase how dynamic websites can be used to augment visual data essays with backend capabilities.</p>
-  
-  <p class="tip"><strong>Tip:</strong> <a href="https://github.com/Rich-Harris/degit" target="_blank" rel="noopener">degit</a> copies a Git repo without its history—like cloning, but faster and cleaner. Requires <a href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js</a>.</p>
+  <p class="tip"><strong>Tip:</strong> <a href="https://github.com/Rich-Harris/degit" target="_blank" rel="noopener">degit</a> copies a Git repo without its history—like cloning, but faster and cleaner. Requires <a href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js</a>. Also note we have a single static-site generator template at the moment, or the <code>baked</code> template. It is <code>baked</code> in that the content is baked-in when building, or pre-rendered. We are planning to provide a second template soon enough, the <code>fresh</code> template, where we showcase how dynamic websites can be used to augment visual data-driven stories with backend capabilities.</p>
 
   <h3>2. Start the dev server</h3>
   <CopyCodeBlock command={`npm run dev`} />

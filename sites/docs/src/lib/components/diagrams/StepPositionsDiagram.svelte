@@ -56,10 +56,6 @@ Shows:
     align-items: flex-start;
   }
 
-  .diagram-position.right {
-    align-items: flex-end;
-  }
-
   .diagram-step-mini {
     background: white;
     border: 1px solid var(--vcsi-border);
