@@ -22,7 +22,7 @@
         command="npx degit Vermont-Complex-Systems/vcsi-starter/templates/fresh example"
         label="Dynamic template"
         />
-        <span class="github-row">For installation details, features, and more visit <a href="https://github.com/Vermont-Complex-Systems/website-template" target="_blank" rel="noopener noreferrer" class="github-link">GitHub <ArrowRight size={16} /></a></span>
+        <span class="github-row">For installation details, features, and more visit <a href="https://github.com/Vermont-Complex-Systems/vcsi-starter/tree/main/templates/baked" target="_blank" rel="noopener noreferrer" class="github-link">GitHub <ArrowRight size={16} /></a></span>
       </div>
     </div>
     <DotsToImage imgFilePath='/octopus-swim-right.png' />

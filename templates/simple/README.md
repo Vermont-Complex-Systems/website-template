@@ -1,11 +1,10 @@
 # VCSI custom research website template
 
 ```bash
-npx degit Vermont-Complex-Systems/vcsi-starter/templates/baked example
+npx degit Vermont-Complex-Systems/vcsi-starter/templates/simple example
 cd example
 ```
 
-You can see this template live at [vcsi.cmplxsys.w3.uvm.edu](https://vcsi.cmplxsys.w3.uvm.edu/).
 
 ## Project Structure
 
