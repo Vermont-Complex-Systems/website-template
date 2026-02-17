@@ -108,15 +108,6 @@ npm install`} />
     }
   }
 
-  h2 {
-    margin-top: 3rem;
-  }
-
-  h3 {
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-
   pre {
     margin: 1rem 0;
   }
