@@ -16,6 +16,7 @@
 
 <!-- Stories Section -->
 <section class="stories page">
+  <h2>Stories</h2>
   {#await getStories()}
     <div class="loading">Loading stories...</div>
   {:then stories}
@@ -27,7 +28,9 @@
 <style>
 /* ---------------- Hero Section ---------------- */
 
-
+.stories h2 {
+  margin-bottom: 2rem;
+}
 
 /*
 Centering vertically the hero
@@ -36,12 +39,9 @@ Uses padding-top: var(--vcsi-nav-height) to create space for the fixed nav
 Uses padding-bottom: 0 to make the centering symmetric
 */
 .hero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   min-height: 100dvh;
-  padding-top: var(--vcsi-nav-height);
-  padding-bottom: 0;
   box-sizing: border-box;
 }
 
@@ -49,7 +49,6 @@ Uses padding-bottom: 0 to make the centering symmetric
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--vcsi-space-2xl);
   width: 100%;
   max-width: var(--vcsi-page-max-width);
 }
@@ -111,9 +110,6 @@ Uses padding-bottom: 0 to make the centering symmetric
 }
 
 /* ---------------- Stories Section ---------------- */
-.stories {
-  padding: 4rem var(--vcsi-page-inline-padding);
-}
 
 .loading {
   text-align: center;

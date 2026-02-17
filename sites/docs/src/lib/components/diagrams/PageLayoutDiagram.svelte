@@ -3,7 +3,7 @@
 Diagram showing the page layout with Nav, .page content, and Footer alignment.
 
 Shows the body flex layout structure:
-- `body` is flex column with `min-height: 100dvh` and `gap`
+- `body` is flex column with `min-height: 100dvh`
 - `main` has `flex: 1` to fill available space
 - Nav, Footer, and .page share CSS variables for alignment
 
@@ -16,7 +16,7 @@ Shows the body flex layout structure:
   <!-- Body container label -->
   <div class="diagram-body-label">
     <code>body</code>
-    <span class="diagram-props">flex-direction: column; min-height: 100dvh; gap: 3rem</span>
+    <span class="diagram-props">flex-direction: column; min-height: 100dvh</span>
   </div>
 
   <div class="diagram-body-wrapper">
@@ -52,11 +52,6 @@ Shows the body flex layout structure:
           <span>5%</span>
         </div>
       </div>
-    </div>
-
-    <!-- Gap indicator -->
-    <div class="diagram-gap">
-      <span>gap: 3rem</span>
     </div>
 
     <!-- Footer -->
@@ -141,49 +136,6 @@ Shows the body flex layout structure:
 
   .diagram-main-label .diagram-props {
     color: rgba(255, 255, 255, 0.7);
-  }
-
-  /* Gap indicator */
-  .diagram-gap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem;
-    margin: 0 0.5rem;
-    border-left: 2px dashed var(--vcsi-gray-400);
-    border-right: 2px dashed var(--vcsi-gray-400);
-    position: relative;
-  }
-
-  .diagram-gap::before,
-  .diagram-gap::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    width: 0;
-    height: 0;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-    transform: translateX(-50%);
-  }
-
-  .diagram-gap::before {
-    top: 0;
-    border-top: 6px solid var(--vcsi-gray-400);
-  }
-
-  .diagram-gap::after {
-    bottom: 0;
-    border-bottom: 6px solid var(--vcsi-gray-400);
-  }
-
-  .diagram-gap span {
-    font-size: 0.65rem;
-    font-family: var(--vcsi-font-mono);
-    color: var(--vcsi-gray-500);
-    background: var(--vcsi-gray-50);
-    padding: 0.125rem 0.5rem;
-    border-radius: 3px;
   }
 
   .diagram-nav-bar {
@@ -294,18 +246,6 @@ Shows the body flex layout structure:
 
   :global(.dark) .diagram-body-wrapper {
     border-color: var(--vcsi-gray-600);
-  }
-
-  :global(.dark) .diagram-gap span {
-    background: var(--vcsi-gray-900);
-  }
-
-  :global(.dark) .diagram-gap::before {
-    border-top-color: var(--vcsi-gray-600);
-  }
-
-  :global(.dark) .diagram-gap::after {
-    border-bottom-color: var(--vcsi-gray-600);
   }
 
   :global(.dark) .diagram-nav-bar,

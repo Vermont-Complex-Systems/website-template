@@ -4,6 +4,28 @@
    ============================================================================= */
 
 /* =============================================================================
+   LAYOUT: PAGE
+   Centered container for app pages (Home, About, etc).
+   Provides consistent max-width and padding for non-story content.
+
+   Usage:
+     <article class="page">
+       <h1>Page Title</h1>
+       <p>Content...</p>
+     </article>
+   ============================================================================= */
+
+.page {
+  width: 100%;
+  max-width: var(--vcsi-page-max-width, 1200px);
+  margin-inline: auto;
+  padding-inline: var(--vcsi-page-inline-padding, 5%);
+  padding-top: 5.5rem;
+  padding-bottom: var(--vcsi-bottom-padding);
+}
+
+
+/* =============================================================================
    LIGHT STORY THEME (default)
    Stories default to light mode, independent of global dark mode toggle.
    Customize with: style="--vcsi-story-bg: #fff; --vcsi-story-fg: #333;"
@@ -46,7 +68,7 @@
   width: 100%;
   min-height: 71vh; /* accomodating the footer */
   padding-top: 5.5rem;
-  padding-bottom: var(--vcsi-space-xl);
+  padding-bottom: var(--vcsi-bottom-padding);
   background: var(--vcsi-story-bg);
   color: var(--vcsi-story-fg);
 }
@@ -615,23 +637,4 @@
 }
 
 
-/* =============================================================================
-   LAYOUT: PAGE
-   Centered container for app pages (Home, About, etc).
-   Provides consistent max-width and padding for non-story content.
 
-   Usage:
-     <article class="page">
-       <h1>Page Title</h1>
-       <p>Content...</p>
-     </article>
-   ============================================================================= */
-
-.page {
-  width: 100%;
-  max-width: var(--vcsi-page-max-width, 1200px);
-  margin-inline: auto;
-  padding-inline: var(--vcsi-page-inline-padding, 5%);
-  padding-top: 5.5rem;
-  padding-bottom: var(--vcsi-space-xl);
-}

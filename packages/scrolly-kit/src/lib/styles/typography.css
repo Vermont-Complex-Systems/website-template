@@ -7,11 +7,10 @@ body {
   background: var(--vcsi-bg);
   color: var(--vcsi-fg);
 
-  /* Layout: flex column for footer spacing */
+  /* Layout: flex column for footer positioning */
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
-  gap: var(--vcsi-space-2xl);
 }
 
 main {

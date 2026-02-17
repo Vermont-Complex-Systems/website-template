@@ -114,7 +114,7 @@ export const getStory = prerender(v.string(), async (slug) => {
 <style>
 .remote-functions {
   padding: 4rem var(--vcsi-page-inline-padding);
-  padding-bottom: 7.5rem; /* spacing before footer */
+  margin-bottom: var(--vcsi-bottom-padding, 7.5rem);
   background: rgba(0, 0, 0, 0.02);
   overflow-x: hidden;
 }

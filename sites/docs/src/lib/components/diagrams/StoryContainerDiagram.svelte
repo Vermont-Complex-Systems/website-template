@@ -33,7 +33,7 @@ Shows how:
       <p>More prose content...</p>
     </div>
     <div class="diagram-padding-bottom">
-      <span>padding-bottom: 2rem</span>
+      <span>--vcsi-bottom-padding (7.5rem)</span>
     </div>
   </div>
 </div>

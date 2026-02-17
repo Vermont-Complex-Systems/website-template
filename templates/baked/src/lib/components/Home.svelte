@@ -139,12 +139,10 @@ Uses padding-top: var(--vcsi-nav-height) to create space for the fixed nav
 Uses padding-bottom: 0 to make the centering symmetric
 */
 .hero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
   min-height: 100dvh;
-  padding-top: var(--vcsi-nav-height);
-  padding-bottom: 0;
+  padding-bottom: var(--vcsi-nav-height);
   box-sizing: border-box;
 }
 
