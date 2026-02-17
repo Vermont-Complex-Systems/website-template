@@ -11,7 +11,7 @@
 
 :root {
   --vcsi-bg-light: #fff;
-  --vcsi-page-max-width: 1000px;
+  --vcsi-page-max-width: 850px;
 }
 
 /* =============================================================================
@@ -31,17 +31,22 @@ main {
   flex: 1;
 }
 
-/* Simple nav for docs */
+/* Simple frosted nav for docs */
 .docs-nav {
   position: sticky;
   top: 0;
   z-index: 100;
   padding: 1rem 2rem;
   border-bottom: transparent;
-  background: color-mix(in srgb, var(--vcsi-bg) 80%, transparent);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px) saturate(1.5);
   -webkit-backdrop-filter: blur(12px);
 }
+
+.dark .docs-nav {
+  background: rgba(255, 255, 255, 0.0);
+}
+
 
 .docs-nav-inner {
   display: flex;
@@ -53,7 +58,6 @@ main {
 .docs-nav-brand {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
 }
 
 .docs-nav-logo {

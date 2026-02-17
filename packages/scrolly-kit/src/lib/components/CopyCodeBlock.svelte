@@ -1,3 +1,24 @@
+<!--
+@component
+Copyable code block with one-click clipboard support.
+
+Displays a command or code snippet with a copy button. Shows a checkmark
+when successfully copied, reverting after 2 seconds.
+
+## Props
+- `command` - The text to display and copy (required)
+- `label` - Optional label shown above the code block
+
+## Usage
+```svelte
+<CopyCodeBlock command="npm install @the-vcsi/scrolly-kit" />
+
+<CopyCodeBlock
+  command="npx degit Vermont-Complex-Systems/vcsi-starter my-project"
+  label="Scaffold a new project"
+/>
+```
+-->
 <script>
     let { command, label = '' } = $props();
     let copied = $state(false);
@@ -30,6 +51,7 @@
         display: flex;
         flex-direction: column;
         gap: var(--vcsi-space-xs);
+        margin-block: var(--vcsi-space-md, 1rem);
     }
 
     .code-label {
@@ -41,14 +63,15 @@
 
     .code-block {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: var(--vcsi-space-sm);
         background: rgba(0, 0, 0, 0.06);
         border-radius: var(--vcsi-radius-md);
         padding: 0.75rem 1rem;
         font-family: var(--vcsi-font-mono);
         font-size: 0.85rem;
-        max-width: fit-content;
+        max-width: 100%;
+        overflow-x: auto;
         transition: background-color var(--vcsi-transition-base);
     }
 
@@ -58,12 +81,15 @@
 
     .code-block code {
         color: var(--vcsi-fg);
+        white-space: pre;
+        background: transparent;
     }
 
     .copy-btn {
         display: flex;
         align-items: center;
         justify-content: center;
+        margin-left: auto;
         background: none;
         border: none;
         padding: var(--vcsi-space-xs);

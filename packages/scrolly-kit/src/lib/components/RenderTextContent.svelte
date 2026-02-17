@@ -1,3 +1,32 @@
+<!--
+@component
+Renders a single content item based on its type.
+
+Takes a `ContentItem` object and renders it as HTML, Markdown, math, or code
+with syntax highlighting. Used internally by ScrollyContent but can be used
+standalone for rendering structured content.
+
+## Props
+- `item` - A `ContentItem` object with `type` and `value` fields
+
+## Supported Types
+- `html` - Raw HTML (rendered with {@html})
+- `markdown` - Markdown text (rendered via MarkdownRenderer)
+- `math` - Math expressions in markdown (centered, uses KaTeX)
+- `code` - Code blocks with syntax highlighting and optional line numbers
+
+## Usage
+```svelte
+<RenderTextContent item={{ type: 'markdown', value: '## Hello' }} />
+
+<RenderTextContent item={{
+  type: 'code',
+  value: 'const x = 1;',
+  language: 'javascript',
+  highlightLines: '1'
+}} />
+```
+-->
 <script lang="ts">
     import Md from './MarkdownRenderer.svelte';
     import type { ContentItem } from './ScrollySnippets.svelte';

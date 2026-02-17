@@ -1,5 +1,6 @@
 <script>
   import { base } from '$app/paths';
+  import { CopyCodeBlock } from '@the-vcsi/scrolly-kit';
 </script>
 
 <svelte:head>
@@ -8,22 +9,23 @@
 
 <article class="page">
   <h1 class="tagline">Minimal CSS Framework<br />for visual data essays</h1>
-  <p class="subheader">Built for scientists in a hurry who want to tell data stories without learning full web development. Born from scrollytelling at the <a href="https://vermontcomplexsystems.org/" target="_blank" rel="noopener">Vermont Complex Systems Institute</a>, <a href="https://www.npmjs.com/package/@the-vcsi/scrolly-kit">@the-vcsi/scrolly-kit</a> provides the engine—CSS tokens and reusable components—while templates give you a ready-to-customize website. Extend with <code>sv</code> add-ons for integrations like SharePoint or <a href="https://openalex.org/">OpenAlex</a>.</p>
+  <p class="subheader">Built for scientists in a hurry who want to tell data stories without learning full web development. <a href="https://www.npmjs.com/package/@the-vcsi/scrolly-kit">@the-vcsi/scrolly-kit</a> provides the engine—CSS tokens and reusable components—while templates give you a ready-to-customize website. Extend with <code>sv</code> add-ons for integrations like SharePoint or <a href="https://openalex.org/">OpenAlex</a>.</p>
 
   <h2>Quick Start</h2>
 
   <h3>1. Scaffold a new project</h3>
-  <pre class="docs-code">npx degit Vermont-Complex-Systems/vcsi-starter/templates/baked my-project
+  <CopyCodeBlock command={`npx degit Vermont-Complex-Systems/vcsi-starter/templates/baked my-project
 cd my-project
-npm install</pre>
+npm install`} />
 
+  
   <p class="tip"><strong>Tip:</strong> <a href="https://github.com/Rich-Harris/degit" target="_blank" rel="noopener">degit</a> copies a Git repo without its history—like cloning, but faster and cleaner. Requires <a href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js</a>.</p>
 
   <h3>2. Start the dev server</h3>
-  <pre class="docs-code">npm run dev</pre>
+  <CopyCodeBlock command={`npm run dev`} />
 
   <h3>3. Create a new story</h3>
-  <pre class="docs-code">npm run new-story my-story-name</pre>
+  <CopyCodeBlock command={`npm run new-story my-story-name`} />
 
   <p>This creates a story scaffold at <code>src/lib/stories/my-story-name/</code> with:</p>
   <ul>
@@ -32,10 +34,11 @@ npm install</pre>
   </ul>
 
   <h3>4. Add optional integrations (optional)</h3>
-  <pre class="docs-code">npx sv add @the-vcsi/msgraph</pre>
+  
+  <CopyCodeBlock command={`npx sv add @the-vcsi/msgraph`} />
   <p class="tip"><strong>msgraph:</strong> Sync your <code>copy.json</code> story content from an Excel sheet on SharePoint—great for collaborative editing with non-technical teammates.</p>
 
-  <pre class="docs-code">npx sv add @the-vcsi/openalex</pre>
+  <CopyCodeBlock command={`npx sv add @the-vcsi/openalex`} />
   <p class="tip"><strong>openalex:</strong> Provide a list of researcher identifiers and build a local database with metadata about their papers and co-authors from <a href="https://openalex.org/" target="_blank" rel="noopener">OpenAlex</a>.</p>
 
   <h2>Project Structure</h2>

@@ -1,6 +1,8 @@
 <script>
   import TableOfContents from '$lib/components/TableOfContents.svelte';
   import ShowcaseGrid from '$lib/components/ShowcaseGrid.svelte';
+  import { CopyCodeBlock } from '@the-vcsi/scrolly-kit';
+
 
   const fullscreenExamples = [
     {
@@ -205,15 +207,14 @@
         </div>
       </div>
 
-      <pre class="docs-code">{`<section class="split-layout" style="
+      <CopyCodeBlock command={`.split-layout {
   --vcsi-panel-width: 60%;
   --vcsi-panel-min-width: 400px;
-">
-  <div class="sticky-panel" style="max-width: 700px;">
-    <!-- Larger proportion, but won't exceed 700px -->
-  </div>
-  <div class="scrolly-content">...</div>
-</section>`}</pre>
+}
+
+.sticky-panel {
+  max-width: 700px;
+}`} />
       <p>The grid uses <code>minmax(min-width, width)</code>, so the panel scales between the min and percentage values. Adding <code>max-width</code> on <code>.sticky-panel</code> caps the absolute size on wide screens.</p>
     </section>
 
@@ -279,24 +280,15 @@
             <div class="diagram-step-mini">Step</div>
             <span class="diagram-position-label">Center (default)</span>
           </div>
-          <div class="diagram-position right">
-            <div class="diagram-step-mini">Step</div>
-            <span class="diagram-position-label">Right</span>
-          </div>
         </div>
       </div>
 
-      <pre class="docs-code">{`/* Left-aligned steps */
+      <CopyCodeBlock label="Repositioning step boxes (CSS)" command={`/* Left-aligned steps */
 .fullscreen-layout .scrolly-content {
   margin-left: 2rem;
   margin-right: auto;
 }
-
-/* Right-aligned steps */
-.fullscreen-layout .scrolly-content {
-  margin-left: auto;
-  margin-right: 2rem;
-}`}</pre>
+`} />
       <p>The <code>margin-left: auto</code> / <code>margin-right: auto</code> pattern pushes the content to the opposite side. Add a fixed margin on the aligned side for padding from the edge.</p>
 
       <h3>Examples in the Wild</h3>
@@ -393,21 +385,17 @@
       <p><strong><code>--story-step-*</code></strong> variables control colors and are typically set globally in <code>app.css</code> for consistent theming across your story. <strong><code>--step-*</code></strong> variables control layout and can be set per-section for local customization.</p>
 
       <h3>Example Override</h3>
-      <pre class="docs-code">{`<section class="split-layout" style="
+      <CopyCodeBlock label="Custom step colors" command={`.split-layout {
   --story-step-bg: #154734;
   --story-step-fg: #fff;
-">
-  ...
-</section>`}</pre>
+}`} />
 
       <p>For a minimal look where only text floats over the visualization:</p>
-      <pre class="docs-code">{`<section class="split-layout" style="
+      <CopyCodeBlock label="Minimal floating text" command={`.split-layout {
   --story-step-bg: transparent;
   --story-step-bg-inactive: transparent;
   --step-box-shadow: none;
-">
-  ...
-</section>`}</pre>
+}`} />
     </section>
 
     <!-- CSS VARIABLES -->
