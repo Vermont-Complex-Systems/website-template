@@ -8,7 +8,8 @@
 
   interface Props {
     columns: Column[];
-    rows: Record<string, string>[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rows: any[];
   }
 
   let { columns, rows }: Props = $props();

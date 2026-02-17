@@ -27,7 +27,8 @@ TypeScript Discriminated Unions + destructing (required for "bindable") do not
 get along, so we shut typescript up by casting `value` to `never`, however,
 from the perspective of the consumer of this component, it will be typed appropriately.
 -->
-<Select.Root bind:value={value as never} {...restProps} class="simple-select">
+<div class="simple-select">
+<Select.Root bind:value={value as never} {...restProps}>
   <Select.Trigger>
     {selectedLabel ? selectedLabel : placeholder}
   </Select.Trigger>
@@ -48,6 +49,7 @@ from the perspective of the consumer of this component, it will be typed appropr
     </Select.Content>
   </Select.Portal>
 </Select.Root>
+</div>
 
 <style>
     :global(.simple-select) {

@@ -1,6 +1,7 @@
 <script>
   import { base } from '$app/paths';
   import { CopyCodeBlock } from '@the-vcsi/scrolly-kit';
+  import { ArrowRight } from '@lucide/svelte';
 </script>
 
 <svelte:head>
@@ -19,8 +20,8 @@
   <CopyCodeBlock command={`npx degit Vermont-Complex-Systems/vcsi-starter/templates/baked my-project
 cd my-project
 npm install`} />
-  <p class="tip"><strong>Tip:</strong> <a href="https://github.com/Rich-Harris/degit" target="_blank" rel="noopener">degit</a> copies a Git repo without its history—like cloning, but faster and cleaner. Requires <a href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js</a>. Also note we have a single static-site generator template at the moment, or the <code>baked</code> template. It is <code>baked</code> in that the content is baked-in when building, or pre-rendered. We are planning to provide a second template soon enough, the <code>fresh</code> template, where we showcase how dynamic websites can be used to augment visual data-driven stories with backend capabilities.</p>
-
+  <p class="tip"><strong>Tip:</strong> <a href="https://github.com/Rich-Harris/degit" target="_blank" rel="noopener">degit</a> copies a Git repo without its history—like cloning, but faster and cleaner. Requires <a href="https://nodejs.org/en/download" target="_blank" rel="noopener">Node.js</a>. Also note we have a single static-site generator template at the moment, or the <code>baked</code> template. It is <code>baked</code> in that the content is baked-in when building, or pre-rendered. We are planning to provide a second template soon enough, the <code>fresh</code> template, where we showcase how dynamic websites can be used to augment visual data-driven stories with backend capabilities.
+  <span class="github-row">For more on the baked template visit <a href="https://github.com/Vermont-Complex-Systems/vcsi-starter/tree/main/templates/baked" target="_blank" rel="noopener noreferrer" class="github-link">GitHub <ArrowRight size={16} /></a></span></p>
   <h3>2. Start the dev server</h3>
   <CopyCodeBlock command={`npm run dev`} />
 
@@ -150,6 +151,26 @@ npm install`} />
     font-size: 1.1rem;
     opacity: 0.75;
     margin-bottom: 2rem;
+  }
+
+
+  .github-row {
+    display: inline-flex;
+  }
+
+  .github-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--vcsi-space-xs);
+    font-weight: 500;
+    color: var(--vcsi-fg);
+    text-decoration: none;
+    margin-left: var(--vcsi-space-xs);
+    transition: gap var(--vcsi-transition-base);
+  }
+
+  .github-link:hover {
+    gap: var(--vcsi-space-sm);
   }
 
   @media (max-width: 600px) {

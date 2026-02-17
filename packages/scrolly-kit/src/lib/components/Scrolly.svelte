@@ -16,23 +16,34 @@ Used internally by ScrollyContent, but can be used directly for custom layouts.
 Wrap step elements and bind to track active index:
 `<Scrolly bind:value={index}>...steps...</Scrolly>`
 -->
-<script>
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+
+	interface Props {
+		root?: Element | null;
+		top?: number;
+		bottom?: number;
+		increments?: number;
+		value?: number;
+		children?: Snippet;
+	}
+
 	let {
 		root = null,
 		top = 0,
 		bottom = 0,
 		increments = 100,
-		value = $bindable(undefined),
+		value = $bindable<number | undefined>(undefined),
 		children
-	} = $props();
+	}: Props = $props();
 
-	let steps = [];
-	let threshold = [];
-	let nodes = [];
-	let intersectionObservers = [];
-	let container = $state(undefined);
+	let steps: number[] = [];
+	let threshold: number[] = [];
+	let nodes: NodeListOf<Element> | Element[] = [];
+	let intersectionObservers: IntersectionObserver[] = [];
+	let container: HTMLDivElement | undefined = $state(undefined);
 
-	function mostInView () {
+	function mostInView(): void {
 		let maxRatio = 0;
 		let maxIndex = 0;
 		for (let i = 0; i < steps.length; i++) {
@@ -44,11 +55,10 @@ Wrap step elements and bind to track active index:
 
 		if (maxRatio > 0) value = maxIndex;
 		else value = undefined;
-	};
+	}
 
-	function createObserver(node, index) {
-		const handleIntersect = (e) => {
-			const intersecting = e[0].isIntersecting;
+	function createObserver(node: Element, index: number): void {
+		const handleIntersect = (e: IntersectionObserverEntry[]): void => {
 			const ratio = e[0].intersectionRatio;
 			steps[index] = ratio;
 			mostInView();
@@ -66,7 +76,7 @@ Wrap step elements and bind to track active index:
 		intersectionObservers[index] = io;
 	}
 
-	function update() {
+	function update(): void {
 		if (!nodes.length) return;
 		nodes.forEach(createObserver);
 	}

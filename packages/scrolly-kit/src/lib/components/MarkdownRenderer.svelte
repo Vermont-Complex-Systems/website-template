@@ -18,7 +18,7 @@ and code blocks with syntax highlighting.
 - KaTeX math (inline and block)
 - Code highlighting (JS, CSS, R, HTML)
 -->
-<script>
+<script lang="ts">
     import Markdown from 'svelte-exmarkdown';
     import { gfmPlugin } from 'svelte-exmarkdown/gfm';
     import 'katex/dist/katex.min.css';
@@ -35,8 +35,13 @@ and code blocks with syntax highlighting.
     import R from 'highlight.js/lib/languages/r';
     import JS from 'highlight.js/lib/languages/javascript';
 
-    let { text } = $props();
+    interface Props {
+        text: string;
+    }
 
+    let { text }: Props = $props();
+
+    // Using 'as any' due to complex plugin typing in svelte-exmarkdown
     const plugins = [
         gfmPlugin(),
         {
@@ -70,9 +75,10 @@ and code blocks with syntax highlighting.
                 }
             ]
         }
-    ];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ] as any[];
 
-    function processContent(content) {
+    function processContent(content: string): string {
         if (!content) return "";
 
         // Remove footnote markers
@@ -80,7 +86,7 @@ and code blocks with syntax highlighting.
 
         // Preserve code blocks (markdown fences and <pre> tags), remove leading whitespace from non-code
         const parts = content.split(/(```[\s\S]*?```|<pre[\s\S]*?<\/pre>)/);
-        content = parts.map((part, i) =>
+        content = parts.map((part: string, i: number) =>
             i % 2 === 0 ? part.replace(/^[ \t]+/gm, '') : part
         ).join('');
 

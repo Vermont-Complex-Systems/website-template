@@ -27,20 +27,26 @@ when successfully copied, reverting after 2 seconds.
 />
 ```
 -->
-<script>
+<script lang="ts">
     import Md from './MarkdownRenderer.svelte';
 
-    let { command, label = '', language = '' } = $props();
+    interface Props {
+        command: string;
+        label?: string;
+        language?: string;
+    }
+
+    let { command, label = '', language = '' }: Props = $props();
     let copied = $state(false);
 
-    async function copyCommand() {
+    async function copyCommand(): Promise<void> {
         await navigator.clipboard.writeText(command);
         copied = true;
         setTimeout(() => copied = false, 2000);
     }
 
     /** Escape HTML entities so code displays as text, not rendered HTML */
-    function escapeHtml(str) {
+    function escapeHtml(str: string): string {
         return str
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')

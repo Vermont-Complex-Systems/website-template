@@ -16,7 +16,7 @@
   let hasDependencies = $derived(dependencyNames.length > 0);
 
   let slug = $derived($page.params.slug);
-  let component = $derived(components[slug]);
+  let component = $derived(slug ? components[slug] : undefined);
 
   // Column definitions for tables
   const propsColumns = [
@@ -288,24 +288,6 @@
     border-top-right-radius: 0;
   }
 
-  .source-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 2rem;
-    padding: 0.75rem 1.25rem;
-    background: var(--vcsi-gray-100);
-    border-radius: 6px;
-    color: #6b7280;
-    text-decoration: none;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-
-  .source-link:hover {
-    background: var(--vcsi-gray-200);
-  }
-
   /* Not found */
   .not-found {
     max-width: 600px;
@@ -356,14 +338,6 @@
     background: var(--vcsi-gray-800);
   }
 
-  :global(.dark) .source-link {
-    background: var(--vcsi-gray-800);
-    color: #60a5fa;
-  }
-
-  :global(.dark) .source-link:hover {
-    background: var(--vcsi-gray-700);
-  }
 
   :global(.dark) .source-tabs {
     border-color: rgba(255, 255, 255, 0.1);

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import '$lib/styles/app.css';
   import { page } from '$app/stores';
   import { base } from '$app/paths';
@@ -13,7 +13,7 @@
   let { children } = $props();
 
   let isMenuOpen = $state(false);
-  let menuButtonRef = $state();
+  let menuButtonRef: HTMLButtonElement | undefined = $state();
 
   const navLinks = [
     { href: `${base}/reference`, label: 'Styling' },
@@ -22,7 +22,7 @@
     { href: 'https://github.com/Vermont-Complex-Systems/vcsi-starter/tree/main', label: 'GitHub', external: true }
   ];
 
-  function closeMenu(skipFocus = false) {
+  function closeMenu(skipFocus: boolean | string = false) {
     isMenuOpen = false;
     if (!skipFocus) menuButtonRef?.focus();
   }

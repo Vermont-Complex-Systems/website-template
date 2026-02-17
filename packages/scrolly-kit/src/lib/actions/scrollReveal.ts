@@ -1,5 +1,14 @@
 import { browser } from '$app/environment';
 
+interface ScrollRevealOptions {
+	threshold?: number;
+	rootMargin?: string;
+}
+
+interface ScrollRevealReturn {
+	destroy: () => void;
+}
+
 /**
  * Svelte action for scroll-based reveal animations using Intersection Observer.
  *
@@ -21,13 +30,11 @@ import { browser } from '$app/environment';
  * }
  * ```
  *
- * @param {HTMLElement} node - The DOM element to observe
- * @param {Object} options - Configuration options
- * @param {number} options.threshold - Intersection ratio threshold (0-1)
- * @param {string} options.rootMargin - Root margin for observer
- * @returns {Object} Svelte action object with destroy method
+ * @param node - The DOM element to observe
+ * @param options - Configuration options
+ * @returns Svelte action object with destroy method
  */
-export function scrollReveal(node, options = {}) {
+export function scrollReveal(node: HTMLElement, options: ScrollRevealOptions = {}): ScrollRevealReturn | void {
 	const {
 		threshold = 0.1,
 		rootMargin = '0px 0px -100px 0px'
@@ -47,7 +54,7 @@ export function scrollReveal(node, options = {}) {
 			entries.forEach((entry) => {
 				// Only reveal when element is entering viewport
 				if (entry.isIntersecting && entry.intersectionRatio > threshold) {
-					entry.target.dataset.revealed = 'true';
+					(entry.target as HTMLElement).dataset.revealed = 'true';
 				}
 			});
 		},

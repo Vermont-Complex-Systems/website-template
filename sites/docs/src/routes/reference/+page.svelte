@@ -62,9 +62,9 @@
 
       <PageLayoutDiagram />
 
-      <pre class="docs-code">{`<script>
+      <CopyCodeBlock language="svelte" command={`<script>
   import { Nav, Footer } from '@the-vcsi/scrolly-kit';
-</script>
+<\/script>
 
 <Nav />
 
@@ -73,7 +73,7 @@
   <p>Content goes here...</p>
 </article>
 
-<Footer />`}</pre>
+<Footer />`} />
 
       <h3>CSS Variables</h3>
       <p>Nav, Footer, and <code>.page</code> all use the same width/padding variables for consistent alignment:</p>
@@ -107,7 +107,7 @@
 
       <StoryContainerDiagram />
 
-      <pre class="docs-code">{`<article class="story">
+      <CopyCodeBlock language="svelte" command={`<article class="story">
   <h1>Story Title</h1>
   <p>Centered prose content...</p>
 
@@ -116,13 +116,13 @@
   </section>
 
   <p>Back to centered prose...</p>
-</article>`}</pre>
+</article>`} />
 
       <h3>Dark Theme</h3>
       <p>Add <code>data-theme="dark"</code> for dark stories:</p>
-      <pre class="docs-code">{`<article class="story" data-theme="dark">
+      <CopyCodeBlock language="svelte" command={`<article class="story" data-theme="dark">
   <!-- Dark background, light text -->
-</article>`}</pre>
+</article>`} />
     </section>
 
 
@@ -133,7 +133,7 @@
 
       <SplitLayoutDiagram />
 
-      <pre class="docs-code">{`<section class="split-layout">
+      <CopyCodeBlock language="svelte" command={`<section class="split-layout">
   <div class="sticky-panel">
     <!-- Your visualization component -->
   </div>
@@ -145,7 +145,7 @@
 <!-- Reversed: panel on left -->
 <section class="split-layout reversed">
   ...
-</section>`}</pre>
+</section>`} />
 
       <h3>CSS Variables</h3>
       <table class="docs-table">
@@ -189,14 +189,14 @@
 
       <FullscreenLayoutDiagram />
 
-      <pre class="docs-code">{`<section class="fullscreen-layout">
+      <CopyCodeBlock language="svelte" command={`<section class="fullscreen-layout">
   <div class="sticky-panel">
     <!-- Full-viewport visualization -->
   </div>
   <div class="scrolly-content">
     <!-- Overlaid step boxes -->
   </div>
-</section>`}</pre>
+</section>`} />
 
       <h3>CSS Variables</h3>
       <table class="docs-table">
@@ -235,7 +235,7 @@
 
       <DashboardLayoutDiagram />
 
-      <pre class="docs-code">{`<article class="dashboard-layout">
+      <CopyCodeBlock language="svelte" command={`<article class="dashboard-layout">
   <aside class="dashboard-sidebar">
     <button class="sidebar-toggle">...</button>
     <div class="sidebar-content">
@@ -245,7 +245,7 @@
   <main class="dashboard-main">
     <!-- Visualization -->
   </main>
-</article>`}</pre>
+</article>`} />
 
       <h3>CSS Variables</h3>
       <table class="docs-table">
