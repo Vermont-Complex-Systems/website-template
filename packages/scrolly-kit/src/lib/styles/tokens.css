@@ -178,6 +178,8 @@
   --vcsi-content-padding-inline: 2rem;
   --vcsi-content-max-width: 600px;
   --vcsi-nav-height: 4.5rem;
+  --vcsi-nav-bg: var(--vcsi-bg);
+  --vcsi-nav-fg: var(--vcsi-fg);
   --vcsi-bottom-padding: 7.5rem;
 }
 

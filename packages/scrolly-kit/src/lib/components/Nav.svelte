@@ -114,7 +114,8 @@ function closeMenu(skipFocus: boolean | string = false) {
 	top: 0;
 	left: 0;
 	width: 100%;
-	background: var(--vcsi-bg);
+	background: var(--vcsi-nav-bg);
+	color: var(--vcsi-nav-fg);
 	border-bottom: 2px solid transparent;
 	z-index: 100;
 	transition: border-color var(--vcsi-transition-base);
@@ -144,7 +145,7 @@ function closeMenu(skipFocus: boolean | string = false) {
 
 /* Default theming - follows global mode */
 .nav-header:not(.theme-light):not(.theme-dark) {
-	--nav-fg: var(--vcsi-fg);
+	--nav-fg: var(--vcsi-nav-fg);
 	--nav-hover: var(--vcsi-hover);
 	--nav-border: var(--vcsi-border);
 }

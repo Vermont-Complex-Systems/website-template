@@ -11,11 +11,7 @@
       "svelte": "./dist/index.js",
       "default": "./dist/index.js"
     },
-    "./styles/reset.css": "./dist/styles/reset.css",
-    "./styles/tokens.css": "./dist/styles/tokens.css",
-    "./styles/layouts.css": "./dist/styles/layouts.css",
-    "./styles/typography.css": "./dist/styles/typography.css",
-    "./styles/all.css": "./dist/styles/all.css"
+    "./styles/*": "./dist/styles/*"
   },
   "files": [
     "dist"

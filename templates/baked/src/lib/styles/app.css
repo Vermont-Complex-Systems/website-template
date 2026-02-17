@@ -9,28 +9,39 @@
 
 /* =============================================================================
    TEMPLATE CUSTOMIZATIONS
-   Override VCSI tokens here. Variables follow the pattern:
-   --vcsi-[context]-[property] (e.g., --vcsi-story-bg, --vcsi-panel-height)
+   Uncomment examples below to see the impact.
 
-   See full reference: https://docs.scrolly-kit.dev/reference
+   Full reference: https://scrolly-kit.vercel.app/reference#css-variables
    ============================================================================= */
 
-/* Example: Custom story colors
-:root {
-  --vcsi-story-bg: #1a1a2e;
-  --vcsi-story-fg: #eee;
-}
-*/
+/* --- Try uncommenting these --- */
 
-/* Example: Wider prose in stories
-.story {
-  --vcsi-story-max-width: 720px;
-}
-*/
+/* Customize Nav colors */
+/* :root { --vcsi-nav-bg: #154734; --vcsi-nav-fg: white; } */
 
-/* Example: Larger split-layout panels
+/* Change heading colors */
+/* h1, h2, h3 { color: #154734; } */
+
+/* Increase body text size */
+/* :root { --vcsi-font-size-base: 1.35rem; } */
+
+/* Widen the prose column in stories */
+/* :root { --vcsi-content-max-width: 720px; } */
+
+/* Change the page background */
+/* :root { --vcsi-bg-light: #fff; } */
+
+/* Make links stand out */
+/* a { color: #0066cc; text-decoration: underline; } */
+
+/* Add padding to .page containers */
+/* :root { --vcsi-page-inline-padding: 8%; } */
+
+/* Customize split-layout */
+/*
 .split-layout {
-  --vcsi-panel-width: 55%;
-  --vcsi-panel-height: min(85vh, 700px);
+  --vcsi-panel-width: 60%;
+  --vcsi-panel-height: 80vh;
+  --vcsi-content-padding-inline: 4rem;
 }
 */

@@ -6,10 +6,10 @@
 
 <BackToHome />
 
-<article class="story" data-theme="dark">
+<article class="story" >
 	<h1>{data.title}</h1>
 	<p>{data.subtitle}</p>
 	
 </article>
 
-<Footer theme="dark" />
+<Footer />
