@@ -12,6 +12,24 @@
 :root {
   --vcsi-bg-light: #fff;
   --vcsi-page-max-width: 850px;
+
+  /* Matisse Blue-Orange Palette (Bohemian Garden) - default */
+  --matisse-blue: oklch(45% 0.18 255);       /* Deep ultramarine */
+  --matisse-orange: oklch(70% 0.18 55);      /* Warm terracotta orange */
+
+  /* Matisse Yellow-Red Palette (The Snail) */
+  --matisse-yellow: oklch(65% 0.18 85);      /* Rich golden amber */
+  --matisse-red: oklch(50% 0.22 25);         /* Deep vermillion */
+
+  /* Semantic aliases (can be overridden per-page) */
+  --matisse-primary: var(--matisse-blue);
+  --matisse-accent: var(--matisse-orange);
+}
+
+/* Yellow-Red theme for specific pages */
+[data-palette="yellow-red"] {
+  --matisse-primary: var(--matisse-red);
+  --matisse-accent: var(--matisse-yellow);
 }
 
 /* =============================================================================
@@ -290,4 +308,169 @@ main {
 
 .dark .docs-table tr:hover {
   background: var(--vcsi-gray-900);
+}
+
+/* =============================================================================
+   MATISSE CUT-OUTS INSPIRED STYLING
+   Bold colors, organic shapes, playful but minimal
+   ============================================================================= */
+
+/* Colored headings - using semantic palette */
+.page h2,
+.components-page h2 {
+  color: var(--matisse-primary);
+  position: relative;
+}
+
+.page h2::before {
+  content: '';
+  position: absolute;
+  left: -1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.5rem;
+  height: 70%;
+  background: var(--matisse-accent);
+  border-radius: 0 100px 100px 0;
+}
+
+.page h3,
+.components-page h3 {
+  color: var(--matisse-accent);
+}
+
+/* Tip boxes with organic flair */
+.page .tip {
+  background: color-mix(in oklch, var(--matisse-accent) 10%, transparent);
+  border-left: 4px solid var(--matisse-accent);
+  padding: 0.75rem 1rem;
+  border-radius: 0 8px 8px 0;
+  margin: 1rem 0;
+  opacity: 1;
+}
+
+.page .tip strong {
+  color: var(--matisse-primary);
+}
+
+/* Links with Matisse primary */
+.page a,
+.components-page a {
+  color: var(--matisse-primary);
+  text-decoration-color: color-mix(in oklch, var(--matisse-primary) 40%, transparent);
+  text-underline-offset: 2px;
+  transition: text-decoration-color 0.2s;
+}
+
+.page a:hover,
+.components-page a:hover {
+  text-decoration-color: var(--matisse-primary);
+}
+
+/* Code blocks with subtle warmth */
+.page code {
+  background: color-mix(in oklch, var(--matisse-accent) 8%, white);
+  color: var(--matisse-primary);
+}
+
+/* Decorative organic shapes */
+.page {
+  position: relative;
+}
+
+.page::before {
+  content: '';
+  position: absolute;
+  top: 2rem;
+  right: -3rem;
+  width: 80px;
+  height: 120px;
+  background: var(--matisse-accent);
+  opacity: 0.12;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  transform: rotate(-15deg);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.page::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: -2rem;
+  width: 60px;
+  height: 90px;
+  background: var(--matisse-primary);
+  opacity: 0.1;
+  border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+  transform: rotate(20deg);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Version badge with color */
+.docs-nav-version {
+  background: color-mix(in oklch, var(--matisse-primary) 10%, white);
+  color: var(--matisse-primary);
+  border: 1px solid color-mix(in oklch, var(--matisse-primary) 20%, transparent);
+}
+
+/* Nav link hover states */
+.docs-nav-links a:hover {
+  color: var(--matisse-primary);
+}
+
+/* Lists with colored bullets */
+.page ul {
+  list-style: none;
+}
+
+.page ul li::before {
+  content: '●';
+  color: var(--matisse-accent);
+  font-size: 0.6em;
+  margin-right: 0.75rem;
+  vertical-align: middle;
+}
+
+/* Dark mode adjustments */
+.dark .page h2,
+.dark .components-page h2 {
+  color: color-mix(in oklch, var(--matisse-primary) 100%, white 30%);
+}
+
+.dark .page h3,
+.dark .components-page h3 {
+  color: color-mix(in oklch, var(--matisse-accent) 100%, white 20%);
+}
+
+.dark .page .tip {
+  background: color-mix(in oklch, var(--matisse-accent) 8%, transparent);
+}
+
+.dark .page a,
+.dark .components-page a {
+  color: color-mix(in oklch, var(--matisse-primary) 100%, white 25%);
+}
+
+.dark .page code {
+  background: var(--vcsi-gray-800);
+  color: color-mix(in oklch, var(--matisse-accent) 100%, white 30%);
+}
+
+.dark .docs-nav-version {
+  background: color-mix(in oklch, var(--matisse-primary) 10%, var(--vcsi-gray-900));
+  border-color: color-mix(in oklch, var(--matisse-primary) 20%, transparent);
+}
+
+/* Hide decorative shapes on mobile */
+@media (max-width: 900px) {
+  .page::before,
+  .page::after {
+    display: none;
+  }
+
+  .page h2::before {
+    display: none;
+  }
 }

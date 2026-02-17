@@ -8,8 +8,10 @@
 </svelte:head>
 
 <article class="page">
-  <h1 class="tagline">Minimal CSS Framework<br />for visual data essays</h1>
-  <p class="subheader">Built for scientists in a hurry who want to tell data stories without learning full web development. <a href="https://www.npmjs.com/package/@the-vcsi/scrolly-kit">@the-vcsi/scrolly-kit</a> provides the engine—CSS tokens and reusable components—while templates give you a ready-to-customize website. Extend with <code>sv</code> add-ons for integrations like SharePoint or <a href="https://openalex.org/">OpenAlex</a>.</p>
+  <header class="hero">
+    <h1 class="tagline">Minimal CSS Framework<br />for visual data essays</h1>
+    <p class="subheader">Built for scientists in a hurry who want to tell data stories without learning full web development. <a href="https://www.npmjs.com/package/@the-vcsi/scrolly-kit">@the-vcsi/scrolly-kit</a> provides the engine—CSS tokens and reusable components—while templates give you a ready-to-customize website. Extend with <code>sv</code> add-ons for integrations like SharePoint or <a href="https://openalex.org/">OpenAlex</a>.</p>
+  </header>
 
   <h2>Quick Start</h2>
 
@@ -89,27 +91,88 @@ npm install`} />
 </article>
 
 <style>
+  .hero {
+    position: relative;
+    padding: 2rem 0 3rem;
+    margin-bottom: 1rem;
+  }
+
+  /* Matisse-inspired decorative shapes around the hero */
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -1rem;
+    left: -4rem;
+    width: 100px;
+    height: 140px;
+    background: var(--matisse-primary);
+    opacity: 0.15;
+    border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
+    transform: rotate(-25deg);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    top: 1rem;
+    right: -3rem;
+    width: 70px;
+    height: 100px;
+    background: var(--matisse-accent);
+    opacity: 0.2;
+    border-radius: 50% 50% 50% 50% / 40% 60% 40% 60%;
+    transform: rotate(15deg);
+    pointer-events: none;
+  }
+
   .tagline {
     text-align: center;
     font-size: 2.5rem;
     font-weight: 600;
     line-height: 1.2;
     margin-bottom: 1rem;
+    position: relative;
+  }
+
+  /* Decorative leaf shape accent */
+  .tagline::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 12px;
+    background: var(--matisse-accent);
+    margin: 1.5rem auto 0;
+    border-radius: 50%;
+    transform: rotate(-5deg);
   }
 
   .subheader {
     text-align: center;
     font-size: 1.1rem;
-    opacity: 0.7;
-    margin-bottom: 3rem;
+    opacity: 0.75;
+    margin-bottom: 2rem;
   }
 
   @media (max-width: 600px) {
+    .hero {
+      padding: 1rem 0 2rem;
+    }
+
+    .hero::before,
+    .hero::after {
+      display: none;
+    }
+
     .tagline {
       text-align: left;
       font-size: 1.75rem;
       margin-top: 0.5rem;
       margin-bottom: 0.75rem;
+    }
+
+    .tagline::after {
+      margin: 1rem 0 0;
     }
 
     .subheader {
@@ -122,7 +185,6 @@ npm install`} />
     margin: 1rem 0;
   }
 
-
   ul {
     margin: 1rem 0;
     padding-left: 1.5rem;
@@ -134,7 +196,6 @@ npm install`} />
 
   .tip {
     font-size: 0.9rem;
-    opacity: 0.8;
     margin-top: 0.5rem;
   }
 </style>

@@ -7,7 +7,7 @@
   <title>Components - scrolly-kit</title>
 </svelte:head>
 
-<div class="components-page">
+<div class="components-page" data-palette="yellow-red">
   <header class="page-header">
     <h1>Components</h1>
     <p>Reusable Svelte components for scrollytelling and data-driven stories.</p>
@@ -85,7 +85,7 @@
   }
 
   .component-card:hover {
-    border-color: #6b7280;
+    border-color: var(--matisse-accent);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     transform: translateY(-2px);
   }
@@ -94,7 +94,7 @@
     margin: 0 0 0.5rem;
     font-size: 1rem;
     font-family: var(--vcsi-font-mono);
-    color: #6b7280;
+    color: var(--matisse-accent);
   }
 
   .component-card p {
@@ -126,12 +126,12 @@
   }
 
   :global(.dark) .component-card:hover {
-    border-color: #60a5fa;
+    border-color: var(--matisse-accent);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   :global(.dark) .component-card h3 {
-    color: #60a5fa;
+    color: color-mix(in oklch, var(--matisse-accent) 100%, white 20%);
   }
 
   :global(.dark) .component-card p {
