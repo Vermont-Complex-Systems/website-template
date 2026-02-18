@@ -80,13 +80,25 @@ npm install`} />
     <li><a href="https://layercake.graphics/" target="_blank" rel="noopener">Layer Cake</a> - Headless graphics framework for Svelte. On top of being awesome charting library, they showcase the beauty of simply copy-pasting well-designed components.</li>
   </ul>
 
-  <h2>Next Steps</h2>
+    <h2>Next Steps</h2>
   <ul>
     <li><a href="{base}/reference">Styling</a> - Layout patterns and CSS variables</li>
     <li><a href="{base}/components">Components</a> - Reusable components used across templates </li>
     <li><a href="https://vcsi.cmplxsys.w3.uvm.edu/" target="_blank" rel="noopener">Examples</a> - See pedagogical stories built with scrolly-kit</li>
   </ul>
   
+
+  <h2>Who is this library for?</h2>
+
+<p>As of today (2026-02-18), LLMs like <code>Claude Sonnet 4.6</code> can write you professionally-looking static websites using only vanilla HTML/CSS/JS in no time. As a matter of fact, Claude did help design and polish this website. So why bother with this library?</p>
+  
+  <p><code>Scrolly-kit</code> has been designed to help you understand the choices you are making when building data-driven stories. These choices are reflected in the code and documentation, built and curated to be understood by people with as little technical knowledge of web design as we find possible with today's tools.</p>
+  
+  <p>For instance, we favor <a href="https://svelte.dev/">Svelte</a> over <a href="https://react.dev/">React</a> because we believe the design of Svelte is closer to the fundamental tools of the web (HTML/CSS). Arguably, Svelte has been shown to be more approachable to newcomers, and does not require learning a whole ecosystem to get going. For some people, they prefer React precisely because there is a whole ecosystem, such that they do not need to understand as much. This library is opinionated in that we believe the web underpinnings should be understandable by humans, and Svelte's North Star is precisely to make the web better in that way.</p>
+
+  <p>The design choices that went into the structure of <code>scrolly-kit</code> and accompanying templates also include making what we can for motivated users to learn why we are styling the website the way we do. Inspired by talks like Josh Comeau's <a href="https://youtu.be/ZPTVr2pS0XE?si=A1vymxJE4Dsc336p">How to teach CSS</a>, the goal of this website is to nurture a growing mindset where styling is fun. With others, we acknowledge that <a href="https://cassidoo.co/post/vibe-coding-yawn/">Vibe Coding is somewhat boring</a>, and that this is vital to keep enjoying building software that is defining our lives in many ways these days.</p>
+  
+  <p>So although you can use this library to just keep going for making cool data-driven stories, know that if you just want to show off a cool scrolly story most likely you can vibe code it with minimal effort. This library is meant to <b>learn and nurture a web platform that can host tailored data stories that are your own</b>; where you can learn and improve yourself to have a space to tell your stories. The upshot is that if you end up running out of tokens on your subscription, you will be able to keep writing fun and whimsical stories until your weekly limits are reset.</p>
 </article>
 
 <style>
