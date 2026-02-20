@@ -85,12 +85,6 @@
             .range([height - margin.bottom, margin.top])
     );
 
-    let radiusScale = $derived(
-        scaleLinear()
-            .domain([0, 10])
-            .range([3, 30])
-    );
-
     let hoveredData = $derived(
         hoveredCourse
             ? filteredData.find(c => c.code === hoveredCourse)
@@ -110,6 +104,7 @@
 
         <Sidebar.Inset>
             <SectionCards data={filteredData} totalCount={courses_viz.length} />
+            <h3 class="chart-title">Course Similarity (UMAP Embedding)</h3>
             <div class="chart-container" bind:clientWidth={width} bind:clientHeight={height}>
                 <svg viewBox={`0 0 ${width} ${height}`}>
                     <Grid {xScale} {yScale} {width} {height} {margin} />
@@ -119,7 +114,6 @@
                         {xScale}
                         {yScale}
                         {colorScale}
-                        {radiusScale}
                         {isMobile}
                         bind:hoveredCourse
                         bind:hoveredElement
@@ -149,10 +143,20 @@
         height: 100%;
     }
 
-    .chart-container {
-        width: 100%;
-        height: 75vh;
+    .chart-title {
+        font-family: var(--vcsi-font-sans, system-ui, sans-serif);
+        font-size: var(--vcsi-font-size-small, 14px);
+        font-weight: 600;
+        color: var(--vcsi-gray-700, rgb(78, 78, 78));
+        margin: 0;
+        padding: var(--vcsi-space-md, 1rem) var(--vcsi-space-lg, 1.5rem) 0;
         flex-shrink: 0;
+    }
+
+    .chart-container {
+        flex: 1;
+        width: 100%;
+        min-height: 750px;
         position: relative;
         overflow: hidden;
     }
@@ -167,9 +171,9 @@
     .tooltip-code {
         margin: 0 0 0.75rem 0;
         font-size: 0.85rem;
-        color: #aaa;
+        color: var(--vcsi-tooltip-muted, #aaa);
         padding-bottom: 0.5rem;
-        border-bottom: 1px solid #444;
+        border-bottom: 1px solid var(--vcsi-tooltip-border, #444);
     }
 
     .tooltip-description {

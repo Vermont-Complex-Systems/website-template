@@ -4,7 +4,6 @@
         xScale,
         yScale,
         colorScale,
-        radiusScale,
         hoveredCourse = $bindable(),
         hoveredElement = $bindable(null),
         isMobile = false
