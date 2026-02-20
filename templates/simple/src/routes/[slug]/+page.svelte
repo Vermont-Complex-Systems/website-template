@@ -1,28 +1,23 @@
+<!--
+  Story page — renders any story from $lib/stories/{slug}/.
+
+  This file stays the same across all phases:
+    Phase 1 (static):  getStory uses prerender()  → built at compile time
+    Phase 2 (dynamic): getStory uses query()      → runs on the server
+    Phase 3 (mutations): add form()/command() alongside, this file unchanged
+
+  The load function (+page.ts) provides the component and slug.
+  The remote function (story.remote.ts) provides the data.
+-->
 <script>
-  import { page } from '$app/state';
   import { getStory } from '$lib/story.remote.js';
-  import { error } from '@sveltejs/kit';
 
-  // Explicit glob - Vite knows exactly what to bundle
-  // https://vite.dev/guide/features#glob-import
-  const storyModules = import.meta.glob(
-    '$lib/stories/*/components/Index.svelte',
-  );
+  // Component and slug come from the load function in +page.ts
+  let { data } = $props();
+  const StoryComponent = data.component;
 
-  const modulePath = `/src/lib/stories/${page.params.slug}/components/Index.svelte`;
-
-  if (!(modulePath in storyModules)) {
-    error(404, `Story "${page.params.slug}" not found`);
-  }
-
-  // Load story data and component in parallel
-  const [storyData, storyModule] = await Promise.all([
-    getStory(page.params.slug),
-    storyModules[modulePath]()
-  ]);
-
-  const { story, copyData } = storyData;
-  const StoryComponent = /** @type {{ default: import('svelte').Component }} */ (storyModule).default;
+  // Data comes from the remote function — the bit that swaps between phases
+  const { story, copyData } = await getStory(data.slug);
 </script>
 
 <StoryComponent {story} data={copyData} />

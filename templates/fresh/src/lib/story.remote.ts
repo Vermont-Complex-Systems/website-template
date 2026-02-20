@@ -1,5 +1,5 @@
 import * as v from 'valibot';
-import { prerender } from '$app/server';
+import { query } from '$app/server';
 import membersData from '$lib/data/members.csv';
 import storiesData from '$lib/data/stories.csv';
 import { error, redirect } from '@sveltejs/kit';
@@ -8,12 +8,12 @@ import { error, redirect } from '@sveltejs/kit';
 
 // MEMBERS
 
-export const getMembers = prerender(async () => {
+export const getMembers = query(async () => {
     return await membersData
 });
 
 
-export const getMember = prerender(
+export const getMember = query(
     v.string(),
     async (slug) => {
         return await membersData.find(d => d.id == slug)
@@ -43,17 +43,22 @@ const copyModules = import.meta.glob<{ default: Record<string, unknown> }>(
 );
 
 // Query for getting all stories
-export const getStories = prerender(async () => {
+export const getStories = query(async () => {
   return stories;
 });
 
 // Query for getting a single story by slug
-export const getStory = prerender(v.string(), async (slug) => {
+export const getStory = query(v.string(), async (slug) => {
   const story = stories.find(d => d.slug === slug);
 
-  if (!story) error(404, 'Story not found');
-  
-  if (story.externalUrl) redirect(302, story.externalUrl);
+  if (!story) {
+    error(404, 'Story not found');
+  }
+
+  // If it has an external URL, redirect to it
+  if (story.externalUrl) {
+    redirect(302, story.externalUrl);
+  }
 
   // Load copy data using glob
   const copyPath = `/src/lib/stories/${slug}/data/copy.json`;

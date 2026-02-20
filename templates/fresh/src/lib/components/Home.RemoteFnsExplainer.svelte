@@ -1,31 +1,7 @@
 <script>
   import { CodeBlock } from '@the-vcsi/scrolly-kit';
-  import hljs from 'highlight.js/lib/core';
-  import typescript from 'highlight.js/lib/languages/typescript';
 
-  hljs.registerLanguage('typescript', typescript);
-
-  const staticSnippet = hljs.highlight(
-`// svelte.config.js
-const storiesIds = storiesCSV.split('\\n')
-  .slice(1).filter(line => line.trim())
-  .map(line => line.split(',')[0]);
-
-const config = {
-  kit: {
-    prerender: {
-      entries: [
-        ...storiesIds.map(id => \`/\${id}\`) 
-      ]
-    },
-}`, { language: 'typescript' }).value;
-
-  const remoteCodeSnippet = `import * as v from 'valibot';
-import { prerender } from '$app/server';
-import membersData from '$lib/data/members.csv';
-import storiesData from '$lib/data/stories.csv';
-import { error, redirect } from '@sveltejs/kit';
-
+  const remoteCodeSnippet = `
 export interface Story {
   slug: string;
   title: string;
@@ -47,17 +23,22 @@ const copyModules = import.meta.glob<{ default: Record<string, unknown> }>(
 );
 
 // Query for getting all stories
-export const getStories = prerender(async () => {
+export const getStories = query(async () => {
   return stories;
 });
 
 // Query for getting a single story by slug
-export const getStory = prerender(v.string(), async (slug) => {
+export const getStory = query(v.string(), async (slug) => {
   const story = stories.find(d => d.slug === slug);
 
-  if (!story) error(404, 'Story not found');
-  
-  if (story.externalUrl) redirect(302, story.externalUrl);
+  if (!story) {
+    error(404, 'Story not found');
+  }
+
+  // If it has an external URL, redirect to it
+  if (story.externalUrl) {
+    redirect(302, story.externalUrl);
+  }
 
   // Load copy data using glob
   const copyPath = \`/src/lib/stories/\${slug}/data/copy.json\`;
@@ -94,17 +75,16 @@ export const getStory = prerender(v.string(), async (slug) => {
         <h3>Secure &amp; Intuitive</h3>
         <p>Clear boundaries mean no accidental closures or security leaks. And because they're just functions, they're intuitive to use—even LLMs understand them immediately.</p>
       </div>
-      <div class="static-note">
-        <!-- <p>With <code>adapter-static</code>, routes are discovered from CSV data at build time:</p> -->
-        <span class="note-label">Small Caveat: we need to say which routes are dynamic</span>
-        <pre><code>{@html staticSnippet}</code></pre>
+      <div class="dynamic-note">
+        <span class="note-label">Dynamic advantage: no build-time route discovery</span>
+        <p>With <code>adapter-node</code> and <code>query()</code>, routes are resolved at runtime. No need to read CSVs at build time or declare prerender entries — just add a story and it works.</p>
       </div>
     </div>
   </div>
 
   <p class="remote-cta">
     <span class="experimental-badge">Experimental</span>
-    Remote functions are still evolving. Watch <a href="https://www.youtube.com/watch?v=0hy7PCbXyqs" target="_blank" rel="noopener noreferrer">Introducing SvelteKit Remote Functions</a> by Simon Holthausen. See <a href="https://svelte.dev/docs/kit/remote-functions#prerender-Prerender-arguments">here</a> for the caveats when using arguments in prerendering mode.
+    Remote functions are still evolving. Watch <a href="https://www.youtube.com/watch?v=0hy7PCbXyqs" target="_blank" rel="noopener noreferrer">Introducing SvelteKit Remote Functions</a> by Simon Holthausen. This template uses <code>query()</code> for runtime data fetching — swap to <code>prerender()</code> for static generation.
   </p>
 </section>
 
@@ -196,15 +176,15 @@ export const getStory = prerender(v.string(), async (slug) => {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.static-note {
+.dynamic-note {
   padding: 1rem 1.25rem;
-  background: rgba(246, 90, 59, 0.06);
-  border: 1px solid rgba(246, 100, 59, 0.15);
+  background: rgba(21, 71, 52, 0.06);
+  border: 1px solid rgba(21, 71, 52, 0.15);
   border-radius: 10px;
   position: relative;
 }
 
-.static-note .note-label {
+.dynamic-note .note-label {
   position: absolute;
   top: -0.6rem;
   left: var(--vcsi-space-md);
@@ -214,54 +194,27 @@ export const getStory = prerender(v.string(), async (slug) => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #f6643b;
+  color: #154734;
 }
 
-.static-note pre {
-  margin: 0;
-  padding: 0.75rem;
-  background: #f6f8fa;
-  border: 1px solid #d1d9e0;
-  border-radius: 6px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.7rem;
+:global(.dark) .dynamic-note {
+  background: rgba(21, 71, 52, 0.1);
+  border-color: rgba(21, 71, 52, 0.25);
+}
+
+.dynamic-note p {
+  font-size: 0.85rem;
   line-height: 1.5;
-  overflow-x: auto;
+  margin: 0;
+  color: var(--vcsi-gray-700);
 }
 
-.static-note pre code {
-  background: none;
-  padding: 0;
-  color: #1f2328;
-}
-
-:global(.dark) .static-note {
-  background: rgba(59, 130, 246, 0.08);
-  border-color: rgba(59, 130, 246, 0.2);
-}
-
-:global(.dark) .static-note pre {
-  background: #161b22;
-  border-color: #30363d;
-}
-
-:global(.dark) .static-note pre code {
-  color: #e6edf3;
-}
-
-/* Dark mode syntax highlighting for static-note */
-:global(.dark) .static-note pre :global(.hljs-keyword) {
-  color: #ff7b72;
-}
-:global(.dark) .static-note pre :global(.hljs-string) {
-  color: #a5d6ff;
-}
-:global(.dark) .static-note pre :global(.hljs-title),
-:global(.dark) .static-note pre :global(.hljs-title.function_) {
-  color: #d2a8ff;
-}
-:global(.dark) .static-note pre :global(.hljs-comment) {
-  color: #8b949e;
+.dynamic-note code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8em;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
 }
 
 .remote-cta {
@@ -322,19 +275,14 @@ export const getStory = prerender(v.string(), async (slug) => {
     font-size: 0.85rem;
   }
 
-  .static-note {
+  .dynamic-note {
     padding: 0.875rem 1rem;
     padding-top: 1.25rem;
   }
 
-  .static-note .note-label {
+  .dynamic-note .note-label {
     font-size: 0.6rem;
     top: -0.5rem;
-  }
-
-  .static-note pre {
-    font-size: 0.65rem;
-    padding: 0.5rem;
   }
 
   .remote-cta {
