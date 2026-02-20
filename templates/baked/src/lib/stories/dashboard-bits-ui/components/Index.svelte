@@ -104,7 +104,6 @@
 
         <Sidebar.Inset>
             <SectionCards data={filteredData} totalCount={courses_viz.length} />
-            <h3 class="chart-title">Course Similarity (UMAP Embedding)</h3>
             <div class="chart-container" bind:clientWidth={width} bind:clientHeight={height}>
                 <svg viewBox={`0 0 ${width} ${height}`}>
                     <Grid {xScale} {yScale} {width} {height} {margin} />
@@ -156,7 +155,7 @@
     .chart-container {
         flex: 1;
         width: 100%;
-        min-height: 750px;
+        min-height: 800px;
         position: relative;
         overflow: hidden;
     }

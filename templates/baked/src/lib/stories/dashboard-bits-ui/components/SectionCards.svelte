@@ -76,9 +76,7 @@
 
     @media (max-width: 768px) {
         .cards {
-            grid-template-columns: repeat(2, 1fr);
-            padding: var(--vcsi-space-md, 1rem);
-            padding-bottom: 0;
+            display: none;
         }
     }
 </style>
