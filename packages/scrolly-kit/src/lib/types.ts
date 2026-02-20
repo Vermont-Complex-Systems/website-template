@@ -5,7 +5,7 @@ import type Scrolly from './components/Scrolly.svelte';
 import type ScrollyContent from './components/ScrollyContent.svelte';
 import type MarkdownRenderer from './components/MarkdownRenderer.svelte';
 import type CodeBlock from './components/CodeBlock.svelte';
-import type SimpleToggle from './components/SimpleToggle.svelte';
+import type SimpleToggle from './components/bits-ui/SimpleToggle.svelte';
 import type Tooltip from './components/Tooltip.svelte';
 import type ScrollIndicator from './components/ScrollIndicator.svelte';
 import type CopyCodeBlock from './components/CopyCodeBlock.svelte';
@@ -17,6 +17,8 @@ import type RenderTextContent from './components/RenderTextContent.svelte';
 import type Nav from './components/Nav.svelte';
 import type NavMenu from './components/NavMenu.svelte';
 import type Footer from './components/Footer.svelte';
+import type DashboardShell from './components/bits-ui/DashboardShell.svelte';
+import type ChartTooltip from './components/bits-ui/ChartTooltip.svelte';
 
 // ============================================================================
 // Component Props - extracted using ComponentProps<typeof Component>
@@ -69,6 +71,18 @@ export type NavMenuProps = ComponentProps<typeof NavMenu>;
 
 /** Props for Footer component */
 export type FooterProps = ComponentProps<typeof Footer>;
+
+/** Props for DashboardShell component */
+export type DashboardShellProps = ComponentProps<typeof DashboardShell>;
+
+/** Props for ChartTooltip component */
+export type ChartTooltipProps = ComponentProps<typeof ChartTooltip>;
+
+// ============================================================================
+// Sidebar state (re-exported for advanced usage)
+// ============================================================================
+
+export { SidebarState } from './components/bits-ui/sidebar/sidebar-state.svelte';
 
 // ============================================================================
 // Data types used by components (not component props)

@@ -123,7 +123,7 @@
             : null
     );
 
-    const years = ['2024', '2025', '2026'];
+    const years = ['2026'];
 </script>
 
 <svelte:window onkeydown={handleKeydown} />

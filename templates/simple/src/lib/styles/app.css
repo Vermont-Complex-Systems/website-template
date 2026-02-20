@@ -38,10 +38,8 @@
 /* a { color: #0066cc; text-decoration: underline; } */
 
 /* Customize split-layout */
-/*
-.split-layout {
-  --vcsi-panel-width: 60%;
-  --vcsi-panel-height: 80vh;
-  --vcsi-content-padding-inline: 4rem;
-}
-*/
+
+/* .split-layout {
+  --vcsi-panel-width: 20%;
+} */
+

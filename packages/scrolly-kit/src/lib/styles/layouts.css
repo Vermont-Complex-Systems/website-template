@@ -468,13 +468,17 @@
 
 .dashboard-sidebar .sidebar-content {
   padding: 4rem var(--vcsi-space-lg) var(--vcsi-space-lg);
+  /* Always lay out at full width — prevents text reflow during grid transition.
+     overflow:hidden on .dashboard-sidebar clips the excess when collapsed. */
+  min-width: var(--vcsi-sidebar-width);
   opacity: 1;
-  transition: opacity calc(var(--vcsi-sidebar-transition) / 2);
+  transition: opacity calc(var(--vcsi-sidebar-transition) / 2) calc(var(--vcsi-sidebar-transition) / 2);
 }
 
 .dashboard-layout.sidebar-collapsed .sidebar-content {
   opacity: 0;
   pointer-events: none;
+  transition: opacity calc(var(--vcsi-sidebar-transition) / 2) 0s;
 }
 
 .dashboard-main {
@@ -485,6 +489,8 @@
   flex-direction: column;
   height: 100%;
 }
+
+/* .dashboard-inset is styled by SidebarInset.svelte component */
 
 /* Dashboard sidebar form elements */
 .dashboard-sidebar h3 {
@@ -552,7 +558,10 @@
   accent-color: var(--vcsi-color-accent, #154734);
 }
 
-/* Dashboard mobile: slide-down drawer from top */
+/* Dashboard mobile: slide-down drawer from top.
+   The vanilla approach uses CSS transforms + .sidebar-open/.dashboard-backdrop.
+   The compound Sidebar.* components use bits-ui Dialog instead (rendering
+   .vcsi-dashboard-drawer via Portal), so these rules don't affect them. */
 @media (max-width: 768px) {
   .dashboard-layout {
     display: block;

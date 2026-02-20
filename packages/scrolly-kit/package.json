@@ -25,8 +25,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
   },
   "peerDependencies": {
-    "svelte": "^5.0.0",
-    "@sveltejs/kit": "^2.0.0"
+    "@sveltejs/kit": "^2.0.0",
+    "svelte": "^5.0.0"
   },
   "devDependencies": {
     "@sveltejs/kit": "^2.49.1",
@@ -38,7 +38,7 @@
     "vite": "^7.2.6"
   },
   "dependencies": {
-    "bits-ui": "^2.15.5",
+    "bits-ui": "^2.16.1",
     "highlight.js": "^11.11.1",
     "katex": "^0.16.27",
     "mode-watcher": "^1.1.0",

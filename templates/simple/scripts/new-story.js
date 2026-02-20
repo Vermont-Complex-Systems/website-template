@@ -128,8 +128,8 @@ const indexSvelteDetailed = `<!--
 	<StoryHeader {...data} />
 
 	<!-- Alternatively, use header section centered by default -->
-	<h1>{data.title}</h1>
-	<p>{data.subtitle}</p>
+	<!-- <h1>{data.title}</h1> -->
+	<!-- <p>{data.subtitle}</p> -->
 
 	<!--
 	  .split-layout creates a two-column scrollytelling layout:

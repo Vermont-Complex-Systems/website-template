@@ -3,8 +3,10 @@ export { default as Scrolly } from './components/Scrolly.svelte';
 export { default as ScrollyContent } from './components/ScrollyContent.svelte';
 export { default as MarkdownRenderer } from './components/MarkdownRenderer.svelte';
 export { default as CodeBlock } from './components/CodeBlock.svelte';
-export { default as SimpleToggle } from './components/SimpleToggle.svelte';
-export { default as SimpleSelect } from './components/SimpleSelect.svelte';
+export { default as SimpleToggle } from './components/bits-ui/SimpleToggle.svelte';
+export { default as SimpleSelect } from './components/bits-ui/SimpleSelect.svelte';
+export { default as DashboardShell } from './components/bits-ui/DashboardShell.svelte';
+export { default as ChartTooltip } from './components/bits-ui/ChartTooltip.svelte';
 export { default as ThemeToggle } from './components/ThemeToggle.svelte';
 export { default as Tooltip } from './components/Tooltip.svelte';
 export { default as ScrollIndicator } from './components/ScrollIndicator.svelte';
@@ -24,6 +26,12 @@ export { renderCodeHtml } from './components/ScrollySnippets.svelte';
 // Actions
 export { scrollReveal } from './actions/scrollReveal';
 
+// Sidebar compound components
+export * as Sidebar from './components/bits-ui/sidebar/index';
+
+// Utilities
+export { useMediaQuery, useIsMobile } from './utils/media.svelte';
+
 // Types - explicit exports for better IDE hints
 export type {
   ScrollyProps,
@@ -36,6 +44,8 @@ export type {
   CopyCodeBlockProps,
   SimpleToggleProps,
   TooltipProps,
+  DashboardShellProps,
+  ChartTooltipProps,
   ScrollIndicatorProps,
   SpinnerProps,
   MetaProps,

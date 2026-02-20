@@ -3,7 +3,11 @@
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
-	"workspaces": ["packages/*", "templates/*", "sites/*"],
+	"workspaces": [
+		"packages/*",
+		"templates/*",
+		"sites/*"
+	],
 	"scripts": {
 		"dev": "npm run package:watch --workspace=@the-vcsi/scrolly-kit & npm run dev --workspace=full",
 		"dev:template": "npm run dev --workspace=full",
@@ -11,7 +15,6 @@
 		"lint": "prettier --check . && eslint ."
 	},
 	"devDependencies": {
-		"vite": "^7.2.6",
 		"@eslint/compat": "^1.4.0",
 		"@eslint/js": "^9.39.1",
 		"eslint": "^9.39.1",
@@ -20,6 +23,7 @@
 		"globals": "^16.5.0",
 		"prettier": "^3.7.4",
 		"prettier-plugin-svelte": "^3.4.0",
-		"typescript-eslint": "^8.48.1"
+		"typescript-eslint": "^8.48.1",
+		"vite": "^7.2.6"
 	}
 }
