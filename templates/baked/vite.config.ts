@@ -5,7 +5,10 @@ import dsv from "@rollup/plugin-dsv";
 
 export default defineConfig({
 	optimizeDeps: {
-		exclude: ['@tanstack/svelte-table']
+		exclude: [
+			'@tanstack/svelte-table', 
+			'@duckdb/duckdb-wasm'
+		]
 	},
 	plugins: [
 		enhancedImages(),
@@ -19,5 +22,5 @@ export default defineConfig({
 				});
 			}
 		})
-	]
+	],
 });

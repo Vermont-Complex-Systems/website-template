@@ -6,3 +6,4 @@ thematic-story-1,Thematic Story,Not all story need scrolly-telling,Jonathan St-O
 geo-story-1,Geo Story,Full-screen layout but with maps and a data pipeline,Jonathan St-Onge,2026-01-05,,"Geo, PDP",2
 dashboard-1,Dashboard,Dashboardinggg,Jonathan St-Onge,2026-01-10,,"Dashboard, PDP",1
 dashboard-bits-ui,Bits-UI Dashboard,"Bits-UI is very nice, once you understand it",Jonathan St-Onge,2026-01-10,,"Dashboard, Bits-UI",2
+dashboard-duckdb,DuckBoard,A duckdb dashboard,Jonathan St-Onge,2026-02-21,,DuckDB add-on,2

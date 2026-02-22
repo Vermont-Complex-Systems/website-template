@@ -1,30 +1,26 @@
 <script>
-    let { data, totalCount } = $props();
-
-    let authorCount = $derived(new Set(data.map(d => d.ego_display_name).filter(Boolean)).size);
-    let departmentCount = $derived(new Set(data.map(d => d.host_dept).filter(Boolean)).size);
-    let collegeCount = $derived(new Set(data.map(d => d.college).filter(Boolean)).size);
+    let { stats = {}, totalCount = 0 } = $props();
 </script>
 
 <div class="cards">
     <div class="card">
         <span class="card-label">Papers</span>
-        <span class="card-value">{data.length}</span>
+        <span class="card-value">{stats?.paper_count ?? 0}</span>
         <span class="card-detail">of {totalCount} total</span>
     </div>
     <div class="card">
         <span class="card-label">Authors</span>
-        <span class="card-value">{authorCount}</span>
+        <span class="card-value">{stats?.author_count ?? 0}</span>
         <span class="card-detail">researchers</span>
     </div>
     <div class="card">
         <span class="card-label">Departments</span>
-        <span class="card-value">{departmentCount}</span>
+        <span class="card-value">{stats?.dept_count ?? 0}</span>
         <span class="card-detail">represented</span>
     </div>
     <div class="card">
         <span class="card-label">Colleges</span>
-        <span class="card-value">{collegeCount}</span>
+        <span class="card-value">{stats?.college_count ?? 0}</span>
         <span class="card-detail">represented</span>
     </div>
 </div>

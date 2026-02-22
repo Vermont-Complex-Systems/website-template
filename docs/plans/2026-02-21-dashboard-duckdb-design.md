@@ -1,8 +1,69 @@
+# Dashboard DuckDB Implementation Plan
+
+> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+
+**Goal:** Replicate the fresh template's `dashboard-1` dashboard in the baked template, powered by DuckDB-WASM querying a local parquet file instead of server-side remote functions.
+
+**Architecture:** Copy all 6 UI subcomponents verbatim from fresh. Rewrite only `Index.svelte` to load data via DuckDB-WASM on mount, filter client-side with `$derived`, and use local array lookup for detail instead of TanStack Query. Add a loading spinner while DuckDB initializes.
+
+**Tech Stack:** Svelte 5 (runes), DuckDB-WASM, @tanstack/svelte-table, D3, @the-vcsi/scrolly-kit (Sidebar, ChartTooltip, Spinner, useIsMobile, SimpleSelect)
+
+---
+
+### Task 1: Copy subcomponents from fresh
+
+**Files:**
+- Copy: `templates/fresh/src/lib/stories/dashboard-1/components/AppSidebar.svelte` → `templates/baked/src/lib/stories/dashboard-duckdb/components/AppSidebar.svelte`
+- Copy: `templates/fresh/src/lib/stories/dashboard-1/components/SectionCards.svelte` → `templates/baked/src/lib/stories/dashboard-duckdb/components/SectionCards.svelte`
+- Copy: `templates/fresh/src/lib/stories/dashboard-1/components/DataTable.svelte` → `templates/baked/src/lib/stories/dashboard-duckdb/components/DataTable.svelte`
+- Copy: `templates/fresh/src/lib/stories/dashboard-1/components/EmbeddingDotPlot.svelte` → `templates/baked/src/lib/stories/dashboard-duckdb/components/EmbeddingDotPlot.svelte`
+- Copy: `templates/fresh/src/lib/stories/dashboard-1/components/Grid.svelte` → `templates/baked/src/lib/stories/dashboard-duckdb/components/Grid.svelte`
+- Copy: `templates/fresh/src/lib/stories/dashboard-1/components/Legend.svelte` → `templates/baked/src/lib/stories/dashboard-duckdb/components/Legend.svelte`
+
+**Step 1: Copy all 6 files**
+
+```bash
+SRC=templates/fresh/src/lib/stories/dashboard-1/components
+DEST=templates/baked/src/lib/stories/dashboard-duckdb/components
+
+cp "$SRC/AppSidebar.svelte" "$DEST/AppSidebar.svelte"
+cp "$SRC/SectionCards.svelte" "$DEST/SectionCards.svelte"
+cp "$SRC/DataTable.svelte" "$DEST/DataTable.svelte"
+cp "$SRC/EmbeddingDotPlot.svelte" "$DEST/EmbeddingDotPlot.svelte"
+cp "$SRC/Grid.svelte" "$DEST/Grid.svelte"
+cp "$SRC/Legend.svelte" "$DEST/Legend.svelte"
+```
+
+**Step 2: Commit**
+
+```bash
+git add templates/baked/src/lib/stories/dashboard-duckdb/components/
+git commit -m "feat(dashboard-duckdb): copy subcomponents from fresh dashboard-1"
+```
+
+---
+
+### Task 2: Rewrite Index.svelte for DuckDB
+
+**Files:**
+- Modify: `templates/baked/src/lib/stories/dashboard-duckdb/components/Index.svelte`
+
+**Step 1: Write the full Index.svelte**
+
+Key changes from fresh's Index.svelte:
+- Replace `await getEmbeddings()` (top-level await, server) with `onMount` + `storyQuery()` (client DuckDB)
+- Replace `createQuery()` detail fetching with `rows.find(d => d.id === id)`
+- Add loading state with `Spinner` while DuckDB initializes
+- Remove `@tanstack/svelte-query` import entirely
+- Remove `academic.remote.js` import entirely
+
+```svelte
 <script>
-	import { scaleLinear, scaleOrdinal, extent, zoomIdentity } from 'd3';
+	import { scaleLinear, scaleOrdinal, extent } from 'd3';
+	import { onMount } from 'svelte';
 
 	import { Sidebar, ChartTooltip, Spinner, useIsMobile } from '@the-vcsi/scrolly-kit';
-	import { duck } from '$lib/db/sql.svelte';
+	import { storyQuery } from '$lib/db/query';
 
 	import AppSidebar from './AppSidebar.svelte';
 	import SectionCards from './SectionCards.svelte';
@@ -12,98 +73,39 @@
 
 	let { story, data } = $props();
 
-	// ── Filter state (declared first so buildWhere can read them) ──
-	let selectedYear = $state([]);
-	let selectedColleges = $state(new Set());
-	let searchQuery = $state('');
+	// Tier 1: all embeddings loaded via DuckDB on mount
+	let rows = $state([]);
+	let loading = $state(true);
 
-	const src = `'${story.slug}.parquet'`;
-
-	// Build WHERE clause from reactive filter state.
-	// Called inside duck() builders, so $effect auto-tracks the deps.
-	function buildWhere() {
-		const clauses = [];
-		if (selectedYear.length === 2 && !(selectedYear[0] === yearMin && selectedYear[1] === yearMax)) {
-			if (selectedYear[0] === selectedYear[1]) {
-				clauses.push(`publication_year = ${selectedYear[0]}`);
-			} else {
-				clauses.push(`publication_year BETWEEN ${selectedYear[0]} AND ${selectedYear[1]}`);
-			}
-		}
-		if (selectedColleges.size > 0) {
-			const list = [...selectedColleges].map(c => `'${c.replace(/'/g, "''")}'`).join(', ');
-			clauses.push(`college IN (${list})`);
-		}
-		if (searchQuery.trim()) {
-			const escaped = searchQuery.trim().replace(/'/g, "''");
-			clauses.push(`title ILIKE '%${escaped}%'`);
-		}
-		return clauses.length > 0 ? `WHERE ${clauses.join(' AND ')}` : '';
-	}
-
-	// ── DuckDB queries ──
-
-	// All rows — runs once, used for background dots and stable scales
-	const allData = duck(() => `SELECT * FROM ${src}`);
-
-	// Filtered embeddings — re-runs when any filter changes
-	const filtered = duck(() => `SELECT * FROM ${src} ${buildWhere()}`);
-
-	// Whether any filter is active
-	let isFiltered = $derived(buildWhere() !== '');
-
-	// Aggregation — re-runs with filters
-	const stats = duck(() => `
-		SELECT
-			COUNT(*) as paper_count,
-			COUNT(DISTINCT ego_display_name) as author_count,
-			COUNT(DISTINCT host_dept) as dept_count,
-			COUNT(DISTINCT college) as college_count
-		FROM ${src} ${buildWhere()}
-	`);
-
-	// Total count — runs once (no reactive deps in SQL)
-	const total = duck(() => `SELECT COUNT(*) as total FROM ${src}`);
-
-	// Sidebar metadata — runs once
-	const collegeMeta = duck(() => `
-		SELECT DISTINCT college FROM ${src}
-		WHERE college IS NOT NULL ORDER BY college
-	`);
-	const yearMeta = duck(() => `
-		SELECT MIN(publication_year) as yr_min, MAX(publication_year) as yr_max
-		FROM ${src} WHERE publication_year IS NOT NULL
-	`);
-
-	let colleges = $derived(collegeMeta.rows.map(r => r.college));
-	let yearMin = $derived(Number(yearMeta.rows[0]?.yr_min ?? 2000));
-	let yearMax = $derived(Number(yearMeta.rows[0]?.yr_max ?? 2025));
-
-	// Initialize slider to full range once metadata loads
-	$effect(() => {
-		if (yearMeta.rows.length > 0 && selectedYear.length === 0) {
-			selectedYear = [yearMin, yearMax];
-		}
+	onMount(async () => {
+		rows = await storyQuery(story.slug, `
+			SELECT * FROM '${story.slug}.parquet'
+		`);
+		loading = false;
 	});
-
-	// ── Chart state ──
 
 	let width = $state(800);
 	let height = $state(600);
 
 	let hoveredId = $state(null);
 	let hoveredElement = $state(null);
-	let zoomTransform = $state(zoomIdentity);
 
+	// Tier 2: detail — just find in already-loaded rows
 	let selectedId = $state(null);
 	let detailData = $derived(
-		selectedId ? filtered.rows.find(d => d.id === selectedId) : null
+		selectedId ? rows.find(d => d.id === selectedId) : null
 	);
 
 	function onDotClick(id) {
 		selectedId = selectedId === id ? null : id;
 	}
 
+	// Sidebar filter state
+	let selectedYear = $state('all');
+	let selectedColleges = $state(new Set());
+	let searchQuery = $state('');
+
+	// Chart-specific mobile awareness
 	const mobile = useIsMobile();
 	let isMobile = $derived(mobile.current);
 
@@ -113,21 +115,37 @@
 			: { top: 50, right: 50, bottom: 50, left: 50 }
 	);
 
+	let colleges = $derived([...new Set(rows.map(d => d.college).filter(Boolean))].sort());
+	let years = $derived([...new Set(rows.map(d => d.publication_year))].sort());
+
 	const colorScale = scaleOrdinal()
 		.domain(["CALS","CAS","CEMS","CNHS","COM","CESS","GSB","GRAD","HON","LCOM","RSENR","SGA"])
 		.range(["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd","#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf","#aec7e8","#ffbb78"]);
 
+	let filteredData = $derived.by(() => {
+		let d = rows;
+		if (selectedColleges.size > 0) {
+			d = d.filter(r => selectedColleges.has(r.college));
+		}
+		if (selectedYear !== 'all') {
+			d = d.filter(r => r.publication_year === +selectedYear);
+		}
+		if (searchQuery.trim()) {
+			const q = searchQuery.toLowerCase().trim();
+			d = d.filter(r => r.title?.toLowerCase().includes(q));
+		}
+		return d;
+	});
+
 	let xExtent = $derived.by(() => {
-		const d = allData.rows;
-		if (d.length === 0) return [0, 1];
+		const d = filteredData.length > 0 ? filteredData : rows;
 		const [min, max] = extent(d, r => r.umap_1);
 		const padding = (max - min) * 0.05;
 		return [min - padding, max + padding];
 	});
 
 	let yExtent = $derived.by(() => {
-		const d = allData.rows;
-		if (d.length === 0) return [0, 1];
+		const d = filteredData.length > 0 ? filteredData : rows;
 		const [min, max] = extent(d, r => r.umap_2);
 		const padding = (max - min) * 0.05;
 		return [min - padding, max + padding];
@@ -145,23 +163,15 @@
 			.range([height - margin.bottom, margin.top])
 	);
 
-	// Zoomed scales for the grid — rescaled by the zoom transform
-	let zoomedXScale = $derived(zoomTransform.rescaleX(xScale));
-	let zoomedYScale = $derived(zoomTransform.rescaleY(yScale));
-
 	let hoveredData = $derived(
-		hoveredId ? filtered.rows.find(d => d.id === hoveredId) : null
+		hoveredId ? filteredData.find(d => d.id === hoveredId) : null
 	);
 </script>
 
-{#if filtered.loading && filtered.rows.length === 0}
+{#if loading}
 	<div class="loading-container">
 		<Spinner />
 		<p class="loading-text">Loading DuckDB...</p>
-	</div>
-{:else if filtered.error}
-	<div class="loading-container">
-		<p class="loading-text">Failed to load data. Please refresh the page.</p>
 	</div>
 {:else}
 	<Sidebar.Provider>
@@ -171,21 +181,20 @@
 				bind:selectedYear
 				bind:selectedColleges
 				{colleges}
-				{yearMin}
-				{yearMax}
+				{years}
 				{colorScale}
 			/>
 
 			<Sidebar.Inset>
-				<SectionCards stats={stats.rows[0]} totalCount={total.rows[0]?.total ?? 0} />
+				<SectionCards data={filteredData} totalCount={rows.length} />
+				<h3 class="chart-title">Paper Similarity (UMAP Embedding)</h3>
 				<div class="chart-container" bind:clientWidth={width} bind:clientHeight={height}>
 					<svg viewBox={`0 0 ${width} ${height}`}>
-						<Grid xScale={zoomedXScale} yScale={zoomedYScale} {width} {height} {margin} />
+						<Grid {xScale} {yScale} {width} {height} {margin} />
 					</svg>
 
 					<EmbeddingDotPlot
-						data={filtered.rows}
-						backgroundData={isFiltered ? allData.rows : []}
+						data={filteredData}
 						{xScale}
 						{yScale}
 						{colorScale}
@@ -194,7 +203,6 @@
 						{isMobile}
 						bind:hoveredId
 						bind:hoveredElement
-						bind:zoomTransform
 						ondotclick={onDotClick}
 					/>
 				</div>
@@ -224,7 +232,7 @@
 					</div>
 				{/if}
 
-				<DataTable data={filtered.rows} />
+				<DataTable data={filteredData} />
 			</Sidebar.Inset>
 		</Sidebar.Root>
 	</Sidebar.Provider>
@@ -384,3 +392,40 @@
 		text-decoration: underline;
 	}
 </style>
+```
+
+**Step 2: Commit**
+
+```bash
+git add templates/baked/src/lib/stories/dashboard-duckdb/components/Index.svelte
+git commit -m "feat(dashboard-duckdb): rewrite Index.svelte for DuckDB-WASM data loading"
+```
+
+---
+
+### Task 3: Verify and test
+
+**Step 1: Start dev server**
+
+```bash
+cd templates/baked && npm run dev
+```
+
+**Step 2: Open browser to `/dashboard-duckdb`**
+
+Verify:
+- [ ] Loading spinner appears briefly while DuckDB initializes
+- [ ] Scatter plot renders with colored dots by college
+- [ ] Sidebar filters work (year dropdown, college legend, search)
+- [ ] SectionCards show correct counts
+- [ ] Hovering dots shows tooltip
+- [ ] Clicking a dot shows detail panel with title, author, abstract, DOI
+- [ ] DataTable shows filtered data with sorting and pagination
+- [ ] Mobile responsive (sidebar collapses, cards hide)
+
+**Step 3: Commit any fixes**
+
+```bash
+git add -A
+git commit -m "fix(dashboard-duckdb): address issues found during testing"
+```

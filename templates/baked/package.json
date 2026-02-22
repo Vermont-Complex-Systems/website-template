@@ -21,6 +21,7 @@
     "vite": "^7.2.6"
   },
   "dependencies": {
+    "@duckdb/duckdb-wasm": "^1.33.1-dev18.0",
     "@internationalized/date": "^3.11.0",
     "@lucide/svelte": "^0.562.0",
     "@rollup/plugin-dsv": "^3.0.5",

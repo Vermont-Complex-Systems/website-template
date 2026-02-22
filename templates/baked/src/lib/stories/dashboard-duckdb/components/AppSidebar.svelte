@@ -1,20 +1,16 @@
 <script>
-    import { Sidebar, SimpleSelect } from '@the-vcsi/scrolly-kit';
+    import { Sidebar, RangeSlider } from '@the-vcsi/scrolly-kit';
     import Legend from './Legend.svelte';
 
     let {
         searchQuery = $bindable(''),
-        selectedYear = $bindable('all'),
+        selectedYear = $bindable([]),
         selectedColleges = $bindable(new Set()),
         colleges,
-        years,
+        yearMin,
+        yearMax,
         colorScale,
     } = $props();
-
-    let yearItems = $derived([
-        { value: 'all', label: 'All years' },
-        ...years.map(y => ({ value: String(y), label: String(y) })).reverse()
-    ]);
 </script>
 
 <Sidebar.Content>
@@ -33,7 +29,14 @@
     </Sidebar.Group>
 
     <Sidebar.Group label="Year">
-        <SimpleSelect items={yearItems} bind:value={selectedYear} placeholder="Select year" />
+        {#if selectedYear.length === 2}
+            <RangeSlider
+                min={yearMin}
+                max={yearMax}
+                bind:value={selectedYear}
+                label="Publication Year"
+            />
+        {/if}
     </Sidebar.Group>
 
     <Sidebar.Group label="Colleges">
