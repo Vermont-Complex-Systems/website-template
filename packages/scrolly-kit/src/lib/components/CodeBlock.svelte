@@ -15,8 +15,14 @@
 
   let { code, filename = '', language = 'typescript' } = $props();
 
+  function dedent(s) {
+    const lines = s.replace(/^\n/, '').replace(/\n\s*$/, '').split('\n');
+    const indent = Math.min(...lines.filter(l => l.trim()).map(l => l.match(/^ */)[0].length));
+    return lines.map(l => l.slice(indent)).join('\n');
+  }
+
   const highlightedCode = $derived(
-    hljs.highlight(code, { language }).value
+    hljs.highlight(dedent(code), { language }).value
   );
 </script>
 
@@ -64,7 +70,7 @@
   margin: 0;
   overflow-x: auto;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   line-height: 1.5;
   color: #1f2328;
 }
@@ -124,7 +130,7 @@
   .code-view {
     padding: 0.75rem;
     /* padding-top: 2rem; */
-    font-size: 0.65rem;
+    font-size: 0.8rem;
     border-radius: 6px;
   }
 }

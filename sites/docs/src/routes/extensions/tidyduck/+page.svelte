@@ -1,8 +1,6 @@
 <script lang="ts">
   import { base } from '$app/paths';
   import { CopyCodeBlock, CodeBlock } from '@the-vcsi/scrolly-kit';
-  // CopyCodeBlock: install commands (copy button useful)
-  // CodeBlock: code examples (language badge in corner, syntax highlighting)
   import LinkableHeader from '$lib/components/LinkableHeader.svelte';
   import TableOfContents from '$lib/components/TableOfContents.svelte';
   import { database } from '$lib/db/duck.svelte';
@@ -52,8 +50,9 @@
   <title>tidyduck - Extensions - scrolly-kit</title>
 </svelte:head>
 
-<div class="reference-layout">
-  <article class="page">
+
+<article class="page">
+    
     <nav class="breadcrumb">
       <a href="{base}/extensions">Extensions</a>
       <span class="separator">/</span>
@@ -89,6 +88,7 @@
       <CopyCodeBlock language="bash" command="npx sv add @the-vcsi/tidyduck" />
 
       <p>This drops three files into <code>src/lib/db/</code>:</p>
+      
       <table class="docs-table">
         <thead>
           <tr><th>File</th><th>Purpose</th></tr>
@@ -106,14 +106,15 @@
         Then import <code>database()</code> and register your tables — similar to Observable's <code>DuckDBClient.of()</code>:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={
-`import { database } from '$lib/db/duck.svelte';
+      <CodeBlock filename="svelte" language="typescript" code={`
+      import { database } from '$lib/db/duck.svelte';
 
-const db = database({
-  flights: 'flights.parquet'
-});
+      const db = database({
+        flights: 'flights.parquet'
+      });
 
-const flights = db.from('flights');`} />
+      const flights = db.from('flights');
+      `} />
 
       <p>
         That's the tidyduck equivalent of <code>library(tidyverse)</code> and <code>flights</code>.
@@ -133,7 +134,7 @@ const flights = db.from('flights');`} />
 
       <p>In R, typing <code>flights</code> prints the first few rows of the tibble. The tidyduck equivalent is <code>.head()</code>:</p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`const preview = flights.head();  // first 6 rows (default)`} />
+      <CodeBlock filename="svelte" language="typescript" code={`const preview = flights.head();  // first 6 rows (default)`} />
 
       <HeadTable {flights} badge="live 1.1" />
 
@@ -141,9 +142,11 @@ const flights = db.from('flights');`} />
         For a transposed view showing every column with its type and sample values — like R's <code>glimpse()</code> — use <code>.glimpse()</code>:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`const info = flights.glimpse();
-// info.columns → [{ name, type, sample }, ...]
-// info.nRows, info.nCols`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      const info = flights.glimpse();
+      // info.columns → [{ name, type, sample }, ...]
+      // info.nRows, info.nCols
+      `} />
 
       <GlimpseView {flights} badge="live 1.2" />
 
@@ -152,8 +155,10 @@ const flights = db.from('flights');`} />
         It runs DuckDB's <code>SUMMARIZE</code> under the hood, giving you min, max, quantiles, and null percentages in one call:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`const summary = flights.describe();
-// summary.rows → [{ column_name, column_type, min, max, q25, q50, q75, avg, ... }, ...]`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      const summary = flights.describe();
+      // summary.rows → [{ column_name, column_type, min, max, q25, q50, q75, avg, ... }, ...]
+      `} />
 
       <DescribeTable {flights} badge="live 1.3" />
 
@@ -167,12 +172,13 @@ const flights = db.from('flights');`} />
         Each method returns a <strong>new builder</strong> — the original is never modified:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// dplyr:  flights |> filter(...) |> arrange(...)
-// tidyduck:
-const q = flights
-  .between('year', () => selectedYear)
-  .in('carrier', () => selectedCarriers)
-  .eq('origin', () => selectedOrigin);`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // dplyr:  flights |> filter(...) |> arrange(...)
+      // tidyduck:
+      const q = flights
+        .between('year', () => selectedYear)
+        .in('carrier', () => selectedCarriers)
+        .eq('origin', () => selectedOrigin);`} />
 
       <p>
         Filter methods — <code>.where()</code>, <code>.between()</code>, <code>.in()</code>, <code>.ilike()</code>, <code>.eq()</code> — add reactive clauses.
@@ -217,11 +223,16 @@ const q = flights
         In tidyduck, the builder offers several specialized filter methods that handle common patterns and automatically skip inactive filters:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: flights that departed more than 120 minutes late
-flights |> filter(dep_delay > 120)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: flights that departed more than 120 minutes late
+      flights |> 
+        filter(dep_delay > 120)
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck
-const delayed = flights.where(() => "dep_delay > 120").rows();`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck
+      const delayed = flights.where(() => "dep_delay > 120").rows();
+      `} />
 
       <FilterDelay {flights} badge="live 2.1" />
 
@@ -229,19 +240,23 @@ const delayed = flights.where(() => "dep_delay > 120").rows();`} />
         The <code>.where()</code> method accepts any SQL expression. For common patterns, use the specialized helpers:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: flights in January or February
-flights |> filter(month %in% c(1, 2))`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: flights in January or February
+      flights |> filter(month %in% c(1, 2))
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck: .in() works for string columns
-// For numeric columns like month, use .where() with raw SQL:
-let selectedMonths = $state([1, 2]);
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck: .in() works for string columns
+      // For numeric columns like month, use .where() with raw SQL:
+      let selectedMonths = $state([1, 2]);
 
-const janFeb = flights
-  .where(() => selectedMonths.length === 0
-    ? null
-    : \`month IN (\${selectedMonths.join(', ')})\`
-  )
-  .rows();`} />
+      const janFeb = flights
+        .where(() => selectedMonths.length === 0
+          ? null
+          : \`month IN (\${selectedMonths.join(', ')})\`
+        )
+        .rows();
+        `} />
 
       <FilterMonths {flights} badge="live 2.2" />
 
@@ -272,16 +287,17 @@ const janFeb = flights
         For OR logic, use the <code>or()</code> helper inside <code>.where()</code>:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// Search across multiple columns at once
-let search = $state('');
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // Search across multiple columns at once
+      let search = $state('');
 
-const results = flights
-  .where(() => or(
-    ilike('carrier', search),
-    ilike('dest', search),
-    ilike('origin', search)
-  ))
-  .count();`} />
+      const results = flights
+        .where(() => or(
+          ilike('carrier', search),
+          ilike('dest', search),
+          ilike('origin', search)
+        ))
+        .count();`} />
 
       <FilterSearch {flights} badge="live 2.3" />
 
@@ -295,16 +311,20 @@ const results = flights
         NULLs always sort last, matching R's behavior:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: most delayed flights first
-flights |> arrange(desc(dep_delay))`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: most delayed flights first
+      flights |> arrange(desc(dep_delay))
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`import { database, desc } from '$lib/db/duck.svelte';
+      <CodeBlock filename="svelte" language="typescript" code={`
+      import { database, desc } from '$lib/db/duck.svelte';
 
-// tidyduck: same pattern
-const mostDelayed = flights.arrange(desc('dep_delay')).rows();
+      // tidyduck: same pattern
+      const mostDelayed = flights.arrange(desc('dep_delay')).rows();
 
-// multiple columns
-const sorted = flights.arrange('carrier', desc('dep_delay')).rows();`} />
+      // multiple columns
+      const sorted = flights.arrange('carrier', desc('dep_delay')).rows();
+      `} />
 
       <p>
         <code>.arrange()</code> returns a new builder — the original is unmodified.
@@ -319,21 +339,23 @@ const sorted = flights.arrange('carrier', desc('dep_delay')).rows();`} />
         In tidyduck, <code>.distinct()</code> is overloaded just like in dplyr:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: unique carriers
-flights |> distinct(carrier)
-# unique origin-dest combos
-flights |> distinct(origin, dest)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: unique carriers
+      flights |> distinct(carrier)
+      # unique origin-dest combos
+      flights |> distinct(origin, dest)`} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// Single column → { items } (flat array, perfect for dropdowns)
-const carriers = flights.distinct('carrier');
-// carriers.items → ['AA', 'B6', 'DL', 'EV', 'UA', ...]
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // Single column → { items } (flat array, perfect for dropdowns)
+      const carriers = flights.distinct('carrier');
+      // carriers.items → ['AA', 'B6', 'DL', 'EV', 'UA', ...]
 
-// Multiple columns → { rows } (unique combinations)
-const routes = flights.distinct('origin', 'dest');
-// routes.rows → [{ origin: 'EWR', dest: 'ALB' }, ...]
+      // Multiple columns → { rows } (unique combinations)
+      const routes = flights.distinct('origin', 'dest');
+      // routes.rows → [{ origin: 'EWR', dest: 'ALB' }, ...]
 
-// No args → all unique rows
-const unique = flights.distinct();`} />
+      // No args → all unique rows
+      const unique = flights.distinct();`} />
 
       <Distinct {flights} badge="live 2.4" />
 
@@ -351,11 +373,15 @@ const unique = flights.distinct();`} />
         tidyduck works the same way:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: count by origin and destination, sorted
-flights |> count(origin, dest, sort = TRUE)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: count by origin and destination, sorted
+      flights |> count(origin, dest, sort = TRUE)
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`const byRoute = flights.count('origin', 'dest');
-// byRoute.rows → [{ origin: 'JFK', dest: 'LAX', n: 11262 }, ...]`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      const byRoute = flights.count('origin', 'dest');
+      // byRoute.rows → [{ origin: 'JFK', dest: 'LAX', n: 11262 }, ...]
+      `} />
 
       <Count {flights} badge="live 2.5" />
     </section>
@@ -380,18 +406,21 @@ flights |> count(origin, dest, sort = TRUE)`} />
         In tidyduck, <code>.mutate()</code> takes an object of <code>{'{alias: "SQL expression"}'}</code> pairs and appends them to <code>SELECT *</code>:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr
-flights |> mutate(
-  gain = dep_delay - arr_delay,
-  speed = distance / air_time * 60
-)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr
+      flights |> mutate(
+        gain = dep_delay - arr_delay,
+        speed = distance / air_time * 60
+      )`} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck
-const withComputed = flights.mutate({
-  gain: 'dep_delay - arr_delay',
-  speed: 'ROUND(distance / air_time * 60, 1)'
-});
-// .rows() → SELECT *, dep_delay - arr_delay AS gain, ... FROM ...`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck
+      const withComputed = flights.mutate({
+        gain: 'dep_delay - arr_delay',
+        speed: 'ROUND(distance / air_time * 60, 1)'
+      });
+      // .rows() → SELECT *, dep_delay - arr_delay AS gain, ... FROM ...
+      `} />
 
       <MutateDemo {flights} badge="live 3.1" />
 
@@ -400,10 +429,12 @@ const withComputed = flights.mutate({
         Multiple <code>.mutate()</code> calls accumulate:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// Chain multiple mutate calls
-const computed = flights
-  .mutate({ gain: 'dep_delay - arr_delay' })
-  .mutate({ hours: 'air_time / 60' });`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // Chain multiple mutate calls
+      const computed = flights
+        .mutate({ gain: 'dep_delay - arr_delay' })
+        .mutate({ hours: 'air_time / 60' });
+        `} />
 
       <p class="tip">
         <strong>Keep or select.</strong> In dplyr, <code>.keep = "used"</code> retains only the columns used in the expression.
@@ -418,12 +449,16 @@ const computed = flights
         In tidyduck, <code>.select()</code> replaces <code>SELECT *</code> with your chosen columns:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: select columns by name
-flights |> select(year, month, day)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: select columns by name
+      flights |> select(year, month, day)
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck
-const subset = flights.select('year', 'month', 'day');
-// .rows() → SELECT year, month, day FROM ...`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck
+      const subset = flights.select('year', 'month', 'day');
+      // .rows() → SELECT year, month, day FROM ...
+      `} />
 
       <SelectDemo {flights} badge="live 3.2" />
 
@@ -431,17 +466,21 @@ const subset = flights.select('year', 'month', 'day');
         You can also rename columns as you select them, using SQL's <code>AS</code> syntax — just like dplyr's <code>select(new_name = old_name)</code>:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// Rename while selecting
-const renamed = flights.select('tailnum AS tail_num', 'carrier', 'dest');`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // Rename while selecting
+      const renamed = flights.select('tailnum AS tail_num', 'carrier', 'dest');
+      `} />
 
       <p>
         For dplyr-style helpers like <code>starts_with()</code> or <code>contains()</code>, use DuckDB's <code>COLUMNS</code> expression in <code>.sql()</code>:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// DuckDB COLUMNS regex — like select(contains("delay"))
-const delays = flights.sql((where) =>
-  \`SELECT COLUMNS('.*delay.*') FROM 'nycflights13_flights.parquet' \${where}\`
-);`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // DuckDB COLUMNS regex — like select(contains("delay"))
+      const delays = flights.sql((where) =>
+        \`SELECT COLUMNS('.*delay.*') FROM 'nycflights13_flights.parquet' \${where}\`
+      );
+      `} />
 
       <!-- rename -->
       <h3 id="rename"><code>rename()</code></h3>
@@ -451,12 +490,16 @@ const delays = flights.sql((where) =>
         In tidyduck, <code>.rename()</code> uses DuckDB's <code>EXCLUDE</code> syntax under the hood:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr
-flights |> rename(tail_num = tailnum)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr
+      flights |> rename(tail_num = tailnum)
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck
-const renamed = flights.rename({ tail_num: 'tailnum' });
-// .rows() → SELECT * EXCLUDE (tailnum), tailnum AS tail_num FROM ...`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck
+      const renamed = flights.rename({ tail_num: 'tailnum' });
+      // .rows() → SELECT * EXCLUDE (tailnum), tailnum AS tail_num FROM ...
+      `} />
 
       <RenameDemo {flights} badge="live 3.3" />
 
@@ -477,52 +520,59 @@ const renamed = flights.rename({ tail_num: 'tailnum' });
         Because each method returns a new builder, you can thread operations together naturally:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: find fastest flights to Houston
-flights |>
-  filter(dest == "IAH") |>
-  mutate(speed = distance / air_time * 60) |>
-  select(year:day, dep_time, carrier, flight, speed) |>
-  arrange(desc(speed))`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: find fastest flights to Houston
+      flights |>
+        filter(dest == "IAH") |>
+        mutate(speed = distance / air_time * 60) |>
+        select(year:day, dep_time, carrier, flight, speed) |>
+        arrange(desc(speed))
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck: same pipeline
-import { database, desc } from '$lib/db/duck.svelte';
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck: same pipeline
+      import { database, desc } from '$lib/db/duck.svelte';
 
-const fastest = flights
-  .where(() => "dest = 'IAH'")
-  .mutate({ speed: 'ROUND(distance / air_time * 60, 1)' })
-  .select('year', 'month', 'day', 'dep_time', 'carrier', 'flight', 'speed')
-  .arrange(desc('speed'))
-  .head(10);`} />
+      const fastest = flights
+        .where(() => "dest = 'IAH'")
+        .mutate({ speed: 'ROUND(distance / air_time * 60, 1)' })
+        .select('year', 'month', 'day', 'dep_time', 'carrier', 'flight', 'speed')
+        .arrange(desc('speed'))
+        .head(10);
+      `} />
 
       <p>
         Even though this pipeline has five steps, it's easy to read because each method starts a new line.
         Without chaining, you'd need to write raw SQL:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// Without the builder — same query, harder to compose
-const fastest = duck(() => \`
-  SELECT year, month, day, dep_time, carrier, flight,
-    ROUND(distance / air_time * 60, 1) AS speed
-  FROM 'nycflights13_flights.parquet'
-  WHERE dest = 'IAH'
-  ORDER BY speed DESC
-  LIMIT 10
-\`);`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // Without the builder — same query, harder to compose
+      const fastest = duck(() => \`
+        SELECT year, month, day, dep_time, carrier, flight,
+          ROUND(distance / air_time * 60, 1) AS speed
+        FROM 'nycflights13_flights.parquet'
+        WHERE dest = 'IAH'
+        ORDER BY speed DESC
+        LIMIT 10
+      \`);`} />
 
       <p>
         The builder approach has two advantages: <strong>readability</strong> (each verb is a clear step)
         and <strong>composability</strong> (you can fork a builder to create multiple views of the same data):
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// Fork from a shared base
-const houston = flights.where(() => "dest = 'IAH'");
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // Fork from a shared base
+      const houston = flights.where(() => "dest = 'IAH'");
 
-const topCarriers = houston.count('carrier');  // who flies there most?
-const delays      = houston.summarize({ avg: 'ROUND(AVG(arr_delay), 1)' });
-const fastest     = houston
-  .mutate({ speed: 'ROUND(distance / air_time * 60, 1)' })
-  .arrange(desc('speed'))
-  .head(5);`} />
+      const topCarriers = houston.count('carrier');  // who flies there most?
+      const delays      = houston.summarize({ avg: 'ROUND(AVG(arr_delay), 1)' });
+      const fastest     = houston
+        .mutate({ speed: 'ROUND(distance / air_time * 60, 1)' })
+        .arrange(desc('speed'))
+        .head(5);
+      `} />
     </section>
 
     <!-- ============================================================ -->
@@ -545,14 +595,18 @@ const fastest     = houston
         You pass grouping columns directly to <code>.summarize()</code>, <code>.count()</code>, or <code>.sliceMax()</code>:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: two equivalent ways
-flights |> group_by(month) |> summarize(avg = mean(dep_delay, na.rm = TRUE))
-flights |> summarize(avg = mean(dep_delay, na.rm = TRUE), .by = month)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: two equivalent ways
+      flights |> group_by(month) |> summarize(avg = mean(dep_delay, na.rm = TRUE))
+      flights |> summarize(avg = mean(dep_delay, na.rm = TRUE), .by = month)
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck: grouping is always inline (like .by)
-const monthly = flights.summarize({
-  avg_delay: 'ROUND(AVG(dep_delay), 1)'
-}, 'month');`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck: grouping is always inline (like .by)
+      const monthly = flights.summarize({
+        avg_delay: 'ROUND(AVG(dep_delay), 1)'
+      }, 'month');
+      `} />
 
       <p>
         This means you never need to <code>ungroup()</code> — each operation is self-contained.
@@ -567,18 +621,22 @@ const monthly = flights.summarize({
         Without a <code>by</code> argument, it aggregates the whole table:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: overall summary
-flights |> summarize(
-  avg_delay = mean(arr_delay, na.rm = TRUE),
-  max_delay = max(arr_delay, na.rm = TRUE),
-  n = n()
-)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: overall summary
+      flights |> summarize(
+        avg_delay = mean(arr_delay, na.rm = TRUE),
+        max_delay = max(arr_delay, na.rm = TRUE),
+        n = n()
+      )
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`const stats = flights.summarize({
-  avg_delay: 'ROUND(AVG(arr_delay), 2)',
-  max_delay: 'MAX(arr_delay)',
-  total: 'COUNT(*)'
-});`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      const stats = flights.summarize({
+        avg_delay: 'ROUND(AVG(arr_delay), 2)',
+        max_delay: 'MAX(arr_delay)',
+        total: 'COUNT(*)'
+      });
+      `} />
 
       <SummarizeStats {flights} badge="live 5.1" />
 
@@ -586,19 +644,23 @@ flights |> summarize(
         Add a <code>by</code> argument to group — the result has one row per group, sorted by the grouping columns:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: grouped summary
-flights |>
-  group_by(month) |>
-  summarize(
-    avg_delay = mean(dep_delay, na.rm = TRUE),
-    n = n()
-  )`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: grouped summary
+      flights |>
+        group_by(month) |>
+        summarize(
+          avg_delay = mean(dep_delay, na.rm = TRUE),
+          n = n()
+        )
+        `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck: pass grouping column(s) as second argument
-const monthly = flights.summarize({
-  avg_delay: 'ROUND(AVG(dep_delay), 1)',
-  n: 'COUNT(*)'
-}, 'month');`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck: pass grouping column(s) as second argument
+      const monthly = flights.summarize({
+        avg_delay: 'ROUND(AVG(dep_delay), 1)',
+        n: 'COUNT(*)'
+      }, 'month');
+      `} />
 
       <GroupedSummarize {flights} badge="live 5.2" />
 
@@ -613,11 +675,13 @@ const monthly = flights.summarize({
         For <strong>multiple grouping variables</strong>, pass an array:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// Group by origin and destination
-const byRoute = flights.summarize({
-  avg_delay: 'ROUND(AVG(arr_delay), 1)',
-  n: 'COUNT(*)'
-}, ['origin', 'dest']);`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // Group by origin and destination
+      const byRoute = flights.summarize({
+        avg_delay: 'ROUND(AVG(arr_delay), 1)',
+        n: 'COUNT(*)'
+      }, ['origin', 'dest']);
+      `} />
 
       <p>
         In dplyr, you can keep piping after <code>summarize()</code> — e.g., <code>filter(n > 100)</code> to drop small groups.
@@ -625,23 +689,27 @@ const byRoute = flights.summarize({
         For post-aggregation filtering (<code>HAVING</code>) or custom ordering, use <code>.sql()</code> — it gives you full SQL and still respects your builder's <code>WHERE</code> clause:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: filter after grouping
-flights |>
-  group_by(dest) |>
-  summarize(avg_delay = mean(arr_delay, na.rm = TRUE), n = n()) |>
-  filter(n > 100)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: filter after grouping
+      flights |>
+        group_by(dest) |>
+        summarize(avg_delay = mean(arr_delay, na.rm = TRUE), n = n()) |>
+        filter(n > 100)
+        `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck: use .sql() for HAVING and custom ordering
-const byDest = flights.sql((where) => \`
-  SELECT dest,
-    ROUND(AVG(arr_delay), 1) AS avg_delay,
-    COUNT(*) AS n
-  FROM 'nycflights13_flights.parquet'
-  \${where}
-  GROUP BY dest
-  HAVING COUNT(*) > 100
-  ORDER BY avg_delay DESC
-\`);`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck: use .sql() for HAVING and custom ordering
+      const byDest = flights.sql((where) => \`
+        SELECT dest,
+          ROUND(AVG(arr_delay), 1) AS avg_delay,
+          COUNT(*) AS n
+        FROM 'nycflights13_flights.parquet'
+        \${where}
+        GROUP BY dest
+        HAVING COUNT(*) > 100
+        ORDER BY avg_delay DESC
+      \`);
+      `} />
 
       <SummarizeDest {flights} badge="live 5.3" />
 
@@ -654,19 +722,23 @@ const byDest = flights.sql((where) => \`
         tidyduck provides <code>.sliceMax()</code> and <code>.sliceMin()</code>:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr: most delayed flight per destination
-flights |>
-  group_by(dest) |>
-  slice_max(arr_delay, n = 1)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr: most delayed flight per destination
+      flights |>
+        group_by(dest) |>
+        slice_max(arr_delay, n = 1)
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`// tidyduck: same, with per-operation grouping
-const mostDelayed = flights.sliceMax('arr_delay', 1, 'dest');
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck: same, with per-operation grouping
+      const mostDelayed = flights.sliceMax('arr_delay', 1, 'dest');
 
-// Without grouping — just the overall top N
-const top5 = flights.sliceMax('arr_delay', 5);
+      // Without grouping — just the overall top N
+      const top5 = flights.sliceMax('arr_delay', 5);
 
-// Bottom N works the same way
-const shortest = flights.sliceMin('air_time', 5);`} />
+      // Bottom N works the same way
+      const shortest = flights.sliceMin('air_time', 5);
+      `} />
 
       <SliceMax {flights} badge="live 5.4" />
 
@@ -675,8 +747,10 @@ const shortest = flights.sliceMin('air_time', 5);`} />
         Like dplyr's <code>with_ties</code> argument, pass <code>{'{ withTies: true }'}</code> to keep all tied rows:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// Keep all ties (uses RANK instead of ROW_NUMBER)
-const mostDelayed = flights.sliceMax('arr_delay', 1, 'dest', { withTies: true });`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // Keep all ties (uses RANK instead of ROW_NUMBER)
+      const mostDelayed = flights.sliceMax('arr_delay', 1, 'dest', { withTies: true });
+      `} />
 
       <!-- count -->
       <h3 id="count-groups">Grouped <code>count()</code></h3>
@@ -685,11 +759,15 @@ const mostDelayed = flights.sliceMax('arr_delay', 1, 'dest', { withTies: true })
         <code>.count()</code> with column names is the quickest way to see group sizes, sorted in descending order — just like dplyr:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr
-flights |> count(carrier, sort = TRUE)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr
+      flights |> count(carrier, sort = TRUE)
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`const byCarrier = flights.count('carrier');
-// byCarrier.rows → [{ carrier: 'UA', n: 58665 }, { carrier: 'B6', n: 54635 }, ...]`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      const byCarrier = flights.count('carrier');
+      // byCarrier.rows → [{ carrier: 'UA', n: 58665 }, { carrier: 'B6', n: 54635 }, ...]
+      `} />
 
       <GroupedCount {flights} badge="live 5.5" />
 
@@ -697,8 +775,10 @@ flights |> count(carrier, sort = TRUE)`} />
         Multiple grouping variables work too — you can count by as many columns as you need:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={`// Daily flight counts
-const daily = flights.count('year', 'month', 'day');`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // Daily flight counts
+      const daily = flights.count('year', 'month', 'day');
+      `} />
     </section>
 
     <!-- ============================================================ -->
@@ -715,16 +795,17 @@ const daily = flights.count('year', 'month', 'day');`} />
         Register all your tables upfront, then use <code>db.sql()</code> for joins:
       </p>
 
-      <CodeBlock filename="svelte" language="svelte" code={
-`import { database } from '$lib/db/duck.svelte';
+      <CodeBlock filename="svelte" language="typescript" code={`
+      import { database } from '$lib/db/duck.svelte';
 
-const db = database({
-  flights: 'flights.parquet',
-  airlines: 'airlines.parquet',
-  airports: 'airports.parquet',
-  planes: 'planes.parquet',
-  weather: 'weather.parquet'
-});`} />
+      const db = database({
+        flights: 'flights.parquet',
+        airlines: 'airlines.parquet',
+        airports: 'airports.parquet',
+        planes: 'planes.parquet',
+        weather: 'weather.parquet'
+      });
+      `} />
 
       <!-- mutating joins -->
       <h3 id="mutating-joins">Mutating joins</h3>
@@ -736,55 +817,87 @@ const db = database({
 
       <p>For example, adding the full airline name to flights:</p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr
-flights2 |> left_join(airlines)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr
+      flights2 |> left_join(airlines)
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={
-`// tidyduck
-const withAirline = db.sql(t =>
-  \`SELECT f.*, a.name as airline_name
-   FROM \${t.flights} f
-   LEFT JOIN \${t.airlines} a ON f.carrier = a.carrier\`
-);`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck
+      const withAirline = db.sql(t =>
+        \`SELECT f.*, a.name as airline_name
+        FROM \${t.flights} f
+        LEFT JOIN \${t.airlines} a ON f.carrier = a.carrier\`
+      );
+      `} />
 
       <LeftJoin {db} badge="live 6.1" />
 
       <p>Or finding out what size of plane was flying:</p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr
-flights2 |>
-  left_join(planes |> select(tailnum, type, engines, seats))`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr
+      flights2 |>
+        left_join(planes |> select(tailnum, type, engines, seats))
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={
-`// tidyduck
-const withPlane = db.sql(t =>
-  \`SELECT f.year, f.month, f.day, f.carrier, f.flight,
-          p.type, p.engines, p.seats
-   FROM \${t.flights} f
-   LEFT JOIN \${t.planes} p ON f.tailnum = p.tailnum\`
-);`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck
+      const withPlane = db.sql(t =>
+        \`SELECT f.year, f.month, f.day, f.carrier, f.flight,
+                p.type, p.engines, p.seats
+        FROM \${t.flights} f
+        LEFT JOIN \${t.planes} p ON f.tailnum = p.tailnum\`
+      );
+      `} />
 
       <p>
         When keys have <strong>different names</strong> across tables, you specify them explicitly in the <code>ON</code> clause.
         For example, joining flights to airports by destination:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr — keys have different names
-flights2 |> left_join(airports, join_by(dest == faa))`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr — keys have different names
+      flights2 |> left_join(airports, join_by(dest == faa))
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={
-`// tidyduck — ON spells out the mapping
-const withAirport = db.sql(t =>
-  \`SELECT f.*, a.name, a.lat, a.lon
-   FROM \${t.flights} f
-   LEFT JOIN \${t.airports} a ON f.dest = a.faa\`
-);`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck — ON spells out the mapping
+      const withAirport = db.sql(t =>
+        \`SELECT f.*, a.name, a.lat, a.lon
+        FROM \${t.flights} f
+        LEFT JOIN \${t.airports} a ON f.dest = a.faa\`
+      );
+      `} />
 
       <LeftJoinAirports {db} badge="live 6.2" />
 
       <p>
         When <code>LEFT JOIN</code> fails to find a match, it fills the new columns with <code>NULL</code> — just like dplyr fills with <code>NA</code>.
-        Notice row 4 (<code>BQN</code>) has no matching airport, so <code>name</code>, <code>lat</code>, and <code>lon</code> are null.
+        For example, filtering to a specific tail number that's missing from the <code>planes</code> table:
+      </p>
+
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr
+      flights2 |>
+        filter(tailnum == "N3ALAA") |>
+        left_join(planes |> select(tailnum, type, engines, seats))
+        `} />
+
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck — combine builder filter with db.sql() join
+      const mystery = db.sql(t =>
+        \`SELECT f.year, f.time_hour, f.origin, f.dest, f.tailnum, f.carrier,
+                p.type, p.engines, p.seats
+        FROM \${t.flights} f
+        LEFT JOIN \${t.planes} p ON f.tailnum = p.tailnum
+        WHERE f.tailnum = 'N3ALAA'
+        LIMIT 6\`
+      );
+      `} />
+
+      <p>
+        The <code>type</code>, <code>engines</code>, and <code>seats</code> columns are all <code>NULL</code> — plane <code>N3ALAA</code> isn't in the <code>planes</code> table.
       </p>
 
       <div class="comparison-box">
@@ -808,38 +921,43 @@ const withAirport = db.sql(t =>
         For example, finding airports that are actual destinations:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr
-airports |> semi_join(flights2, join_by(faa == dest))`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr
+      airports |> semi_join(flights2, join_by(faa == dest))`} />
 
-      <CodeBlock filename="svelte" language="svelte" code={
-`// tidyduck — semi-join via WHERE EXISTS
-const destAirports = db.sql(t =>
-  \`SELECT a.*
-   FROM \${t.airports} a
-   WHERE EXISTS (
-     SELECT 1 FROM \${t.flights} f WHERE f.dest = a.faa
-   )\`
-);`} />
+            <CodeBlock filename="svelte" language="typescript" code={
+      `// tidyduck — semi-join via WHERE EXISTS
+      const destAirports = db.sql(t =>
+        \`SELECT a.*
+        FROM \${t.airports} a
+        WHERE EXISTS (
+          SELECT 1 FROM \${t.flights} f WHERE f.dest = a.faa
+        )\`
+      );
+      `} />
 
       <p>
         An <strong>anti-join</strong> is the opposite: rows in <code>x</code> that <em>don't</em> match <code>y</code>.
         Useful for finding missing data:
       </p>
 
-      <CodeBlock filename="r" language="r" code={`# dplyr — destinations not in airports table
-flights2 |>
-  anti_join(airports, join_by(dest == faa)) |>
-  distinct(dest)`} />
+      <CodeBlock filename="r" language="r" code={`
+      # dplyr — destinations not in airports table
+      flights2 |>
+        anti_join(airports, join_by(dest == faa)) |>
+        distinct(dest)
+      `} />
 
-      <CodeBlock filename="svelte" language="svelte" code={
-`// tidyduck — anti-join via WHERE NOT EXISTS
-const missingAirports = db.sql<{ dest: string }>(t =>
-  \`SELECT DISTINCT f.dest
-   FROM \${t.flights} f
-   WHERE NOT EXISTS (
-     SELECT 1 FROM \${t.airports} a WHERE a.faa = f.dest
-   )\`
-);`} />
+      <CodeBlock filename="svelte" language="typescript" code={`
+      // tidyduck — anti-join via WHERE NOT EXISTS
+      const missingAirports = db.sql<{ dest: string }>(t =>
+        \`SELECT DISTINCT f.dest
+        FROM \${t.flights} f
+        WHERE NOT EXISTS (
+          SELECT 1 FROM \${t.airports} a WHERE a.faa = f.dest
+        )\`
+      );
+      `} />
 
       <div class="comparison-box">
         <h4>dplyr joins → tidyduck SQL</h4>
@@ -876,31 +994,33 @@ const missingAirports = db.sql<{ dest: string }>(t =>
 
       <Demo {flights} />
 
-      <CodeBlock filename="svelte" language="svelte" code={`<script lang="ts">
-  import { database, or, ilike } from '$lib/db/duck.svelte';
+      <CodeBlock filename="svelte" language="svelte" code={`
+      <script lang="ts">
+      import { database, or, ilike } from '$lib/db/duck.svelte';
 
-  const db = database({ flights: 'flights.parquet' });
-  const flights = db.from('flights');
+      const db = database({ flights: 'flights.parquet' });
+      const flights = db.from('flights');
 
-  let search = $state('');
-  let selectedCarriers = $state<string[]>([]);
+      let search = $state('');
+      let selectedCarriers = $state<string[]>([]);
 
-  const q = flights
-    .in('carrier', () => selectedCarriers)
-    .where(() => or(
-      ilike('origin', search),
-      ilike('dest', search)
-    ));
+      const q = flights
+        .in('carrier', () => selectedCarriers)
+        .where(() => or(
+          ilike('origin', search),
+          ilike('dest', search)
+        ));
 
-  const total  = q.count();
-  const byDest = q.count('dest');
-<\/script>
+      const total  = q.count();
+      const byDest = q.count('dest');
+    <\/script>
 
-<p>{total.value} flights match your filters</p>
+    <p>{total.value} flights match your filters</p>
 
-{#each byDest.rows.slice(0, 10) as route}
-  <p>{route.dest}: {route.n}</p>
-{/each}`} />
+    {#each byDest.rows.slice(0, 10) as route}
+      <p>{route.dest}: {route.n}</p>
+    {/each}
+    `} />
 
       <p>
         No <code>useEffect</code>. No manual query invalidation.
@@ -936,8 +1056,7 @@ const missingAirports = db.sql<{ dest: string }>(t =>
         </table>
       </div>
     </section>
-  </article>
-</div>
+</article>
 
 <style>
   .breadcrumb {
