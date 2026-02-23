@@ -27,7 +27,7 @@
 //   const filtered = q.rows();
 //   const stats    = q.summarize({ n: 'COUNT(*)' });
 
-import { duck, duck_val, duck_col } from './sql.svelte';
+import { duck, duck_val, duck_col, requireExtension } from './sql.svelte';
 
 // ── SQL fragment helpers (pure functions, composable) ──
 
@@ -386,7 +386,15 @@ export type { DuckQuery };
  *   const q = db.from('flights');           // same builder API
  *   const joined = db.sql<T>(sql => ...);   // raw SQL with all tables available
  */
-export function database(tables: Record<string, string>) {
+export function database(
+  tables: Record<string, string>,
+  opts?: { extensions?: string[] }
+) {
+  // Load any required extensions (e.g., 'spatial') — queries will wait for them
+  if (opts?.extensions) {
+    for (const ext of opts.extensions) requireExtension(ext);
+  }
+
   const registry = new Map(
     Object.entries(tables).map(([name, path]) => [
       name,

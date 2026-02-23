@@ -10,6 +10,9 @@ export default defineConfig({
 			'@duckdb/duckdb-wasm'
 		]
 	},
+	ssr: {
+		noExternal: ['@tanstack/svelte-query']
+	},
 	plugins: [
 		enhancedImages(),
 		sveltekit(),

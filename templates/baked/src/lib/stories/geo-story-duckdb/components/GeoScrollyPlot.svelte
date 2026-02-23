@@ -4,7 +4,7 @@
     import Legend from './Legend.svelte';
     import { database } from '$lib/db/duck.svelte';
 
-    // GeoJSON stays static — no reason to push geometry through DuckDB
+    // Electoral districts + CMA boundary stay as static GeoJSON
     import districtsGeo from '../data/districts.json';
     import boundaryGeo from '../data/boundary.json';
 
@@ -26,13 +26,17 @@
     let stepIndex = $derived(scrollyIndex ?? 0);
 
     // ── DuckDB data layer ──
-    const db = database({ metadata: 'metadata.parquet' });
+    // metadata.parquet → arrondissement-level (steps 0-2)
+    // census_da.parquet → dissemination areas with geometry (steps 3-4)
+    const db = database(
+        { metadata: 'metadata.parquet', census_da: 'census_da.parquet' },
+        { extensions: ['spatial'] }
+    );
     const meta = db.from('metadata');
 
-    // Population for 2011 (used in step 1)
+    // Arrondissement queries (steps 1-2)
     const pop2011 = meta.eq('year', () => 2011).rows();
 
-    // Population change: self-join to compute % change per arrondissement
     const changeData = db.sql(t =>
         `SELECT a.arrondissement,
                 ((b.population - a.population) * 100.0 / a.population) as change
@@ -40,6 +44,27 @@
          JOIN ${t.metadata} b ON a.arrondissement = b.arrondissement
          WHERE a.year = 2011 AND b.year = 2016`
     );
+
+    // DA-level query — spatial extension converts WKB geometry → GeoJSON string
+    const daQuery = db.sql(t =>
+        `SELECT geo_uid, population, avg_age, median_income, seniors_65plus,
+                area_sqkm, population / NULLIF(area_sqkm, 0) as pop_density,
+                ST_AsGeoJSON(geom) as geojson
+         FROM ${t.census_da}
+         WHERE population > 0`
+    );
+
+    // Convert DuckDB rows → GeoJSON features for D3 path rendering
+    let daFeatures = $derived(
+        daQuery.rows.map(r => ({
+            type: 'Feature',
+            properties: r,
+            geometry: JSON.parse(r.geojson)
+        }))
+    );
+
+    // Show DA layer for steps >= 3
+    let showDAs = $derived(stepIndex >= 3);
 
     // ── Map config driven by scroll step + reactive query results ──
     let mapConfig = $derived.by(() => {
@@ -98,13 +123,59 @@
                 return { title: 'Population Change 2011→2016', colors, labelsToShow, legend: colorScale };
             }
 
+            case 3: {
+                // DA population density — quantile scale to handle skewed distribution
+                const features = daFeatures;
+                if (features.length === 0) return { title: 'Population Density by DA', colors: null, labelsToShow: null, legend: null };
+
+                const densities = features
+                    .map(f => f.properties.pop_density)
+                    .filter(d => d != null && isFinite(d));
+                const colorScale = d3.scaleSequentialQuantile(densities)
+                    .interpolator(d3.interpolateYlOrRd);
+
+                const colors = new Map(
+                    features.map(f => [
+                        f.properties.geo_uid,
+                        f.properties.pop_density != null && isFinite(f.properties.pop_density)
+                            ? colorScale(f.properties.pop_density)
+                            : '#e0e0e0'
+                    ])
+                );
+
+                return { title: 'Population Density (Census 2021)', colors, labelsToShow: null, legend: colorScale };
+            }
+
+            case 4: {
+                // DA median income — quantile scale for skewed distribution
+                const features = daFeatures;
+                if (features.length === 0) return { title: 'Median Household Income', colors: null, labelsToShow: null, legend: null };
+
+                const incomes = features
+                    .map(f => f.properties.median_income)
+                    .filter(d => d != null);
+                const colorScale = d3.scaleSequentialQuantile(incomes)
+                    .interpolator(d3.interpolateViridis);
+
+                const colors = new Map(
+                    features.map(f => [
+                        f.properties.geo_uid,
+                        f.properties.median_income != null
+                            ? colorScale(f.properties.median_income)
+                            : '#e0e0e0'
+                    ])
+                );
+
+                return { title: 'Median Household Income ($)', colors, labelsToShow: null, legend: colorScale };
+            }
+
             default: {
                 return { title: null, colors: null, labelsToShow: null, legend: null };
             }
         }
     });
 
-    // Projection that fits the districts to the container
+    // Projection fitted to districts (same bbox for both layers)
     let projection = $derived(
         d3.geoMercator().fitSize(
             [innerWidth, innerHeight],
@@ -118,31 +189,57 @@
         return pathGenerator.centroid(feature);
     }
 
-    let isLoading = $derived(pop2011.loading || changeData.loading);
+    let isLoading = $derived(
+        pop2011.loading || changeData.loading || (showDAs && daQuery.loading)
+    );
 </script>
 
 <div class="chart-container" bind:clientWidth={width} bind:clientHeight={height}>
     {#if isLoading && stepIndex > 0}
-        <div class="loading-overlay">Loading DuckDB...</div>
+        <div class="loading-overlay">Loading DuckDB{showDAs ? ' + Spatial' : ''}...</div>
     {/if}
 
     <div class="year-indicator">{mapConfig.title}</div>
 
     <svg viewBox={`0 0 ${width} ${height}`} style="background: #a6cee3;">
         <g transform={`translate(${margin.left},${margin.top})`}>
-                <!-- Boundary (CMA land outside districts) -->
-                {#each boundary as feature (feature.properties.id)}
+            <!-- Boundary (CMA land outside districts) -->
+            {#each boundary as feature (feature.properties.id)}
+                <path
+                    class="boundary"
+                    d={pathGenerator(feature)}
+                    fill="#f4efea"
+                    stroke="#999"
+                    stroke-width="0.5"
+                    pointer-events="none"
+                />
+            {/each}
+
+            {#if showDAs}
+                <!-- DA polygons (2,831 dissemination areas) -->
+                {#each daFeatures as feature (feature.properties.geo_uid)}
+                    {@const fill = mapConfig.colors?.get(feature.properties.geo_uid) ?? '#e0e0e0'}
                     <path
-                        class="boundary"
                         d={pathGenerator(feature)}
-                        fill="#f4efea"
-                        stroke="#999"
-                        stroke-width="0.5"
+                        {fill}
+                        stroke="#666"
+                        stroke-width="0.15"
                         pointer-events="none"
                     />
                 {/each}
 
-                <!-- Districts -->
+                <!-- District outlines on top for context -->
+                {#each districts as feature (feature.properties.id)}
+                    <path
+                        d={pathGenerator(feature)}
+                        fill="none"
+                        stroke="#333"
+                        stroke-width="1"
+                        pointer-events="none"
+                    />
+                {/each}
+            {:else}
+                <!-- Districts (arrondissement level) -->
                 {#each districts as feature (feature.properties.id)}
                     {@const arrondissement = feature.properties.arrondissement}
                     {@const fill = mapConfig.colors?.get(arrondissement) ?? '#e0e0e0'}
@@ -181,7 +278,8 @@
                         </text>
                     {/if}
                 {/each}
-            </g>
+            {/if}
+        </g>
     </svg>
 
     <Legend scale={mapConfig.legend} />

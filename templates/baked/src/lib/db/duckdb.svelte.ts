@@ -41,6 +41,20 @@ export async function query<T = Record<string, unknown>>(
   return result.toArray().map((r: any) => r.toJSON());
 }
 
+// Deduplicate extension loading (INSTALL + LOAD are idempotent but slow)
+const extensions = new Map<string, Promise<void>>();
+
+export async function loadExtension(name: string) {
+  if (!extensions.has(name)) {
+    extensions.set(name, (async () => {
+      const conn = await getDB();
+      await conn.query(`INSTALL ${name};`);
+      await conn.query(`LOAD ${name};`);
+    })());
+  }
+  return extensions.get(name)!;
+}
+
 export async function registerParquet(name: string, url: string) {
   const duckdb = await import('@duckdb/duckdb-wasm');
   const conn = await getDB();

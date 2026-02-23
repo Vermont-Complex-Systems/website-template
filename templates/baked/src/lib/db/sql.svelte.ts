@@ -1,5 +1,5 @@
 // src/lib/db/sql.svelte.ts
-import { getDB, registerParquet } from './duckdb.svelte';
+import { getDB, registerParquet, loadExtension } from './duckdb.svelte';
 import { untrack } from 'svelte';
 
 interface QueryResult<T = Record<string, unknown>> {
@@ -8,6 +8,29 @@ interface QueryResult<T = Record<string, unknown>> {
   readonly error: string | null;
   readonly queryTime: number;
   refresh: () => Promise<void>;
+}
+
+// Extensions to load before any query executes (deferred until first browser query)
+const pendingExtensions: string[] = [];
+let extensionBarrier: Promise<void> | null = null;
+
+/** Require a DuckDB extension (INSTALL + LOAD). Queries will wait for it. */
+export function requireExtension(name: string) {
+  if (!pendingExtensions.includes(name)) {
+    pendingExtensions.push(name);
+    extensionBarrier = null; // reset so next query re-resolves
+  }
+}
+
+/** Lazily load all required extensions (only runs in browser, on first query). */
+async function ensureExtensions() {
+  if (pendingExtensions.length === 0) return;
+  if (!extensionBarrier) {
+    extensionBarrier = Promise.all(
+      pendingExtensions.map(name => loadExtension(name))
+    ).then(() => {});
+  }
+  await extensionBarrier;
 }
 
 // Deduplicate concurrent parquet registrations (5 duck() queries fire on mount)
@@ -39,6 +62,7 @@ export function duck<T = Record<string, unknown>>(
     const start = performance.now();
 
     try {
+      await ensureExtensions();
       await ensureParquet(sql);
       const conn = await getDB();
       const result = await conn.query(sql);

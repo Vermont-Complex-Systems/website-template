@@ -1,51 +1,58 @@
 <script>
-    import BackToHome from '$lib/components/helpers/BackToHome.svelte';
-    import GeoScrollyPlot from './GeoScrollyPlot.svelte';
-    import { ScrollIndicator, RenderTextContent, ScrollyContent, StoryHeader, Footer } from '@the-vcsi/scrolly-kit';
+    import SimpleDAMap from './SimpleDAMap.svelte';
+    import FlatGeobufDAMap from './FlatGeobufDAMap.svelte';
+    import ZoomMapDuckDB from './ZoomMapDuckDB.svelte';
+    import ZoomMapFlatGeobuf from './ZoomMapFlatGeobuf.svelte';
 
     let { story, data } = $props();
-
-    let scrollyIndex = $state(undefined);
-    
 </script>
 
-<BackToHome />
-<ScrollIndicator threshold={50} />
 
-<article class="story" id="geo-story-duckdb">
-    <StoryHeader
-        title={data.title}
-        subtitle={data.subtitle}
-        authors={data.authors}
-        date={data.date}
-    />
-
-    <section id="intro">
-        {#each data.introduction as item}
-            <RenderTextContent {item} />
-        {/each}
-    </section>
-
-    <section id="scrolly" class="fullscreen-layout">
-        <div class="sticky-panel">
-            <GeoScrollyPlot {scrollyIndex} />
+<div class="story">
+    <div style="padding: 2rem;">
+    <h2 class="section-title">Static Bbox Comparison</h2>
+    <p class="section-desc">Same hardcoded bounding box, same ~164 DAs</p>
+    <div class="comparison">
+        <div>
+            <h3 class="col-label">DuckDB-WASM + Spatial Extension</h3>
+            <SimpleDAMap />
         </div>
-        <ScrollyContent steps={data.steps} bind:value={scrollyIndex} />
-    </section>
+        <div>
+            <h3 class="col-label">FlatGeobuf (HTTP range requests)</h3>
+            <FlatGeobufDAMap />
+        </div>
+    </div>
 
-    <h2>Conclusion</h2>
-    <section id="conclusion">
-        {#each data.conclusion as item}
-            <RenderTextContent {item} />
-        {/each}
-    </section>
+    <hr class="divider" />
 
-    <h2>Appendix</h2>
-    <section id="appendix">
-        {#each data.appendix as item}
-            <RenderTextContent {item} />
-        {/each}
-    </section>
-</article>
+    <h2 class="section-title">Interactive District Zoom</h2>
+    <p class="section-desc">Click any electoral district to load its dissemination areas</p>
+    <div class="comparison">
+        <div>
+            <h3 class="col-label">DuckDB-WASM + Spatial Extension</h3>
+            <ZoomMapDuckDB />
+        </div>
+        <div>
+            <h3 class="col-label">FlatGeobuf (HTTP range requests)</h3>
+            <ZoomMapFlatGeobuf />
+        </div>
+    </div>
+</div>
+</div>
 
-<Footer theme="light" />
+<style>
+    .section-title { font-family: system-ui; text-align: center; margin: 0 0 0.25rem; }
+    .section-desc { font-family: system-ui; text-align: center; color: #666; font-size: 0.9rem; margin: 0 0 1.5rem; }
+    .col-label { font-family: system-ui; font-size: 0.9rem; color: #666; margin: 0 0 0.5rem; }
+    .divider { margin: 3rem 0; border: none; border-top: 1px solid #ddd; }
+    .comparison {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+    @media (max-width: 900px) {
+        .comparison { grid-template-columns: 1fr; }
+    }
+</style>

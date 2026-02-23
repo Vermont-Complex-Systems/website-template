@@ -35,6 +35,14 @@
         {
             "type": "markdown",
             "value": "Now let's look at population change between 2011 and 2016. Blue areas grew while red areas declined."
+        },
+        {
+            "type": "markdown",
+            "value": "But arrondissements are coarse. The Canadian census publishes data at the **dissemination area** (DA) level — the smallest standard geographic unit, typically 400–700 people. Here we see all 2,831 DAs colored by population density, loaded via DuckDB's spatial extension right in your browser."
+        },
+        {
+            "type": "markdown",
+            "value": "Finally, median household income reveals stark geographic inequality. The west island and central-south corridors show the highest incomes, while parts of the north and east fall well below the metro average."
         }
     ],
     "conclusion": [
