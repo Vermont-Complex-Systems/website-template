@@ -402,7 +402,7 @@
     .map-container { width: 100%; margin: 0 auto; position: relative; }
     h3 { font-family: system-ui, sans-serif; font-size: 1rem; margin: 0 0 0.5rem; }
     .timing { font-size: 0.8rem; color: #999; font-weight: normal; }
-    svg { width: 100%; height: auto; aspect-ratio: 4/3; border: 1px solid #ddd; border-radius: 8px; background: #fafafa; }
+    svg { width: 100%; height: 70vh; border: 1px solid #ddd; border-radius: 8px; background: #fafafa; }
     .back-btn {
         position: absolute; top: 2.5rem; right: 0.5rem; z-index: 10;
         font-family: system-ui; font-size: 0.8rem; padding: 0.3rem 0.6rem;

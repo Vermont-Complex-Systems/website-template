@@ -38,11 +38,35 @@
         },
         {
             "type": "markdown",
-            "value": "But arrondissements are coarse. The Canadian census publishes data at the **dissemination area** (DA) level — the smallest standard geographic unit, typically 400–700 people. Here we see all 2,831 DAs colored by population density, loaded via DuckDB's spatial extension right in your browser."
+            "value": "But arrondissements are coarse. The Canadian census publishes data at the **dissemination area** (DA) level — the smallest standard geographic unit, typically 400–700 people. Here we see all 2,831 DAs that make up Montreal, loaded via DuckDB's spatial extension right in your browser."
         },
         {
             "type": "markdown",
-            "value": "Finally, median household income reveals stark geographic inequality. The west island and central-south corridors show the highest incomes, while parts of the north and east fall well below the metro average."
+            "value": "Let's color these DAs by **population density** using **equal-interval** bins — the simplest approach, where the range is divided into 7 equal slices. Notice how the map is almost entirely one color? Density ranges from 3 to over 120,000 people/km², so a few tiny hyper-dense DAs stretch the scale and the vast majority of areas land in the first bin."
+        },
+        {
+            "type": "markdown",
+            "value": "Same data, now with **quantile** bins: each color band contains the same number of DAs. Patterns emerge — the dense urban core separates clearly from the suburban periphery. When data is heavily skewed, the choice of binning strategy determines whether your map reveals anything at all."
+        },
+        {
+            "type": "markdown",
+            "value": "Now let's map **median household income** using equal-interval bins. Income is still skewed — a handful of DAs top $200K+ — so we cap the scale at the 99th percentile to keep the bins meaningful for the other 99% of areas. Stark geographic inequality appears: the west island and central-south corridors show the highest incomes, while much of the north and east fall well below the metro average."
+        },
+        {
+            "type": "markdown",
+            "value": "Now let's focus on a single neighborhood. The red outline highlights **Le Plateau-Mont-Royal** — one of Montreal's densest and most iconic boroughs, home to Mile End, De Lorimier, and Jeanne-Mance."
+        },
+        {
+            "type": "markdown",
+            "value": "Zooming in with the **city-wide** income scale. The Plateau looks fairly uniform — most of its DAs cluster in the same income range relative to the whole city, so there's little color variation at this scale."
+        },
+        {
+            "type": "markdown",
+            "value": "Now the same data, but with the color scale normalized to **just this district**. Suddenly we can see income variation *within* the Plateau: pricier blocks near Parc La Fontaine versus more affordable stretches along Saint-Laurent. This is the **local vs. global normalization** trade-off: city-wide scales reveal between-area comparisons, local scales reveal within-area patterns."
+        },
+        {
+            "type": "markdown",
+            "value": "Back to the full picture. Now that you understand how binning and normalization shape what you see, try exploring districts on your own below."
         }
     ],
     "conclusion": [
