@@ -17,7 +17,7 @@
         subtitle={data.subtitle}
         authors={data.authors}
         date={data.date}
-        warning="Boilerplate content is currently co-written with Claude"
+        warning="Content is currently boilerplate and co-written with Claude"
     />
 
     <section id="intro">
