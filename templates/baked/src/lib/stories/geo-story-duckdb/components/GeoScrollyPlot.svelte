@@ -1,8 +1,6 @@
 <script>
     import * as d3 from 'd3';
     import { rewind } from '@turf/rewind';
-    import { Tween } from 'svelte/motion';
-    import { cubicInOut } from 'svelte/easing';
     import Legend from './Legend.svelte';
     import DAPolygons from './DAPolygons.svelte';
     import DistrictOutlines from './DistrictOutlines.svelte';
@@ -18,12 +16,18 @@
     const districts = districtsGeo.features.map(f => rewind(f, { reverse: true }));
     const boundary = boundaryGeo.features.map(f => rewind(f, { reverse: true }));
 
-    // Pre-compute Le Plateau-Mont-Royal zoom target
-    const plateauDistricts = districts.filter(
-        d => d.properties.arrondissement === 'Le Plateau-Mont-Royal'
+    // Pre-compute Villeray-Saint-Michel-Parc-Extension zoom target
+    const villerayDistricts = districts.filter(
+        d => d.properties.arrondissement === 'Villeray-Saint-Michel-Parc-Extension'
     );
-    const plateauCollection = { type: 'FeatureCollection', features: plateauDistricts };
-    const isZoomStep = (step) => step >= 8 && step <= 9;
+    const villerayCollection = { type: 'FeatureCollection', features: villerayDistricts };
+
+    const outremontDistricts = districts.filter(
+        d => d.properties.arrondissement === 'Outremont'
+    );
+    const outremontCollection = { type: 'FeatureCollection', features: outremontDistricts };
+
+    const isZoomStep = (step) => step >= 8 && step <= 10;
     const isHighlightStep = (step) => step === 7;
 
     // Chart dimensions
@@ -85,13 +89,13 @@
             }, { reverse: true }))
     );
 
-    function isInPlateau(feature) {
+    function isInVilleray(feature) {
         const centroid = d3.geoCentroid(feature);
-        return plateauDistricts.some(d => d3.geoContains(d, centroid));
+        return villerayDistricts.some(d => d3.geoContains(d, centroid));
     }
 
-    // ── Explore mode (step 11+) ──
-    let isExploreMode = $derived(stepIndex >= 11);
+    // ── Explore mode (step 12+) ──
+    let isExploreMode = $derived(stepIndex >= 12);
 
     let metric = $state('density');
     let binning = $state('equal-interval');
@@ -145,7 +149,7 @@
     let hoveredDistrict = $state(null);
     let mouse = $state({ x: 0, y: 0 });
 
-    // ── d3.zoom for explore mode ──
+    // ── d3.zoom (unified: story steps + explore mode) ──
     let svgEl;
     let zoomTransform = $state(d3.zoomIdentity);
 
@@ -154,30 +158,60 @@
         .filter(event => !event.type.startsWith('wheel'))
         .on('zoom', ({ transform }) => { zoomTransform = transform; });
 
-    $effect(() => {
-        if (!svgEl) return;
-        const svg = d3.select(svgEl);
-        if (isExploreMode) {
-            svg.call(zoom);
-        } else {
-            svg.on('.zoom', null);
-            zoomTransform = d3.zoomIdentity;
-            svg.call(zoom.transform, d3.zoomIdentity);
-            selectedDistrict = null;
-            selectedDas = [];
-        }
-    });
-
-    function zoomToFeature(feature) {
-        const [[x0, y0], [x1, y1]] = pathGenerator.bounds(feature);
+    function computeZoomTransform(featureOrCollection) {
+        const [[x0, y0], [x1, y1]] = pathGenerator.bounds(featureOrCollection);
         const dx = x1 - x0, dy = y1 - y0;
         const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
         const k = 0.8 * Math.min(width / dx, height / dy);
         const tx = width / 2 - k * cx;
         const ty = height / 2 - k * cy;
+        return d3.zoomIdentity.translate(tx, ty).scale(k);
+    }
+
+    function getStepZoomTarget(step) {
+        if (step >= 8 && step <= 9) return villerayCollection;
+        if (step === 10) return outremontCollection;
+        return null;
+    }
+
+    // Unified zoom effect: drives story-step zooms and manages explore-mode attachment
+    let prevStepTarget = null; // plain var, not $state
+    $effect(() => {
+        if (!svgEl) return;
+        const svg = d3.select(svgEl);
+
+        if (isExploreMode) {
+            svg.call(zoom);
+            return;
+        }
+
+        // Detach interactive zoom for story steps
+        svg.on('.zoom', null);
+        selectedDistrict = null;
+        selectedDas = [];
+
+        // Compute target zoom for this step
+        const target = getStepZoomTarget(stepIndex);
+        const targetTransform = target ? computeZoomTransform(target) : d3.zoomIdentity;
+
+        const targetKey = target === villerayCollection ? 'villeray'
+                        : target === outremontCollection ? 'outremont'
+                        : null;
+        const changed = targetKey !== prevStepTarget;
+        const wasZoomed = prevStepTarget !== null;
+        prevStepTarget = targetKey;
+
+        if (changed && (target || wasZoomed)) {
+            svg.transition().duration(1500).call(zoom.transform, targetTransform);
+        } else {
+            svg.call(zoom.transform, targetTransform);
+        }
+    });
+
+    function zoomToFeature(feature) {
         d3.select(svgEl).transition().duration(750).call(
             zoom.transform,
-            d3.zoomIdentity.translate(tx, ty).scale(k)
+            computeZoomTransform(feature)
         );
     }
 
@@ -192,12 +226,21 @@
         d3.select(svgEl).transition().duration(300).call(zoom.scaleBy, factor);
     }
 
-    // ── Visible DAs (filtered for Plateau steps, all DAs otherwise) ──
-    let visibleDAs = $derived.by(() => {
-        if (daFeatures.length === 0) return daFeatures;
-        if (isZoomStep(stepIndex)) return daFeatures.filter(isInPlateau);
-        return daFeatures;
-    });
+    // ── All DAs always rendered (d3.zoom handles visual zoom) ──
+    let visibleDAs = $derived(daFeatures);
+
+    // DAs within Villeray (for local color normalization in steps 8-9)
+    let villerayDAs = $derived(
+        daFeatures.filter(isInVilleray)
+    );
+
+    // DAs within Outremont (for color normalization in step 10)
+    let outremontDAs = $derived(
+        daFeatures.filter(f => {
+            const c = d3.geoCentroid(f);
+            return outremontDistricts.some(d => d3.geoContains(d, c));
+        })
+    );
 
     // DAs within the selected district (for local color normalization)
     let districtDAs = $derived.by(() => {
@@ -209,6 +252,13 @@
     });
 
     let showDAs = $derived(stepIndex >= 3);
+
+    // Constrain hover to zoomed-in area DAs (null = all DAs hoverable)
+    let hoverableIds = $derived.by(() => {
+        if (stepIndex >= 8 && stepIndex <= 9) return new Set(villerayDAs.map(f => f.properties.geo_uid));
+        if (stepIndex === 10) return new Set(outremontDAs.map(f => f.properties.geo_uid));
+        return null;
+    });
 
     // ── Map config driven by scroll step ──
     const baseView = { title: null, daColors: null, districtColors: null, labelsToShow: null, legend: null };
@@ -264,30 +314,36 @@
             }
 
             case 7: {
-                if (daFeatures.length === 0) return { ...baseView, title: 'Le Plateau-Mont-Royal' };
+                if (daFeatures.length === 0) return { ...baseView, title: 'Villeray\u2013Saint-Michel\u2013Parc-Extension' };
                 const { colors } = computeColors(daFeatures, { metric: 'income', binning: 'equal-interval', percentileCap: 0.99 });
-                return { ...baseView, title: 'Le Plateau-Mont-Royal', daColors: colors };
+                return { ...baseView, title: 'Villeray\u2013Saint-Michel\u2013Parc-Extension', daColors: colors };
             }
 
             case 8: {
-                if (visibleDAs.length === 0) return { ...baseView, title: 'Le Plateau \u2014 City-wide scale' };
-                const { colors, colorScale } = computeColors(visibleDAs, { metric: 'income', binning: 'equal-interval', percentileCap: 0.99, domainFeatures: daFeatures });
-                return { ...baseView, title: 'Le Plateau \u2014 City-wide scale', daColors: colors, legend: colorScale };
+                if (villerayDAs.length === 0) return { ...baseView, title: 'Villeray\u2013Parc-Ex \u2014 City-wide scale' };
+                const { colors, colorScale } = computeColors(villerayDAs, { metric: 'income', binning: 'equal-interval', percentileCap: 0.99, domainFeatures: daFeatures });
+                return { ...baseView, title: 'Villeray\u2013Parc-Ex \u2014 City-wide scale', daColors: colors, legend: colorScale };
             }
 
             case 9: {
-                if (visibleDAs.length === 0) return { ...baseView, title: 'Le Plateau \u2014 Local scale' };
-                const { colors, colorScale } = computeColors(visibleDAs, { metric: 'income', binning: 'equal-interval' });
-                return { ...baseView, title: 'Le Plateau \u2014 Local scale', daColors: colors, legend: colorScale };
+                if (villerayDAs.length === 0) return { ...baseView, title: 'Villeray\u2013Parc-Ex \u2014 Local scale' };
+                const { colors, colorScale } = computeColors(villerayDAs, { metric: 'income', binning: 'equal-interval' });
+                return { ...baseView, title: 'Villeray\u2013Parc-Ex \u2014 Local scale', daColors: colors, legend: colorScale };
             }
 
             case 10: {
+                if (outremontDAs.length === 0) return { ...baseView, title: 'Outremont \u2014 City-wide scale' };
+                const { colors, colorScale } = computeColors(outremontDAs, { metric: 'income', binning: 'equal-interval', percentileCap: 0.99, domainFeatures: daFeatures });
+                return { ...baseView, title: 'Outremont \u2014 City-wide scale', daColors: colors, legend: colorScale };
+            }
+
+            case 11: {
                 if (daFeatures.length === 0) return { ...baseView, title: 'Population Density (Census 2021)' };
                 const { colors, colorScale } = computeColors(daFeatures, { metric: 'density', binning: 'quantile' });
                 return { ...baseView, title: 'Population Density (Census 2021)', daColors: colors, legend: colorScale };
             }
 
-            case 11: default: {
+            case 12: default: {
                 const features = isZoomed ? districtDAs : daFeatures;
                 if (features.length === 0) return baseView;
                 const { colors, colorScale } = computeColors(features, {
@@ -305,52 +361,18 @@
     // Highlight districts
     let highlightDistricts = $derived.by(() => {
         if (isExploreMode && selectedDistrict) return [selectedDistrict];
-        if (isZoomStep(stepIndex) || isHighlightStep(stepIndex)) return plateauDistricts;
+        if (stepIndex === 7 || (stepIndex >= 8 && stepIndex <= 9)) return villerayDistricts;
+        if (stepIndex === 10) return outremontDistricts;
         return [];
     });
     let hasHighlights = $derived(highlightDistricts.length > 0);
 
-    // ── Projection with Tween animation ──
-    let targetParams = $derived.by(() => {
-        let target;
-        if (isExploreMode) {
-            // Fixed city-wide projection; d3.zoom handles visual zoom in explore mode
-            target = { type: 'FeatureCollection', features: districts };
-        } else if (isZoomStep(stepIndex)) {
-            target = plateauCollection;
-        } else {
-            target = { type: 'FeatureCollection', features: districts };
-        }
-        const extent = [[margin.left, margin.top], [width - margin.right, height - margin.bottom]];
-        const p = d3.geoMercator().fitExtent(extent, target);
-        return { scale: p.scale(), translate: p.translate() };
-    });
-
-    const tweenOpts = { duration: 1200, easing: cubicInOut };
-    const projScale = new Tween(targetParams.scale, tweenOpts);
-    const projTranslate = new Tween(targetParams.translate, tweenOpts);
-
-    // Animate on Plateau zoom transitions (steps 7→8 and 9→10),
-    // snap instantly for regular scroll steps. Explore mode uses d3.zoom instead.
-    let prevZoomTarget = null; // plain var, not $state — avoids re-triggering this effect
-    $effect(() => {
-        const nowZoomed = isZoomStep(stepIndex);
-        const currentTarget = nowZoomed ? 'plateau' : null;
-        const wasZoomed = prevZoomTarget !== null;
-        const targetChanged = currentTarget !== prevZoomTarget;
-        prevZoomTarget = currentTarget;
-
-        if (targetChanged && (nowZoomed || wasZoomed)) {
-            projScale.set(targetParams.scale);
-            projTranslate.set(targetParams.translate);
-        } else {
-            projScale.set(targetParams.scale, { duration: 0 });
-            projTranslate.set(targetParams.translate, { duration: 0 });
-        }
-    });
-
+    // ── Fixed city-wide projection (d3.zoom handles all zoom transitions) ──
     let projection = $derived(
-        d3.geoMercator().scale(projScale.current).translate(projTranslate.current)
+        d3.geoMercator().fitExtent(
+            [[margin.left, margin.top], [width - margin.right, height - margin.bottom]],
+            { type: 'FeatureCollection', features: districts }
+        )
     );
 
     let pathGenerator = $derived(d3.geoPath().projection(projection));
@@ -409,7 +431,7 @@
     {/if}
 
     <svg bind:this={svgEl} viewBox={`0 0 ${width} ${height}`} style="background: #a6cee3;">
-        <g transform={isExploreMode ? zoomTransform.toString() : undefined}>
+        <g transform={zoomTransform.toString()}>
             <!-- Boundary (CMA land outside districts) -->
             {#each boundary as feature (feature.properties.id)}
                 <path
@@ -468,6 +490,7 @@
                     selectedIds={isExploreMode ? selectedIds : new Set()}
                     {highlightDistricts}
                     enableHover={isZoomStep(stepIndex) || isExploreMode}
+                    {hoverableIds}
                     zoomScale={zoomTransform.k}
                     onclick={isExploreMode && isZoomed ? toggleDa : null}
                     bind:hovered={hoveredDa}

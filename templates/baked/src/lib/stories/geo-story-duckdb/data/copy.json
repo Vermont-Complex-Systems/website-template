@@ -54,15 +54,19 @@
         },
         {
             "type": "markdown",
-            "value": "Now let's focus on a single neighborhood. The red outline highlights **Le Plateau-Mont-Royal** — one of Montreal's densest and most iconic boroughs, home to Mile End, De Lorimier, and Jeanne-Mance."
+            "value": "Now let's focus on a single neighborhood. The red outline highlights **Villeray–Saint-Michel–Parc-Extension** — one of Montreal's most diverse and densely populated boroughs, home to Little Italy, Parc-Extension, and Saint-Michel."
         },
         {
             "type": "markdown",
-            "value": "Zooming in with the **city-wide** income scale. The Plateau looks fairly uniform — most of its DAs cluster in the same income range relative to the whole city, so there's little color variation at this scale."
+            "value": "Zooming in with the **city-wide** income scale. Villeray–Saint-Michel–Parc-Extension looks fairly uniform — most of its DAs cluster in the same income range relative to the whole city, so there's little color variation at this scale."
         },
         {
             "type": "markdown",
-            "value": "Now the same data, but with the color scale normalized to **just this district**. Suddenly we can see income variation *within* the Plateau: pricier blocks near Parc La Fontaine versus more affordable stretches along Saint-Laurent. This is the **local vs. global normalization** trade-off: city-wide scales reveal between-area comparisons, local scales reveal within-area patterns."
+            "value": "Now the same data, but with the color scale normalized to **just this district**. Suddenly we can see income variation *within* the borough: higher-income blocks in Villeray proper versus more modest areas in Parc-Extension and Saint-Michel. This is the **local vs. global normalization** trade-off: city-wide scales reveal between-area comparisons, local scales reveal within-area patterns."
+        },
+        {
+            "type": "markdown",
+            "value": "Now let's fly south to **Outremont** — one of Montreal's wealthiest boroughs. Using the same city-wide scale, notice how Outremont's DAs land in much higher income bins compared to Villeray–Parc-Ex."
         },
         {
             "type": "markdown",
