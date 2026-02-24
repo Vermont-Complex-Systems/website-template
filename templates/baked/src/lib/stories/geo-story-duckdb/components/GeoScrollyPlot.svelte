@@ -31,8 +31,6 @@
     let height = $state(600);
     const margin = { top: 20, right: 20, bottom: 40, left: 40 };
 
-    let innerWidth = $derived(width - margin.left - margin.right);
-    let innerHeight = $derived(height - margin.top - margin.bottom);
     let isMobile = $derived(width < 768);
 
     let stepIndex = $derived(scrollyIndex ?? 0);
@@ -120,11 +118,13 @@
     function handleDistrictClick(feature) {
         selectedDistrict = feature;
         selectedDas = [];
+        zoomToFeature(feature);
     }
 
     function handleZoomOut() {
         selectedDistrict = null;
         selectedDas = [];
+        zoomReset();
     }
 
     function toggleDa(feature) {
@@ -145,19 +145,67 @@
     let hoveredDistrict = $state(null);
     let mouse = $state({ x: 0, y: 0 });
 
-    // ── Visible DAs (filtered by zoom target) ──
+    // ── d3.zoom for explore mode ──
+    let svgEl;
+    let zoomTransform = $state(d3.zoomIdentity);
+
+    const zoom = d3.zoom()
+        .scaleExtent([1, 20])
+        .filter(event => !event.type.startsWith('wheel'))
+        .on('zoom', ({ transform }) => { zoomTransform = transform; });
+
+    $effect(() => {
+        if (!svgEl) return;
+        const svg = d3.select(svgEl);
+        if (isExploreMode) {
+            svg.call(zoom);
+        } else {
+            svg.on('.zoom', null);
+            zoomTransform = d3.zoomIdentity;
+            svg.call(zoom.transform, d3.zoomIdentity);
+            selectedDistrict = null;
+            selectedDas = [];
+        }
+    });
+
+    function zoomToFeature(feature) {
+        const [[x0, y0], [x1, y1]] = pathGenerator.bounds(feature);
+        const dx = x1 - x0, dy = y1 - y0;
+        const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+        const k = 0.8 * Math.min(width / dx, height / dy);
+        const tx = width / 2 - k * cx;
+        const ty = height / 2 - k * cy;
+        d3.select(svgEl).transition().duration(750).call(
+            zoom.transform,
+            d3.zoomIdentity.translate(tx, ty).scale(k)
+        );
+    }
+
+    function zoomReset() {
+        d3.select(svgEl).transition().duration(750).call(
+            zoom.transform,
+            d3.zoomIdentity
+        );
+    }
+
+    function zoomBy(factor) {
+        d3.select(svgEl).transition().duration(300).call(zoom.scaleBy, factor);
+    }
+
+    // ── Visible DAs (filtered for Plateau steps, all DAs otherwise) ──
     let visibleDAs = $derived.by(() => {
         if (daFeatures.length === 0) return daFeatures;
-        if (isExploreMode && isZoomed) {
-            return daFeatures.filter(f => {
-                const centroid = d3.geoCentroid(f);
-                return d3.geoContains(selectedDistrict, centroid);
-            });
-        }
-        if (isZoomStep(stepIndex)) {
-            return daFeatures.filter(isInPlateau);
-        }
+        if (isZoomStep(stepIndex)) return daFeatures.filter(isInPlateau);
         return daFeatures;
+    });
+
+    // DAs within the selected district (for local color normalization)
+    let districtDAs = $derived.by(() => {
+        if (!selectedDistrict) return daFeatures;
+        return daFeatures.filter(f => {
+            const centroid = d3.geoCentroid(f);
+            return d3.geoContains(selectedDistrict, centroid);
+        });
     });
 
     let showDAs = $derived(stepIndex >= 3);
@@ -240,7 +288,7 @@
             }
 
             case 11: default: {
-                const features = isZoomed ? visibleDAs : daFeatures;
+                const features = isZoomed ? districtDAs : daFeatures;
                 if (features.length === 0) return baseView;
                 const { colors, colorScale } = computeColors(features, {
                     metric,
@@ -265,14 +313,16 @@
     // ── Projection with Tween animation ──
     let targetParams = $derived.by(() => {
         let target;
-        if (isExploreMode && isZoomed) {
-            target = selectedDistrict;
+        if (isExploreMode) {
+            // Fixed city-wide projection; d3.zoom handles visual zoom in explore mode
+            target = { type: 'FeatureCollection', features: districts };
         } else if (isZoomStep(stepIndex)) {
             target = plateauCollection;
         } else {
             target = { type: 'FeatureCollection', features: districts };
         }
-        const p = d3.geoMercator().fitSize([innerWidth, innerHeight], target);
+        const extent = [[margin.left, margin.top], [width - margin.right, height - margin.bottom]];
+        const p = d3.geoMercator().fitExtent(extent, target);
         return { scale: p.scale(), translate: p.translate() };
     });
 
@@ -280,12 +330,12 @@
     const projScale = new Tween(targetParams.scale, tweenOpts);
     const projTranslate = new Tween(targetParams.translate, tweenOpts);
 
-    // Animate on zoom transitions (in/out of Plateau or explore district),
-    // snap instantly for regular scroll steps.
+    // Animate on Plateau zoom transitions (steps 7→8 and 9→10),
+    // snap instantly for regular scroll steps. Explore mode uses d3.zoom instead.
     let prevZoomTarget = null; // plain var, not $state — avoids re-triggering this effect
     $effect(() => {
-        const nowZoomed = isZoomStep(stepIndex) || isZoomed;
-        const currentTarget = isZoomed ? selectedDistrict : (isZoomStep(stepIndex) ? 'plateau' : null);
+        const nowZoomed = isZoomStep(stepIndex);
+        const currentTarget = nowZoomed ? 'plateau' : null;
         const wasZoomed = prevZoomTarget !== null;
         const targetChanged = currentTarget !== prevZoomTarget;
         prevZoomTarget = currentTarget;
@@ -334,6 +384,10 @@
                     <option value="quantile">Quantile</option>
                 </select>
             </label>
+            <div class="zoom-btns">
+                <button class="zoom-btn" onclick={() => zoomBy(2)}>+</button>
+                <button class="zoom-btn" onclick={() => zoomBy(0.5)}>&minus;</button>
+            </div>
             {#if isZoomed}
                 <label>
                     Scale
@@ -354,15 +408,15 @@
         <div class="title-indicator">{mapConfig.title}</div>
     {/if}
 
-    <svg viewBox={`0 0 ${width} ${height}`} style="background: #a6cee3;">
-        <g transform={`translate(${margin.left},${margin.top})`}>
+    <svg bind:this={svgEl} viewBox={`0 0 ${width} ${height}`} style="background: #a6cee3;">
+        <g transform={isExploreMode ? zoomTransform.toString() : undefined}>
             <!-- Boundary (CMA land outside districts) -->
             {#each boundary as feature (feature.properties.id)}
                 <path
                     d={pathGenerator(feature)}
                     fill="#f4efea"
                     stroke="#999"
-                    stroke-width="0.5"
+                    stroke-width={0.5 / zoomTransform.k}
                     pointer-events="none"
                 />
             {/each}
@@ -375,7 +429,7 @@
                         d={pathGenerator(feature)}
                         {fill}
                         stroke="#333"
-                        stroke-width="0.5"
+                        stroke-width={0.5 / zoomTransform.k}
                         style="transition: fill 0.5s ease;"
                         pointer-events="none"
                     />
@@ -414,6 +468,7 @@
                     selectedIds={isExploreMode ? selectedIds : new Set()}
                     {highlightDistricts}
                     enableHover={isZoomStep(stepIndex) || isExploreMode}
+                    zoomScale={zoomTransform.k}
                     onclick={isExploreMode && isZoomed ? toggleDa : null}
                     bind:hovered={hoveredDa}
                     bind:mouse
@@ -423,6 +478,7 @@
                     {pathGenerator}
                     interactive={isExploreMode && !isZoomed}
                     {hasHighlights}
+                    zoomScale={zoomTransform.k}
                     onclick={handleDistrictClick}
                     bind:hovered={hoveredDistrict}
                     bind:mouse
@@ -560,6 +616,28 @@
     }
     .norm-toggle:hover { background: #f0f0f0; }
     .norm-toggle.active { background: #e8f4fd; border-color: #90caf9; }
+
+    .zoom-btns {
+        display: flex;
+        gap: 2px;
+    }
+
+    .zoom-btn {
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background: white;
+        cursor: pointer;
+        color: #555;
+        line-height: 1;
+    }
+    .zoom-btn:hover { background: #f0f0f0; }
 
     .back-btn {
         font-size: 0.75rem;
