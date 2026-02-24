@@ -56,6 +56,9 @@
          WHERE a.year = 2011 AND b.year = 2016`
     );
 
+    // We use ST_AsGeoJSON (DuckDB spatial
+    // extension) to convert the binary WKB geometry stored in the parquet
+    // back into a GeoJSON string the browser can render on an SVG map.
     const daQuery = db.sql(t =>
         `SELECT *,
                 population / NULLIF(area_sqkm, 0) as pop_density,
@@ -65,6 +68,10 @@
          WHERE population > 0`
     );
 
+    // Build GeoJSON features from DuckDB rows. All parquet columns are
+    // forwarded as feature properties automatically — no need to list them
+    // one by one. Numeric values (including BigInt from DuckDB) are cast
+    // to JS Numbers; strings (like geo_uid) are kept as-is.
     let daFeatures = $derived(
         daQuery.rows
             .filter(r => r.geojson)
@@ -72,9 +79,14 @@
                 const props = {};
                 for (const [k, v] of Object.entries(r)) {
                     if (k === 'geojson' || k === 'geom') continue;
-                    props[k] = typeof v === 'bigint' ? Number(v) : v != null && typeof v !== 'string' ? Number(v) : v;
+                    props[k] = typeof v === 'bigint' ? Number(v)
+                             : v != null && typeof v !== 'string' ? Number(v)
+                             : v;
                 }
-                return rewind({ type: 'Feature', properties: props, geometry: JSON.parse(r.geojson) }, { reverse: true });
+                return rewind(
+                    { type: 'Feature', properties: props, geometry: JSON.parse(r.geojson) },
+                    { reverse: true }
+                );
             })
     );
 

@@ -12,7 +12,7 @@
     "introduction": [
         {
             "type": "markdown",
-            "value": "This code is a follow up from [this story](https://vcsi.cmplxsys.w3.uvm.edu/geo-story-1/), but we show how to work with geo data in a performant way using [duckdb-wasm](https://duckdb.org/docs/stable/clients/wasm/overview). We show how to use [spatial-extension](https://duckdb.org/docs/stable/core_extensions/spatial/overview) on the client to do sptial operations. The data we'll be using is from statcan, in charge of the Canadian census, the city of montreal, and other places that we document in the pipeline."
+            "value": "This code is a follow up from [this story](https://vcsi.cmplxsys.w3.uvm.edu/geo-story-1/), where we use [DuckDB-WASM](https://duckdb.org/docs/stable/clients/wasm/overview) to query census data directly in the browser. DuckDB lets us store the data as a compact Parquet file and use SQL as a convenient query layer — computing derived columns, joining tables, and converting geometries via the [spatial extension](https://duckdb.org/docs/stable/core_extensions/spatial/overview). The same architecture would scale to much larger datasets without changes. The data comes from StatCan (Canadian census), the city of Montreal, and other sources documented in the pipeline."
         },
         {
             "type": "markdown",
